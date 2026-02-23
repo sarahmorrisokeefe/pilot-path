@@ -17,7 +17,7 @@ export function Layout({ children, hideNav = false, title, backPath }: LayoutPro
   const navigate = useNavigate()
 
   return (
-    <div className="min-h-screen bg-sky-50 dark:bg-slate-900">
+    <div className="min-h-screen bg-sky-50 dark:bg-slate-900 flex flex-col">
       {/* Header */}
       <header className="sticky top-0 z-30 bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm border-b border-slate-200 dark:border-slate-700 safe-top transform-gpu">
         <div className="flex items-center justify-between px-4 h-14">
@@ -105,9 +105,32 @@ export function Layout({ children, hideNav = false, title, backPath }: LayoutPro
       </header>
 
       {/* Main content */}
-      <main className={`max-w-lg mx-auto px-4 py-4 ${!hideNav ? 'pb-24' : 'pb-4'}`}>
+      <main className="flex-1 max-w-lg mx-auto w-full px-4 py-4">
         {children}
       </main>
+
+      {/* Footer */}
+      <footer className={`max-w-lg mx-auto w-full px-4 pt-2 text-center ${!hideNav ? 'pb-28' : 'pb-6'}`}>
+        <p className="text-xs text-slate-400 dark:text-slate-500">
+          Created by{' '}
+          <a
+            href="https://okeefesarah.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sky-500 dark:text-sky-400 hover:text-sky-700 dark:hover:text-sky-600 transition-colors"
+          >
+            Sarah O'Keefe
+          </a>
+        </p>
+        <a
+          href="https://ko-fi.com/sarahmorrisokeefe"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-1 inline-block text-xs text-sky-500 dark:text-sky-400 hover:text-sky-700 dark:hover:text-sky-600 transition-colors"
+        >
+          ☕ Support this app on Ko-fi
+        </a>
+      </footer>
 
       {!hideNav && <BottomNav />}
     </div>
