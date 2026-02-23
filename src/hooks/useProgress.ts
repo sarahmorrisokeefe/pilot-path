@@ -2,6 +2,45 @@ import { useCallback } from 'react'
 import { useStorage } from './useStorage'
 import type { UserProgress, Question, TestResult } from '../types'
 import { getTodayDateString, isToday, isYesterday } from '../utils'
+import { supabase, supabaseEnabled } from '../lib/supabase'
+
+// ─── Supabase sync helpers (standalone, no hook deps) ────────────────────────
+
+/** Fire-and-forget upsert of the full progress object to Supabase. */
+export async function pushProgressToSupabase(
+  userId: string,
+  progress: UserProgress
+): Promise<void> {
+  if (!supabaseEnabled) return
+  try {
+    await supabase
+      .from('user_progress')
+      .upsert(
+        { id: userId, progress, updated_at: new Date().toISOString() },
+        { onConflict: 'id' }
+      )
+  } catch {
+    // Network failure — silently ignore; local data is always the source of truth
+  }
+}
+
+/** Fetch remote progress for a user. Returns null on error or if no row exists. */
+export async function fetchProgressFromSupabase(
+  userId: string
+): Promise<UserProgress | null> {
+  if (!supabaseEnabled) return null
+  try {
+    const { data, error } = await supabase
+      .from('user_progress')
+      .select('progress')
+      .eq('id', userId)
+      .single()
+    if (error || !data) return null
+    return data.progress as UserProgress
+  } catch {
+    return null
+  }
+}
 
 const PROGRESS_KEY = 'pilotpath_progress'
 
@@ -245,6 +284,13 @@ export function useProgress() {
 
   const isStudiedToday = isToday(progress.streak.lastStudied ?? '')
 
+  /** Load remote progress and overwrite local if the remote has more total XP. */
+  const loadFromSupabase = useCallback(async (userId: string) => {
+    const remote = await fetchProgressFromSupabase(userId)
+    if (!remote) return
+    setProgress((local) => (remote.totalXP >= local.totalXP ? remote : local))
+  }, [setProgress])
+
   return {
     progress,
     completeLesson,
@@ -254,5 +300,6 @@ export function useProgress() {
     getLessonScore,
     resetProgress,
     isStudiedToday,
+    loadFromSupabase,
   }
 }
