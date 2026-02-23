@@ -48,14 +48,14 @@ export function Layout({ children, hideNav = false, title, backPath }: LayoutPro
           </div>
           {/* Right side: sync/avatar + settings + dark mode toggle */}
           <div className="flex items-center gap-1">
-            {/* Signed-out: subtle sync prompt */}
+            {/* Signed-out: sign in button */}
             {!user && (
               <button
                 onClick={() => navigate('/auth')}
-                className="hidden sm:flex items-center gap-1 text-xs text-sky-500 dark:text-sky-400 font-medium hover:underline touch-manipulation px-2 py-1"
-                aria-label="Sign in to sync progress"
+                className="flex items-center gap-1 text-xs font-semibold bg-sky-500 hover:bg-sky-600 active:bg-sky-700 text-white px-3 py-1.5 rounded-lg transition-colors touch-manipulation"
+                aria-label="Sign in"
               >
-                ☁️ Sync
+                Sign In
               </button>
             )}
 
@@ -70,8 +70,8 @@ export function Layout({ children, hideNav = false, title, backPath }: LayoutPro
               </button>
             )}
 
-            {/* Settings gear (always visible) */}
-            <button
+            {/* Settings gear (signed-in only — avatar already links to settings too) */}
+            {user && <button
               onClick={() => navigate('/settings')}
               className="p-2 rounded-xl text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors touch-manipulation"
               aria-label="Settings"
@@ -81,6 +81,8 @@ export function Layout({ children, hideNav = false, title, backPath }: LayoutPro
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
             </button>
+
+            }
 
             {/* Dark mode toggle */}
             <button
