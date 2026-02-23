@@ -1,0 +1,258 @@
+import { useCallback } from 'react'
+import { useStorage } from './useStorage'
+import type { UserProgress, Question, TestResult } from '../types'
+import { getTodayDateString, isToday, isYesterday } from '../utils'
+
+const PROGRESS_KEY = 'pilotpath_progress'
+
+const defaultProgress: UserProgress = {
+  courses: {},
+  weakAreas: {},
+  testResults: [],
+  totalXP: 0,
+  streak: {
+    current: 0,
+    longest: 0,
+    lastStudied: null,
+  },
+  lastActivity: null,
+}
+
+export function useProgress() {
+  const [progress, setProgress] = useStorage<UserProgress>(
+    PROGRESS_KEY,
+    defaultProgress
+  )
+
+  // ─── Streak Management ──────────────────────────────────────────────────────
+
+  const updateStreak = useCallback(() => {
+    setProgress((prev) => {
+      const today = getTodayDateString()
+      const { streak } = prev
+
+      if (streak.lastStudied === today) {
+        // Already studied today — no change
+        return prev
+      }
+
+      let newCurrent: number
+      if (streak.lastStudied === null || !isYesterday(streak.lastStudied)) {
+        // First time or gap — reset to 1
+        newCurrent = 1
+      } else {
+        // Consecutive day
+        newCurrent = streak.current + 1
+      }
+
+      return {
+        ...prev,
+        streak: {
+          current: newCurrent,
+          longest: Math.max(newCurrent, streak.longest),
+          lastStudied: today,
+        },
+        lastActivity: new Date().toISOString(),
+      }
+    })
+  }, [setProgress])
+
+  // ─── Lesson Completion ──────────────────────────────────────────────────────
+
+  const completeLesson = useCallback(
+    (params: {
+      courseId: string
+      moduleId: string
+      lessonId: string
+      correctCount: number
+      totalCount: number
+      questions: Question[]
+      answers: (number | null)[]
+    }) => {
+      const { courseId, moduleId, lessonId, correctCount, totalCount, questions, answers } = params
+      const score = Math.round((correctCount / totalCount) * 100)
+      const isPerfect = score === 100
+      const baseXP = 10
+      const bonusXP = isPerfect ? 10 : 0
+      const xpEarned = baseXP + bonusXP
+
+      setProgress((prev) => {
+        const today = getTodayDateString()
+
+        // Build updated weak areas
+        const weakAreas = { ...prev.weakAreas }
+        questions.forEach((q, i) => {
+          const isCorrect = answers[i] === q.correctAnswer
+          if (!isCorrect) {
+            const existing = weakAreas[q.id]
+            weakAreas[q.id] = {
+              questionId: q.id,
+              questionText: q.text,
+              topic: q.topic,
+              courseId,
+              moduleId,
+              lessonId,
+              incorrectCount: (existing?.incorrectCount ?? 0) + 1,
+              lastAttempted: new Date().toISOString(),
+            }
+          } else if (weakAreas[q.id]) {
+            // Correct answer — decrement weak count (floor 0)
+            const entry = weakAreas[q.id]
+            if (entry.incorrectCount <= 1) {
+              delete weakAreas[q.id]
+            } else {
+              weakAreas[q.id] = {
+                ...entry,
+                incorrectCount: entry.incorrectCount - 1,
+              }
+            }
+          }
+        })
+
+        // Update course progress
+        const courseProgress = prev.courses[courseId] ?? { xp: 0, modules: {} }
+        const moduleProgress = courseProgress.modules[moduleId] ?? {
+          lessonsProgress: {},
+        }
+
+        const alreadyCompleted =
+          moduleProgress.lessonsProgress[lessonId]?.completed ?? false
+
+        const updatedLesson = {
+          completed: true,
+          score,
+          xpEarned,
+          completedAt: new Date().toISOString(),
+        }
+
+        const updatedModule = {
+          ...moduleProgress,
+          lessonsProgress: {
+            ...moduleProgress.lessonsProgress,
+            [lessonId]: updatedLesson,
+          },
+        }
+
+        const updatedCourse = {
+          ...courseProgress,
+          xp: courseProgress.xp + (alreadyCompleted ? 0 : xpEarned),
+          modules: {
+            ...courseProgress.modules,
+            [moduleId]: updatedModule,
+          },
+        }
+
+        // Streak update
+        const { streak } = prev
+        let newCurrent = streak.current
+        if (streak.lastStudied !== today) {
+          if (streak.lastStudied === null || !isYesterday(streak.lastStudied)) {
+            newCurrent = 1
+          } else {
+            newCurrent = streak.current + 1
+          }
+        }
+
+        return {
+          ...prev,
+          courses: { ...prev.courses, [courseId]: updatedCourse },
+          weakAreas,
+          totalXP: prev.totalXP + (alreadyCompleted ? 0 : xpEarned),
+          streak: {
+            current: newCurrent,
+            longest: Math.max(newCurrent, streak.longest),
+            lastStudied: today,
+          },
+          lastActivity: new Date().toISOString(),
+        }
+      })
+
+      return xpEarned
+    },
+    [setProgress]
+  )
+
+  // ─── Test Completion ────────────────────────────────────────────────────────
+
+  const completeTest = useCallback(
+    (result: TestResult) => {
+      setProgress((prev) => {
+        const today = getTodayDateString()
+        const testXP = result.passed ? 50 : 20
+        const courseProgress = prev.courses[result.courseId] ?? {
+          xp: 0,
+          modules: {},
+        }
+
+        const { streak } = prev
+        let newCurrent = streak.current
+        if (streak.lastStudied !== today) {
+          if (streak.lastStudied === null || !isYesterday(streak.lastStudied)) {
+            newCurrent = 1
+          } else {
+            newCurrent = streak.current + 1
+          }
+        }
+
+        return {
+          ...prev,
+          courses: {
+            ...prev.courses,
+            [result.courseId]: {
+              ...courseProgress,
+              xp: courseProgress.xp + testXP,
+            },
+          },
+          testResults: [...prev.testResults, result],
+          totalXP: prev.totalXP + testXP,
+          streak: {
+            current: newCurrent,
+            longest: Math.max(newCurrent, streak.longest),
+            lastStudied: today,
+          },
+          lastActivity: new Date().toISOString(),
+        }
+      })
+    },
+    [setProgress]
+  )
+
+  // ─── Helpers ────────────────────────────────────────────────────────────────
+
+  const isLessonComplete = useCallback(
+    (courseId: string, moduleId: string, lessonId: string): boolean => {
+      return (
+        progress.courses[courseId]?.modules[moduleId]?.lessonsProgress[lessonId]
+          ?.completed ?? false
+      )
+    },
+    [progress]
+  )
+
+  const getLessonScore = useCallback(
+    (courseId: string, moduleId: string, lessonId: string): number => {
+      return (
+        progress.courses[courseId]?.modules[moduleId]?.lessonsProgress[lessonId]
+          ?.score ?? 0
+      )
+    },
+    [progress]
+  )
+
+  const resetProgress = useCallback(() => {
+    setProgress(defaultProgress)
+  }, [setProgress])
+
+  const isStudiedToday = isToday(progress.streak.lastStudied ?? '')
+
+  return {
+    progress,
+    completeLesson,
+    completeTest,
+    updateStreak,
+    isLessonComplete,
+    getLessonScore,
+    resetProgress,
+    isStudiedToday,
+  }
+}

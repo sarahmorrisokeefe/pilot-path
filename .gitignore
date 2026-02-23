@@ -1,0 +1,76 @@
+# ─── Dependencies ──────────────────────────────────────────────────────────────
+node_modules/
+.pnp
+.pnp.js
+
+# ─── Build output ──────────────────────────────────────────────────────────────
+dist/
+dist-ssr/
+build/
+
+# ─── Environment variables — NEVER commit real secrets ─────────────────────────
+# .env.example IS committed (shows format, no real values)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env
+*.env.local
+
+# ─── Vite ──────────────────────────────────────────────────────────────────────
+vite.config.ts.timestamp-*
+
+# ─── TypeScript ────────────────────────────────────────────────────────────────
+*.tsbuildinfo
+
+# ─── Editor / OS ───────────────────────────────────────────────────────────────
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+*.swp
+*.swo
+.idea/
+.vscode/
+*.iml
+
+# ─── Capacitor — iOS / Android (future App Store builds) ───────────────────────
+# Generated native project folders — large, machine-specific, regenerated via `npx cap sync`
+ios/
+android/
+# CocoaPods (iOS dependency manager)
+Pods/
+*.xcworkspace
+!default.xcworkspace
+# Android
+.gradle/
+local.properties
+# Build artifacts
+*.apk
+*.aab
+*.ipa
+*.dSYM.zip
+*.dSYM
+capacitor.config.local.ts
+capacitor.config.local.json
+
+# ─── Test output ───────────────────────────────────────────────────────────────
+coverage/
+.nyc_output/
+
+# ─── Logs ──────────────────────────────────────────────────────────────────────
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ─── Misc ──────────────────────────────────────────────────────────────────────
+.cache/
+.temp/
+*.tmp
