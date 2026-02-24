@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { Analytics } from '@vercel/analytics/react'
 import { Home } from './pages/Home'
 import { Courses } from './pages/Courses'
 import { CourseDetail } from './pages/CourseDetail'
@@ -73,6 +74,7 @@ export default function App() {
     <BrowserRouter>
       <AuthProvider>
         <AppRoutes />
+        <Analytics />
       </AuthProvider>
     </BrowserRouter>
   )
