@@ -2,8 +2,15 @@ import type { Course, Module, UserProgress, WeakAreaEntry } from '../types'
 
 // ─── Date Helpers ─────────────────────────────────────────────────────────────
 
+function toLocalDateString(d: Date): string {
+  const y = d.getFullYear()
+  const m = String(d.getMonth() + 1).padStart(2, '0')
+  const day = String(d.getDate()).padStart(2, '0')
+  return `${y}-${m}-${day}`
+}
+
 export function getTodayDateString(): string {
-  return new Date().toISOString().split('T')[0]
+  return toLocalDateString(new Date())
 }
 
 export function isToday(dateStr: string): boolean {
@@ -13,7 +20,7 @@ export function isToday(dateStr: string): boolean {
 export function isYesterday(dateStr: string): boolean {
   const yesterday = new Date()
   yesterday.setDate(yesterday.getDate() - 1)
-  return dateStr === yesterday.toISOString().split('T')[0]
+  return dateStr === toLocalDateString(yesterday)
 }
 
 // ─── Progress Calculations ────────────────────────────────────────────────────
