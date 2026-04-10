@@ -14,6 +14,21 @@
     overscroll-behavior: none;
   }
 
+  /* Native-only: disable text selection and callout on long-press.
+     The .cap-native class is added by App.tsx when running inside Capacitor. */
+  body.cap-native {
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    user-select: none;
+  }
+
+  body.cap-native input,
+  body.cap-native textarea,
+  body.cap-native [contenteditable] {
+    -webkit-user-select: text;
+    user-select: text;
+  }
+
   * {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;

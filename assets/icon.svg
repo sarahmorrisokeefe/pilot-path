@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <!-- Sky blue background with rounded corners (Xcode masks to shape) -->
+  <rect width="1024" height="1024" fill="#0ea5e9"/>
+
+  <!-- Subtle radial gradient for depth -->
+  <defs>
+    <radialGradient id="bg" cx="40%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#0284c7"/>
+    </radialGradient>
+  </defs>
+  <rect width="1024" height="1024" fill="url(#bg)"/>
+
+  <!-- Airplane silhouette (white) centered at 512,512 -->
+  <!-- Fuselage -->
+  <ellipse cx="512" cy="512" rx="280" ry="56" fill="white" transform="rotate(-30, 512, 512)"/>
+
+  <!-- Main wings -->
+  <ellipse cx="480" cy="512" rx="340" ry="70" fill="white" transform="rotate(60, 480, 512)"/>
+  <ellipse cx="544" cy="512" rx="340" ry="70" fill="white" transform="rotate(120, 544, 512)"/>
+
+  <!-- Tail fins -->
+  <ellipse cx="326" cy="580" rx="130" ry="36" fill="white" transform="rotate(50, 326, 580)"/>
+  <ellipse cx="698" cy="444" rx="130" ry="36" fill="white" transform="rotate(50, 698, 444)"/>
+
+  <!-- Cockpit / nose highlight -->
+  <ellipse cx="680" cy="394" rx="40" ry="22" fill="#bae6fd" transform="rotate(-30, 680, 394)"/>
+</svg>

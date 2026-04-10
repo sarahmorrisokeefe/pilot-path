@@ -85,47 +85,74 @@ The included `vercel.json` handles SPA routing (all paths rewrite to `index.html
 
 ---
 
-## Wrapping for iOS with Capacitor
+## iOS Development (Capacitor)
 
-### 1. Install Capacitor
+The app is fully configured for native iOS via Capacitor. All Capacitor packages are installed and `capacitor.config.ts` is committed. The `ios/` folder is gitignored and regenerated locally.
 
-```bash
-npm install @capacitor/core @capacitor/ios
-npx cap init PilotPath com.yourcompany.pilotpath --web-dir dist
-```
-
-### 2. Add the iOS platform
+### First-time iOS setup
 
 ```bash
-npx cap add ios
-```
+# 1. Install dependencies (already done if you ran npm install)
+npm install
 
-### 3. Swap localStorage for Capacitor Preferences *(optional but recommended)*
-
-In `src/hooks/useStorage.ts`, replace the `localStorage` calls with `@capacitor/preferences`:
-
-```typescript
-import { Preferences } from '@capacitor/preferences'
-
-// getItem  → (await Preferences.get({ key })).value
-// setItem  → await Preferences.set({ key, value })
-// removeItem → await Preferences.remove({ key })
-```
-
-### 4. Build and sync
-
-```bash
+# 2. Build web assets + add iOS platform
 npm run build
-npx cap sync
+npx cap add ios
+
+# 3. Open in Xcode
+npm run ios:open
+# → Select your Apple development team in Signing & Capabilities → Run
 ```
 
-### 5. Open in Xcode
+### Ongoing development workflow
 
 ```bash
-npx cap open ios
+# After any code changes:
+npm run ios:build   # builds Vite + syncs to Xcode project
+
+# Then in Xcode: Cmd+R to re-run on simulator/device
 ```
 
-Then select your development team in **Signing & Capabilities** and hit **Run**.
+### What's included
+
+| Feature | Implementation |
+|---------|---------------|
+| Storage | `@capacitor/preferences` on native, `localStorage` on web (auto-detected) |
+| Status bar | Syncs with dark mode via `@capacitor/status-bar` |
+| Keyboard | `@capacitor/keyboard` — resize body on keyboard show |
+| Splash screen | `@capacitor/splash-screen` — sky-blue (#0ea5e9), 2s auto-hide |
+| Safe areas | CSS `env(safe-area-inset-top/bottom)` on header + bottom nav |
+| Native feel | `-webkit-user-select: none`, `-webkit-touch-callout: none` |
+| Viewport | `viewport-fit=cover` for edge-to-edge on notched devices |
+
+### App icon
+
+Source icon is at `assets/icon.svg`. To generate the 1024×1024 PNG:
+
+```bash
+node scripts/generate-icon.js
+# Follow the printed instructions (requires sharp or ImageMagick)
+
+# Or use @capacitor/assets to generate all required sizes at once:
+npx @capacitor/assets generate --ios
+```
+
+Then in Xcode: **Assets.xcassets → AppIcon → drag icon.png into the 1024×1024 slot.**
+
+### Info.plist additions (do in Xcode)
+
+Open `ios/App/App/Info.plist` and add:
+
+```xml
+<key>UIRequiresFullScreen</key>
+<true/>
+<key>UISupportedInterfaceOrientations</key>
+<array>
+    <string>UIInterfaceOrientationPortrait</string>
+</array>
+```
+
+See `TESTFLIGHT.md` for the full TestFlight submission checklist.
 
 ---
 
