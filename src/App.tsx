@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { SpeedInsights } from '@vercel/speed-insights/react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { Analytics } from '@vercel/analytics/react'
 import { Capacitor } from '@capacitor/core'
 import { StatusBar, Style } from '@capacitor/status-bar'
 import { Home } from './pages/Home'
@@ -89,6 +90,7 @@ export default function App() {
     <BrowserRouter>
       <AuthProvider>
         <AppRoutes />
+        <Analytics />
       </AuthProvider>
       <SpeedInsights />
     </BrowserRouter>

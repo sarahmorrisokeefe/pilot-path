@@ -19,8 +19,8 @@ export function Layout({ children, hideNav = false, title, backPath }: LayoutPro
   return (
     <div className="min-h-screen bg-sky-50 dark:bg-slate-900 flex flex-col">
       {/* Header */}
-      <header className="sticky top-0 z-30 bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm border-b border-slate-200 dark:border-slate-700 safe-top">
-        <div className="flex items-center justify-between px-4 h-14 max-w-lg mx-auto">
+      <header className="sticky top-0 z-30 bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm border-b border-slate-200 dark:border-slate-700 safe-top transform-gpu">
+        <div className="flex items-center justify-between px-4 h-14">
           <div className="flex items-center gap-3">
             {backPath && (
               <a
