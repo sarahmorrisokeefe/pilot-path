@@ -1,5 +1,8 @@
+import { lazy, Suspense } from 'react'
 import { motion } from 'framer-motion'
 import type { Question } from '../../types'
+
+const StaffNotation = lazy(() => import('../music/StaffNotation').then(m => ({ default: m.StaffNotation })))
 
 interface QuestionCardProps {
   question: Question
@@ -47,6 +50,15 @@ export function QuestionCard({
       <p className="text-sm font-medium text-slate-400 dark:text-slate-500 mb-3">
         Question {questionNumber} of {totalQuestions}
       </p>
+
+      {/* Staff notation (lazy-loaded) */}
+      {question.staffConfig && (
+        <Suspense fallback={<div className="h-32 flex items-center justify-center text-slate-400">Loading notation...</div>}>
+          <div className="mb-4 flex justify-center">
+            <StaffNotation {...question.staffConfig} />
+          </div>
+        </Suspense>
+      )}
 
       {/* Question text */}
       <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 mb-4 shadow-sm border border-slate-100 dark:border-slate-700">

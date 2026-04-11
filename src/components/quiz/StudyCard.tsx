@@ -1,5 +1,8 @@
+import { lazy, Suspense } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import type { LessonSlide } from '../../types'
+
+const StaffNotation = lazy(() => import('../music/StaffNotation').then(m => ({ default: m.StaffNotation })))
 
 interface StudyCardProps {
   slide: LessonSlide
@@ -55,6 +58,15 @@ export function StudyCard({
           <h2 className="text-xl font-black text-slate-900 dark:text-white leading-tight">
             {slide.topic}
           </h2>
+
+          {/* Staff notation (lazy-loaded) */}
+          {slide.staffConfig && (
+            <Suspense fallback={<div className="h-32 flex items-center justify-center text-slate-400">Loading notation...</div>}>
+              <div className="flex justify-center">
+                <StaffNotation {...slide.staffConfig} />
+              </div>
+            </Suspense>
+          )}
 
           {/* Question context (true/false only) — gives "True"/"False" a subject */}
           {slide.questionText && (
