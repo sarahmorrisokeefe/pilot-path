@@ -1,69 +1,65 @@
 import type { Course } from '../types'
-import { groundSchoolModules } from './groundSchool'
-import { pplModules } from './ppl'
-import { irModules } from './ir'
-import { cplModules } from './cpl'
 
 export const COURSES: Course[] = [
   {
-    id: 'ground-school',
-    title: 'Ground School Basics',
-    shortTitle: 'Ground School',
-    description: 'Airspace, weather, charts, regulations & aerodynamics fundamentals',
-    icon: '🎓',
-    color: 'bg-emerald-500',
-    bgGradient: 'bg-gradient-to-r from-emerald-500 to-teal-600',
-    modules: groundSchoolModules,
-    testConfig: {
-      questionCount: 60,
-      timeLimit: 150,
-      passingScore: 70,
-    },
+    id: 'notation-basics',
+    title: 'Notation Basics',
+    shortTitle: 'Notation',
+    description:
+      'Learn to read the staff, identify clefs, and understand accidentals.',
+    icon: '🎼',
+    color: 'cadence-800',
+    bgGradient: 'bg-gradient-to-br from-cadence-800 to-cadence-600',
+    modules: [],
+    testConfig: { questionCount: 15, timeLimit: 10, passingScore: 70 },
   },
   {
-    id: 'ppl',
-    title: 'Private Pilot License',
-    shortTitle: 'PPL',
-    description: 'FAA PAR written exam — all topics for the private pilot certificate',
-    icon: '🛩️',
-    color: 'bg-cadence-800',
-    bgGradient: 'bg-gradient-to-r from-cadence-800 to-cadence-600',
-    modules: pplModules,
-    testConfig: {
-      questionCount: 60,
-      timeLimit: 150,
-      passingScore: 70,
-    },
+    id: 'rhythm-and-meter',
+    title: 'Rhythm & Meter',
+    shortTitle: 'Rhythm',
+    description:
+      'Master note values, time signatures, and rhythmic patterns.',
+    icon: '🥁',
+    color: 'copper-500',
+    bgGradient: 'bg-gradient-to-br from-copper-500 to-copper-700',
+    modules: [],
+    testConfig: { questionCount: 15, timeLimit: 10, passingScore: 70 },
   },
   {
-    id: 'ir',
-    title: 'Instrument Rating',
-    shortTitle: 'Instrument Rating',
-    description: 'IFR procedures, approaches, holds, weather minimums & IFR planning',
-    icon: '🌫️',
-    color: 'bg-violet-500',
-    bgGradient: 'bg-gradient-to-r from-violet-500 to-purple-700',
-    modules: irModules,
-    testConfig: {
-      questionCount: 60,
-      timeLimit: 180,
-      passingScore: 70,
-    },
+    id: 'scales-and-keys',
+    title: 'Scales & Keys',
+    shortTitle: 'Scales',
+    description:
+      'Explore major and minor scales, key signatures, and the circle of fifths.',
+    icon: '🎹',
+    color: 'cadence-600',
+    bgGradient: 'bg-gradient-to-br from-cadence-600 to-cadence-800',
+    modules: [],
+    testConfig: { questionCount: 20, timeLimit: 15, passingScore: 70 },
   },
   {
-    id: 'cpl',
-    title: 'Commercial Pilot Certificate',
-    shortTitle: 'Commercial',
-    description: 'Commercial FARs, complex aircraft, performance & advanced operations',
-    icon: '🏆',
-    color: 'bg-amber-500',
-    bgGradient: 'bg-gradient-to-r from-amber-500 to-orange-600',
-    modules: cplModules,
-    testConfig: {
-      questionCount: 100,
-      timeLimit: 180,
-      passingScore: 70,
-    },
+    id: 'intervals',
+    title: 'Intervals',
+    shortTitle: 'Intervals',
+    description:
+      'Identify and construct intervals — the building blocks of harmony.',
+    icon: '📏',
+    color: 'copper-600',
+    bgGradient: 'bg-gradient-to-br from-copper-600 to-copper-500',
+    modules: [],
+    testConfig: { questionCount: 20, timeLimit: 15, passingScore: 70 },
+  },
+  {
+    id: 'chords',
+    title: 'Chords',
+    shortTitle: 'Chords',
+    description:
+      'Build and identify triads, inversions, and seventh chords.',
+    icon: '🎸',
+    color: 'cadence-700',
+    bgGradient: 'bg-gradient-to-br from-cadence-700 to-cadence-900',
+    modules: [],
+    testConfig: { questionCount: 20, timeLimit: 15, passingScore: 70 },
   },
 ]
 
