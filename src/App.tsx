@@ -14,6 +14,7 @@ import { WeakAreas } from './pages/WeakAreas'
 import { Progress } from './pages/Progress'
 import { Auth } from './pages/Auth'
 import { Settings } from './pages/Settings'
+import { PlacementTest } from './pages/PlacementTest'
 import { useDarkMode } from './hooks/useDarkMode'
 import { useProgress, pushProgressToSupabase } from './hooks/useProgress'
 import { AuthProvider, useAuth } from './context/AuthContext'
@@ -76,6 +77,7 @@ function AppRoutes() {
         <Route path="/review" element={<WeakAreas />} />
         <Route path="/progress" element={<Progress />} />
         <Route path="/auth" element={<Auth />} />
+        <Route path="/placement" element={<PlacementTest />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
