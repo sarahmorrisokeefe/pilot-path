@@ -26,6 +26,8 @@ vite.config.ts.timestamp-*
 
 # ─── Claude Code ───────────────────────────────────────────────────────────────
 .claude/
+.superpowers/
+.worktrees/
 
 # ─── Editor / OS ───────────────────────────────────────────────────────────────
 .DS_Store
