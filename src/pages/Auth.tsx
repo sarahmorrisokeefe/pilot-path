@@ -88,7 +88,7 @@ export function Auth() {
           <div className="text-5xl mb-3 text-copper-500">♩</div>
           <h1 className="font-black text-2xl text-slate-900 dark:text-white">Cadence</h1>
           <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">
-            {mode === 'forgot' ? 'Reset your password' : 'Save your progress across devices'}
+            {mode === 'forgot' ? 'Reset your password' : 'Sign in to start learning'}
           </p>
         </div>
 

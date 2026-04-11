@@ -46,19 +46,8 @@ export function Layout({ children, hideNav = false, title, backPath }: LayoutPro
               </div>
             )}
           </div>
-          {/* Right side: sync/avatar + settings + dark mode toggle */}
+          {/* Right side: avatar + settings + dark mode toggle */}
           <div className="flex items-center gap-1">
-            {/* Signed-out: sign in button */}
-            {!user && (
-              <button
-                onClick={() => navigate('/auth')}
-                className="flex items-center gap-1 text-xs font-semibold bg-cadence-800 hover:bg-cadence-700 active:bg-cadence-600 text-white px-3 py-1.5 rounded-lg transition-colors touch-manipulation"
-                aria-label="Sign in"
-              >
-                Sign In
-              </button>
-            )}
-
             {/* Signed-in: avatar circle */}
             {user && (
               <button
