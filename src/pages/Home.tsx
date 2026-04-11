@@ -23,8 +23,8 @@ export function Home() {
   const weakAreas = getTopWeakAreas(progress, 3)
 
   const today = getTodayDateString()
-  const dailyDone = progress.dailyGoalDate === today ? progress.dailyGoalProgress : 0
-  const dailyGoal = progress.dailyGoal
+  const dailyDone = progress.dailyGoalDate === today ? (progress.dailyGoalProgress ?? 0) : 0
+  const dailyGoal = progress.dailyGoal ?? 3
   const dailyPct = Math.min(100, Math.round((dailyDone / dailyGoal) * 100))
 
   // Find next incomplete lesson across all courses

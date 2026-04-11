@@ -14,11 +14,12 @@ export function ProgressBar({
   animated = true,
 }: ProgressBarProps) {
   const clamped = Math.min(100, Math.max(0, value))
+  const bgColor = color.startsWith('bg-') ? color : `bg-${color}`
   return (
     <div className="w-full">
       <div className={`w-full ${height} bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden`}>
         <div
-          className={`${height} ${color} rounded-full ${animated ? 'transition-all duration-500 ease-out' : ''}`}
+          className={`${height} ${bgColor} rounded-full ${animated ? 'transition-all duration-500 ease-out' : ''}`}
           style={{ width: `${clamped}%` }}
         />
       </div>

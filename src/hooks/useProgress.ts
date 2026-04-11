@@ -71,10 +71,17 @@ function calculateLevel(totalXP: number): number {
 }
 
 export function useProgress() {
-  const [progress, setProgress] = useStorage<UserProgress>(
+  const [rawProgress, setProgress] = useStorage<UserProgress>(
     PROGRESS_KEY,
     defaultProgress
   )
+
+  // Merge with defaults to ensure new fields exist on old stored data
+  const progress: UserProgress = {
+    ...defaultProgress,
+    ...rawProgress,
+    streak: { ...defaultProgress.streak, ...rawProgress.streak },
+  }
 
   // ─── Streak Management ──────────────────────────────────────────────────────
 
