@@ -5,7 +5,7 @@ type DarkModePreference = 'light' | 'dark' | 'system'
 
 export function useDarkMode() {
   const [preference, setPreference] = useStorage<DarkModePreference>(
-    'pilotpath_theme',
+    'cadence_theme',
     'system'
   )
 

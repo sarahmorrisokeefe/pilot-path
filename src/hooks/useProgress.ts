@@ -42,7 +42,7 @@ export async function fetchProgressFromSupabase(
   }
 }
 
-const PROGRESS_KEY = 'pilotpath_progress'
+const PROGRESS_KEY = 'cadence_progress'
 
 const defaultProgress: UserProgress = {
   courses: {},
@@ -55,6 +55,19 @@ const defaultProgress: UserProgress = {
     lastStudied: null,
   },
   lastActivity: null,
+  badges: [],
+  dailyGoal: 3,
+  dailyGoalProgress: 0,
+  dailyGoalDate: null,
+  level: 1,
+}
+
+function calculateLevel(totalXP: number): number {
+  const thresholds = [0, 50, 150, 300, 500, 800, 1200, 1800, 2500, 3500]
+  for (let i = thresholds.length - 1; i >= 0; i--) {
+    if (totalXP >= thresholds[i]) return i + 1
+  }
+  return 1
 }
 
 export function useProgress() {
@@ -192,17 +205,22 @@ export function useProgress() {
           }
         }
 
+        const newTotalXP = prev.totalXP + (alreadyCompleted ? 0 : xpEarned)
+
         return {
           ...prev,
           courses: { ...prev.courses, [courseId]: updatedCourse },
           weakAreas,
-          totalXP: prev.totalXP + (alreadyCompleted ? 0 : xpEarned),
+          totalXP: newTotalXP,
           streak: {
             current: newCurrent,
             longest: Math.max(newCurrent, streak.longest),
             lastStudied: today,
           },
           lastActivity: new Date().toISOString(),
+          dailyGoalProgress: prev.dailyGoalDate === today ? prev.dailyGoalProgress + 1 : 1,
+          dailyGoalDate: today,
+          level: calculateLevel(newTotalXP),
         }
       })
 
