@@ -1,6 +1,24 @@
 // ─── Question & Content Types ────────────────────────────────────────────────
 
-export type QuestionType = 'multiple-choice' | 'true-false'
+export type QuestionType = 'multiple-choice' | 'true-false' | 'staff-identify' | 'staff-select'
+
+export interface NoteSpec {
+  keys: string[]         // VexFlow format: e.g., ['c/4'], ['e/4', 'g/4', 'b/4'] for chord
+  duration: string       // e.g., 'q' (quarter), 'h' (half), 'w' (whole)
+  accidental?: string    // e.g., '#', 'b', 'n'
+}
+
+export interface StaffConfig {
+  notes: NoteSpec[]
+  clef: 'treble' | 'bass' | 'alto' | 'tenor'
+  keySignature?: string
+  timeSignature?: string
+  width?: number
+  height?: number
+  showLabels?: boolean
+}
+
+export type DiagramType = 'chord' | 'interval' | 'scale' | 'key-signature' | 'notation'
 
 export interface Question {
   id: string
@@ -11,6 +29,9 @@ export interface Question {
   explanation: string
   reference?: string
   topic: string
+  staffConfig?: StaffConfig
+  diagramType?: DiagramType
+  difficulty?: number  // 1-5, used by placement test
 }
 
 export interface LessonSlide {
@@ -20,6 +41,8 @@ export interface LessonSlide {
   questionText?: string  // original question text — populated for true/false so keyFact has context
   keyFact?: string       // key takeaway — the correct answer reformulated as a rule
   reference?: string     // e.g. "14 CFR 91.131"
+  staffConfig?: StaffConfig
+  diagramType?: DiagramType
 }
 
 export interface Lesson {
@@ -110,11 +133,45 @@ export interface UserProgress {
   totalXP: number
   streak: StreakData
   lastActivity: string | null
+  placementResult?: PlacementResult
+  badges: BadgeId[]
+  dailyGoal: number            // quizzes per day (1, 3, or 5)
+  dailyGoalProgress: number    // quizzes completed today
+  dailyGoalDate: string | null // ISO date for today tracking
+  level: number
+}
+
+export interface PlacementResult {
+  completedAt: string
+  score: number
+  recommendedCourseIndex: number
+  skillLevel: number // 1-5
+}
+
+export type BadgeId =
+  | 'first-steps'
+  | 'note-reader'
+  | 'rhythm-keeper'
+  | 'scale-master'
+  | 'interval-pro'
+  | 'chord-builder'
+  | 'perfect-score'
+  | 'week-warrior'
+  | 'dedicated'
+  | 'century'
+  | 'scholar'
+
+export interface Badge {
+  id: BadgeId
+  name: string
+  description: string
+  icon: string
+  earnedAt?: string
 }
 
 // ─── UI Types ─────────────────────────────────────────────────────────────────
 
-export type TabId = 'home' | 'courses' | 'test' | 'weak-areas' | 'progress'
+export type TabId = 'home' | 'learn' | 'practice' | 'review' | 'progress'
 
 export interface QuizState {
   currentIndex: number
