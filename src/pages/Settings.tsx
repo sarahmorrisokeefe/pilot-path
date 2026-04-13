@@ -152,7 +152,7 @@ export function Settings() {
               </p>
               <button
                 onClick={() => navigate('/auth')}
-                className="w-full py-3 rounded-xl bg-sky-500 hover:bg-sky-600 text-white font-bold text-sm transition-colors touch-manipulation"
+                className="w-full py-3 rounded-xl bg-cadence-800 hover:bg-cadence-700 text-white font-bold text-sm transition-colors touch-manipulation"
               >
                 Sign In or Create Account
               </button>
@@ -184,7 +184,18 @@ export function Settings() {
           <SettingsRow
             label="musictheory.net"
             value="musictheory.net ↗"
-            onClick={() => window.open('https://www.musictheory.net', '_blank', 'noopener,noreferrer')}
+            onClick={() => window.open('https://www.musictheory.net/', '_blank', 'noopener,noreferrer')}
+          />
+          <SettingsRow
+            label="AP Music Theory"
+            value="collegeboard.org ↗"
+            onClick={() =>
+              window.open(
+                'https://apcentral.collegeboard.org/courses/ap-music-theory',
+                '_blank',
+                'noopener,noreferrer'
+              )
+            }
           />
         </SettingsCard>
       </motion.div>

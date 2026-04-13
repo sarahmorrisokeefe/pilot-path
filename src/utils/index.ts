@@ -77,15 +77,12 @@ export function getCourseCompletion(
 }
 
 export function isModuleLocked(
-  course: Course,
-  moduleIndex: number,
-  progress: UserProgress
+  _course: Course,
+  _moduleIndex: number,
+  _progress: UserProgress
 ): boolean {
-  if (moduleIndex === 0) return false
-
-  const prevModule = course.modules[moduleIndex - 1]
-  const completion = getModuleCompletion(course, prevModule, progress)
-  return completion < 100
+  // All modules are freely accessible in Cadence
+  return false
 }
 
 export function getCourseXP(courseId: string, progress: UserProgress): number {

@@ -1,12 +1,13 @@
-import { useCallback } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useStorage } from './useStorage'
 import type { UserProgress, Question, TestResult } from '../types'
 import { getTodayDateString, isToday, isYesterday } from '../utils'
 import { supabase, supabaseEnabled } from '../lib/supabase'
+import { useAuth } from '../context/AuthContext'
 
 // ─── Supabase sync helpers (standalone, no hook deps) ────────────────────────
 
-/** Fire-and-forget upsert of the full progress object to Supabase. */
+/** Upsert the full progress object to Supabase (source of truth). */
 export async function pushProgressToSupabase(
   userId: string,
   progress: UserProgress
@@ -20,7 +21,7 @@ export async function pushProgressToSupabase(
         { onConflict: 'id' }
       )
   } catch {
-    // Network failure — silently ignore; local data is always the source of truth
+    // Network failure — localStorage has the data as offline cache
   }
 }
 
@@ -55,12 +56,75 @@ const defaultProgress: UserProgress = {
     lastStudied: null,
   },
   lastActivity: null,
+  badges: [],
+  dailyGoal: 3,
+  dailyGoalProgress: 0,
+  dailyGoalDate: null,
+  level: 1,
+}
+
+function calculateLevel(totalXP: number): number {
+  const thresholds = [0, 50, 150, 300, 500, 800, 1200, 1800, 2500, 3500]
+  for (let i = thresholds.length - 1; i >= 0; i--) {
+    if (totalXP >= thresholds[i]) return i + 1
+  }
+  return 1
 }
 
 export function useProgress() {
-  const [progress, setProgress] = useStorage<UserProgress>(
+  const { user } = useAuth()
+  const [cachedProgress, setCachedProgress] = useStorage<UserProgress>(
     PROGRESS_KEY,
     defaultProgress
+  )
+  const [progress, setProgressState] = useState<UserProgress>({
+    ...defaultProgress,
+    ...cachedProgress,
+    streak: { ...defaultProgress.streak, ...cachedProgress.streak },
+  })
+  const [loaded, setLoaded] = useState(false)
+
+  // On mount / sign-in: load from Supabase (source of truth)
+  useEffect(() => {
+    if (!user) return
+    let cancelled = false
+
+    async function load() {
+      const remote = await fetchProgressFromSupabase(user!.id)
+      if (cancelled) return
+      if (remote) {
+        const merged = {
+          ...defaultProgress,
+          ...remote,
+          streak: { ...defaultProgress.streak, ...remote.streak },
+        }
+        setProgressState(merged)
+        setCachedProgress(merged) // update local cache
+      }
+      setLoaded(true)
+    }
+
+    load()
+    return () => { cancelled = true }
+  }, [user?.id]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Helper: update progress in state, localStorage, and Supabase
+  const setProgress = useCallback(
+    (updater: UserProgress | ((prev: UserProgress) => UserProgress)) => {
+      setProgressState((prev) => {
+        const next = typeof updater === 'function' ? updater(prev) : updater
+        // Write to localStorage (offline cache)
+        setCachedProgress(next)
+        // Write to Supabase (source of truth)
+        if (user && supabaseEnabled) {
+          pushProgressToSupabase(user.id, next).catch(() => {
+            // Offline — localStorage has the data, will sync on next successful write
+          })
+        }
+        return next
+      })
+    },
+    [user, setCachedProgress]
   )
 
   // ─── Streak Management ──────────────────────────────────────────────────────
@@ -192,17 +256,22 @@ export function useProgress() {
           }
         }
 
+        const newTotalXP = prev.totalXP + (alreadyCompleted ? 0 : xpEarned)
+
         return {
           ...prev,
           courses: { ...prev.courses, [courseId]: updatedCourse },
           weakAreas,
-          totalXP: prev.totalXP + (alreadyCompleted ? 0 : xpEarned),
+          totalXP: newTotalXP,
           streak: {
             current: newCurrent,
             longest: Math.max(newCurrent, streak.longest),
             lastStudied: today,
           },
           lastActivity: new Date().toISOString(),
+          dailyGoalProgress: prev.dailyGoalDate === today ? prev.dailyGoalProgress + 1 : 1,
+          dailyGoalDate: today,
+          level: calculateLevel(newTotalXP),
         }
       })
 
@@ -284,15 +353,9 @@ export function useProgress() {
 
   const isStudiedToday = isToday(progress.streak.lastStudied ?? '')
 
-  /** Load remote progress and overwrite local if the remote has more total XP. */
-  const loadFromSupabase = useCallback(async (userId: string) => {
-    const remote = await fetchProgressFromSupabase(userId)
-    if (!remote) return
-    setProgress((local) => (remote.totalXP >= local.totalXP ? remote : local))
-  }, [setProgress])
-
   return {
     progress,
+    loaded,
     completeLesson,
     completeTest,
     updateStreak,
@@ -300,6 +363,5 @@ export function useProgress() {
     getLessonScore,
     resetProgress,
     isStudiedToday,
-    loadFromSupabase,
   }
 }

@@ -1,69 +1,70 @@
 import type { Course } from '../types'
-import { fundamentalsModules } from './fundamentals'
-import { chordModules } from './chords'
-import { scaleModules } from './scales'
-import { earTrainingModules } from './earTraining'
+import { notationBasicsModules } from './notationBasics'
+import { rhythmAndMeterModules } from './rhythmAndMeter'
+import { scalesAndKeysModules } from './scalesAndKeys'
+import { intervalsModules } from './intervals'
+import { chordsModules } from './chords'
 
 export const COURSES: Course[] = [
   {
-    id: 'fundamentals',
-    title: 'Music Fundamentals',
-    shortTitle: 'Fundamentals',
-    description: 'Notes, rhythm, intervals, key signatures & basic harmony',
-    icon: '🎓',
-    color: 'bg-emerald-500',
-    bgGradient: 'bg-gradient-to-r from-emerald-500 to-teal-600',
-    modules: fundamentalsModules,
-    testConfig: {
-      questionCount: 60,
-      timeLimit: 150,
-      passingScore: 70,
-    },
+    id: 'notation-basics',
+    title: 'Notation Basics',
+    shortTitle: 'Notation',
+    description:
+      'Learn to read the staff, identify clefs, and understand accidentals.',
+    icon: '🎼',
+    color: 'cadence-800',
+    bgGradient: 'bg-gradient-to-br from-cadence-800 to-cadence-600',
+    modules: notationBasicsModules,
+    testConfig: { questionCount: 15, timeLimit: 10, passingScore: 70 },
+  },
+  {
+    id: 'rhythm-and-meter',
+    title: 'Rhythm & Meter',
+    shortTitle: 'Rhythm',
+    description:
+      'Master note values, time signatures, and rhythmic patterns.',
+    icon: '🥁',
+    color: 'copper-500',
+    bgGradient: 'bg-gradient-to-br from-copper-500 to-copper-700',
+    modules: rhythmAndMeterModules,
+    testConfig: { questionCount: 15, timeLimit: 10, passingScore: 70 },
+  },
+  {
+    id: 'scales-and-keys',
+    title: 'Scales & Keys',
+    shortTitle: 'Scales',
+    description:
+      'Explore major and minor scales, key signatures, and the circle of fifths.',
+    icon: '🎹',
+    color: 'cadence-600',
+    bgGradient: 'bg-gradient-to-br from-cadence-600 to-cadence-800',
+    modules: scalesAndKeysModules,
+    testConfig: { questionCount: 20, timeLimit: 15, passingScore: 70 },
+  },
+  {
+    id: 'intervals',
+    title: 'Intervals',
+    shortTitle: 'Intervals',
+    description:
+      'Identify and construct intervals — the building blocks of harmony.',
+    icon: '📏',
+    color: 'copper-600',
+    bgGradient: 'bg-gradient-to-br from-copper-600 to-copper-500',
+    modules: intervalsModules,
+    testConfig: { questionCount: 20, timeLimit: 15, passingScore: 70 },
   },
   {
     id: 'chords',
-    title: 'Chord Theory',
+    title: 'Chords',
     shortTitle: 'Chords',
-    description: 'Triads, seventh chords, inversions & chord progressions',
-    icon: '🎹',
-    color: 'bg-sky-500',
-    bgGradient: 'bg-gradient-to-r from-sky-500 to-blue-600',
-    modules: chordModules,
-    testConfig: {
-      questionCount: 60,
-      timeLimit: 150,
-      passingScore: 70,
-    },
-  },
-  {
-    id: 'scales',
-    title: 'Scales & Modes',
-    shortTitle: 'Scales',
-    description: 'Major, minor, modes, pentatonic & blues scales',
+    description:
+      'Build and identify triads, inversions, and seventh chords.',
     icon: '🎸',
-    color: 'bg-violet-500',
-    bgGradient: 'bg-gradient-to-r from-violet-500 to-purple-700',
-    modules: scaleModules,
-    testConfig: {
-      questionCount: 60,
-      timeLimit: 180,
-      passingScore: 70,
-    },
-  },
-  {
-    id: 'ear-training',
-    title: 'Ear Training',
-    shortTitle: 'Ear Training',
-    description: 'Interval recognition, chord quality, rhythm & melody',
-    icon: '👂',
-    color: 'bg-amber-500',
-    bgGradient: 'bg-gradient-to-r from-amber-500 to-orange-600',
-    modules: earTrainingModules,
-    testConfig: {
-      questionCount: 60,
-      timeLimit: 180,
-      passingScore: 70,
-    },
+    color: 'cadence-700',
+    bgGradient: 'bg-gradient-to-br from-cadence-700 to-cadence-900',
+    modules: chordsModules,
+    testConfig: { questionCount: 20, timeLimit: 15, passingScore: 70 },
   },
 ]
 

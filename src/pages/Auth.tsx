@@ -76,7 +76,7 @@ export function Auth() {
     w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-600
     bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-base
     placeholder-slate-400 dark:placeholder-slate-500
-    focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent
+    focus:outline-none focus:ring-2 focus:ring-cadence-400 focus:border-transparent
     transition-colors
   `
 
@@ -85,10 +85,10 @@ export function Auth() {
       <div className="max-w-sm mx-auto pt-4">
         {/* Logo */}
         <div className="text-center mb-8">
-          <div className="text-5xl mb-3">🎵</div>
+          <div className="text-5xl mb-3 text-copper-500">♩</div>
           <h1 className="font-black text-2xl text-slate-900 dark:text-white">Cadence</h1>
           <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">
-            {mode === 'forgot' ? 'Reset your password' : 'Save your progress across devices'}
+            {mode === 'forgot' ? 'Reset your password' : 'Sign in to start learning'}
           </p>
         </div>
 
@@ -207,7 +207,7 @@ export function Auth() {
                 <button
                   type="button"
                   onClick={() => switchMode('forgot')}
-                  className="text-sky-500 dark:text-sky-400 hover:underline"
+                  className="text-cadence-800 dark:text-cadence-300 hover:underline"
                 >
                   Forgot password?
                 </button>
@@ -216,7 +216,7 @@ export function Auth() {
                 <button
                   type="button"
                   onClick={() => switchMode('signin')}
-                  className="text-sky-500 dark:text-sky-400 hover:underline"
+                  className="text-cadence-800 dark:text-cadence-300 hover:underline"
                 >
                   ← Back to sign in
                 </button>

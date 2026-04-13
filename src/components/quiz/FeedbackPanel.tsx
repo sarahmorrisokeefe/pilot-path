@@ -1,7 +1,6 @@
 import { motion } from 'framer-motion'
 import type { Question } from '../../types'
 import { Button } from '../ui/Button'
-import { ReferenceLink } from '../ui/ReferenceLink'
 
 interface FeedbackPanelProps {
   question: Question
@@ -36,14 +35,6 @@ export function FeedbackPanel({ question, isCorrect, isLast, onContinue }: Feedb
       <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed mb-2">
         {question.explanation}
       </p>
-
-      {/* Reference */}
-      {question.reference && (
-        <ReferenceLink
-          reference={question.reference}
-          className="text-slate-500 dark:text-slate-400 mb-3"
-        />
-      )}
 
       <Button
         onClick={onContinue}

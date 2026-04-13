@@ -2,12 +2,12 @@ import { type ReactNode } from 'react'
 
 interface BadgeProps {
   children: ReactNode
-  variant?: 'sky' | 'green' | 'amber' | 'red' | 'purple' | 'slate'
+  variant?: 'cadence' | 'green' | 'amber' | 'red' | 'purple' | 'slate'
   size?: 'sm' | 'md'
 }
 
 const variantClasses = {
-  sky: 'bg-sky-100 text-sky-700 dark:bg-sky-900/40 dark:text-sky-300',
+  cadence: 'bg-cadence-100 text-cadence-800 dark:bg-cadence-900/40 dark:text-cadence-300',
   green: 'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300',
   amber: 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300',
   red: 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300',
@@ -20,7 +20,7 @@ const sizeClasses = {
   md: 'px-2.5 py-1 text-sm',
 }
 
-export function Badge({ children, variant = 'sky', size = 'sm' }: BadgeProps) {
+export function Badge({ children, variant = 'cadence', size = 'sm' }: BadgeProps) {
   return (
     <span
       className={`inline-flex items-center gap-1 font-medium rounded-full ${variantClasses[variant]} ${sizeClasses[size]}`}

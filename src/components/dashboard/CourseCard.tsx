@@ -22,7 +22,7 @@ export function CourseCard({ course }: CourseCardProps) {
 
   return (
     <div
-      onClick={() => navigate(`/courses/${course.id}`)}
+      onClick={() => navigate(`/learn/${course.id}`)}
       className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden cursor-pointer active:scale-[0.98] transition-transform duration-100 touch-manipulation"
     >
       {/* Color banner */}

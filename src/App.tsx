@@ -14,39 +14,14 @@ import { WeakAreas } from './pages/WeakAreas'
 import { Progress } from './pages/Progress'
 import { Auth } from './pages/Auth'
 import { Settings } from './pages/Settings'
+import { PlacementTest } from './pages/PlacementTest'
 import { useDarkMode } from './hooks/useDarkMode'
-import { useProgress, pushProgressToSupabase } from './hooks/useProgress'
 import { AuthProvider, useAuth } from './context/AuthContext'
-
-// ─── Background cloud sync ──────────────────────────────────────────────────
-// Renderless component: syncs progress to Supabase whenever it changes while
-// the user is signed in, and loads remote progress on sign-in.
-
-function ProgressSyncEffect() {
-  const { user } = useAuth()
-  const { progress, loadFromSupabase } = useProgress()
-
-  // On sign-in: fetch remote progress and merge (remote wins if totalXP >= local)
-  useEffect(() => {
-    if (user) {
-      loadFromSupabase(user.id)
-    }
-  }, [user?.id]) // eslint-disable-line react-hooks/exhaustive-deps
-
-  // On any progress change while signed in: push to Supabase (fire-and-forget)
-  useEffect(() => {
-    if (user) {
-      pushProgressToSupabase(user.id, progress)
-    }
-  }, [progress, user?.id]) // eslint-disable-line react-hooks/exhaustive-deps
-
-  return null
-}
 
 // ─── Routes ─────────────────────────────────────────────────────────────────
 
 function AppRoutes() {
-  // Initialize dark mode on mount
+  const { user, loading } = useAuth()
   const { isDark } = useDarkMode()
 
   // Add platform class so CSS can target native-only styles
@@ -62,24 +37,44 @@ function AppRoutes() {
     StatusBar.setStyle({ style: isDark ? Style.Light : Style.Dark }).catch(() => {})
   }, [isDark])
 
-  return (
-    <>
-      <ProgressSyncEffect />
+  // Show loading spinner while checking auth
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#f5f3ff] dark:bg-[#0d0f1f] flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-4xl text-copper-500 mb-2">♩</div>
+          <p className="text-slate-500 dark:text-slate-400 text-sm">Loading...</p>
+        </div>
+      </div>
+    )
+  }
+
+  // Not signed in — show auth page only
+  if (!user) {
+    return (
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/courses" element={<Courses />} />
-        <Route path="/courses/:courseId" element={<CourseDetail />} />
-        <Route path="/courses/:courseId/modules/:moduleId" element={<ModuleDetail />} />
-        <Route path="/courses/:courseId/modules/:moduleId/lessons/:lessonId" element={<Lesson />} />
-        <Route path="/practice" element={<PracticeTest />} />
-        <Route path="/practice/:courseId" element={<PracticeTest />} />
-        <Route path="/weak-areas" element={<WeakAreas />} />
-        <Route path="/progress" element={<Progress />} />
         <Route path="/auth" element={<Auth />} />
-        <Route path="/settings" element={<Settings />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="*" element={<Navigate to="/auth" replace />} />
       </Routes>
-    </>
+    )
+  }
+
+  // Signed in — show full app
+  return (
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/learn" element={<Courses />} />
+      <Route path="/learn/:courseId" element={<CourseDetail />} />
+      <Route path="/learn/:courseId/modules/:moduleId" element={<ModuleDetail />} />
+      <Route path="/learn/:courseId/modules/:moduleId/lessons/:lessonId" element={<Lesson />} />
+      <Route path="/practice" element={<PracticeTest />} />
+      <Route path="/review" element={<WeakAreas />} />
+      <Route path="/progress" element={<Progress />} />
+      <Route path="/auth" element={<Auth />} />
+      <Route path="/placement" element={<PlacementTest />} />
+      <Route path="/settings" element={<Settings />} />
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   )
 }
 

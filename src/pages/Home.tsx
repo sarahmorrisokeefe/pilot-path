@@ -1,17 +1,31 @@
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Layout } from '../components/layout/Layout'
-import { CourseCard } from '../components/dashboard/CourseCard'
 import { Card } from '../components/ui/Card'
 import { Badge } from '../components/ui/Badge'
+import { ProgressBar } from '../components/ui/ProgressBar'
 import { COURSES } from '../data/courses'
 import { useProgress } from '../hooks/useProgress'
-import { getTopWeakAreas, getCourseCompletion, getLiveStreak } from '../utils'
+import { getTopWeakAreas, getCourseCompletion, getTodayDateString, getLiveStreak } from '../utils'
+
+const LEVEL_THRESHOLDS = [0, 50, 150, 300, 500, 800, 1200, 1800, 2500, 3500]
+
+function getLevel(totalXP: number) {
+  for (let i = LEVEL_THRESHOLDS.length - 1; i >= 0; i--) {
+    if (totalXP >= LEVEL_THRESHOLDS[i]) return i + 1
+  }
+  return 1
+}
 
 export function Home() {
   const navigate = useNavigate()
   const { progress } = useProgress()
   const weakAreas = getTopWeakAreas(progress, 3)
+
+  const today = getTodayDateString()
+  const dailyDone = progress.dailyGoalDate === today ? (progress.dailyGoalProgress ?? 0) : 0
+  const dailyGoal = progress.dailyGoal ?? 3
+  const dailyPct = Math.min(100, Math.round((dailyDone / dailyGoal) * 100))
 
   // Find next incomplete lesson across all courses
   const nextLesson = (() => {
@@ -30,8 +44,8 @@ export function Home() {
 
   const streak = progress.streak
   const liveStreakCount = getLiveStreak(streak)
-  const today = new Date().toISOString().split('T')[0]
   const studiedToday = streak.lastStudied === today
+  const level = getLevel(progress.totalXP)
 
   const container = {
     hidden: { opacity: 0 },
@@ -43,26 +57,49 @@ export function Home() {
     <Layout>
       <motion.div variants={container} initial="hidden" animate="show" className="space-y-5">
 
-        {/* XP + Streak Hero */}
+        {/* Hero Card */}
         <motion.div variants={item}>
-          <Card className="bg-gradient-to-br from-sky-500 to-blue-600 border-0 text-white" padding="lg">
+          <Card className="bg-gradient-to-br from-cadence-800 to-cadence-600 border-0 text-white" padding="lg">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sky-100 text-sm font-medium">Total XP</p>
-                <p className="text-4xl font-black mt-0.5">⭐ {progress.totalXP}</p>
+                <p className="text-cadence-100 text-sm font-medium">Total XP</p>
+                <p className="text-4xl font-black mt-0.5">{progress.totalXP}</p>
+              </div>
+              <div className="text-center">
+                <p className="text-cadence-100 text-sm font-medium">Level</p>
+                <p className="text-4xl font-black mt-0.5">{level}</p>
               </div>
               <div className="text-right">
-                <p className="text-sky-100 text-sm font-medium">Study Streak</p>
+                <p className="text-cadence-100 text-sm font-medium">Streak</p>
                 <p className="text-4xl font-black mt-0.5">
-                  🔥 {liveStreakCount}
-                  <span className="text-lg font-normal text-sky-200 ml-1">{liveStreakCount === 1 ? 'day' : 'days'}</span>
+                  {liveStreakCount}
+                  <span className="text-lg font-normal text-cadence-200 ml-1">{liveStreakCount === 1 ? 'day' : 'days'}</span>
                 </p>
               </div>
             </div>
-            <div className="mt-3 pt-3 border-t border-white/20 flex items-center gap-2">
-              <span className={`w-2.5 h-2.5 rounded-full ${studiedToday ? 'bg-green-400' : 'bg-sky-300'}`} />
-              <p className="text-sky-100 text-xs">
-                {studiedToday ? 'Studied today! Keep the streak going 💪' : 'Study today to keep your streak alive!'}
+            {/* Daily Goal Bar */}
+            <div className="mt-3 pt-3 border-t border-white/20">
+              <div className="flex items-center justify-between mb-1">
+                <p className="text-cadence-100 text-xs font-medium">
+                  Daily goal: {dailyDone} of {dailyGoal} quizzes
+                </p>
+                {dailyDone >= dailyGoal && (
+                  <span className="text-xs font-bold text-green-300">Done!</span>
+                )}
+              </div>
+              <div className="w-full h-2 bg-white/20 rounded-full overflow-hidden">
+                <div
+                  className={`h-2 rounded-full transition-all duration-500 ease-out ${
+                    dailyDone >= dailyGoal ? 'bg-green-400' : 'bg-white'
+                  }`}
+                  style={{ width: `${dailyPct}%` }}
+                />
+              </div>
+            </div>
+            <div className="mt-2 flex items-center gap-2">
+              <span className={`w-2.5 h-2.5 rounded-full ${studiedToday ? 'bg-green-400' : 'bg-cadence-300'}`} />
+              <p className="text-cadence-100 text-xs">
+                {studiedToday ? 'Studied today! Keep the streak going.' : 'Study today to keep your streak alive!'}
               </p>
             </div>
           </Card>
@@ -77,10 +114,10 @@ export function Home() {
             <Card
               onClick={() =>
                 navigate(
-                  `/courses/${nextLesson.course.id}/modules/${nextLesson.mod.id}/lessons/${nextLesson.lesson.id}`
+                  `/learn/${nextLesson.course.id}/modules/${nextLesson.mod.id}/lessons/${nextLesson.lesson.id}`
                 )
               }
-              className="border-sky-200 dark:border-sky-800 bg-sky-50 dark:bg-sky-900/20"
+              className="border-cadence-200 dark:border-cadence-900 bg-cadence-50 dark:bg-cadence-900/20"
             >
               <div className="flex items-center gap-3">
                 <div className={`w-12 h-12 ${nextLesson.course.bgGradient} rounded-xl flex items-center justify-center text-2xl flex-shrink-0`}>
@@ -94,10 +131,10 @@ export function Home() {
                     {nextLesson.lesson.title}
                   </p>
                   <p className="text-xs text-slate-500 mt-0.5">
-                    {nextLesson.lesson.questions.length} questions · ⭐ {nextLesson.lesson.xpReward} XP
+                    {nextLesson.lesson.questions.length} questions · {nextLesson.lesson.xpReward} XP
                   </p>
                 </div>
-                <div className="text-sky-500 dark:text-sky-400 flex-shrink-0">
+                <div className="text-cadence-800 dark:text-cadence-300 flex-shrink-0">
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
                   </svg>
@@ -107,18 +144,72 @@ export function Home() {
           </motion.div>
         )}
 
-        {/* Weak Areas Callout */}
+        {/* Topic Map */}
+        <motion.div variants={item}>
+          <div className="flex items-center justify-between mb-2">
+            <h2 className="text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
+              Topics
+            </h2>
+            <button
+              onClick={() => navigate('/learn')}
+              className="text-cadence-800 dark:text-cadence-300 text-xs font-semibold touch-manipulation"
+            >
+              Browse all →
+            </button>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            {COURSES.map((course) => {
+              const pct = getCourseCompletion(course, progress)
+              const started = pct > 0
+              const complete = pct === 100
+              return (
+                <div
+                  key={course.id}
+                  onClick={() => navigate(`/learn/${course.id}`)}
+                  className={`bg-white dark:bg-slate-800 rounded-2xl border p-4 cursor-pointer touch-manipulation transition-shadow hover:shadow-md active:scale-[0.98] ${
+                    started
+                      ? 'border-cadence-200 dark:border-cadence-800'
+                      : 'border-slate-100 dark:border-slate-700 opacity-80'
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <div className={`w-10 h-10 ${course.bgGradient} rounded-xl flex items-center justify-center text-xl`}>
+                      {course.icon}
+                    </div>
+                    {complete && (
+                      <span className="text-green-500 text-lg">{'\u2705'}</span>
+                    )}
+                  </div>
+                  <p className="font-bold text-slate-900 dark:text-white text-sm leading-tight">
+                    {course.shortTitle}
+                  </p>
+                  {started && !complete && (
+                    <div className="mt-2">
+                      <ProgressBar value={pct} color={course.color} height="h-1.5" />
+                      <p className="text-[10px] text-slate-500 mt-1">{pct}%</p>
+                    </div>
+                  )}
+                  {!started && (
+                    <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-1">Not started</p>
+                  )}
+                </div>
+              )
+            })}
+          </div>
+        </motion.div>
+
+        {/* Needs Review */}
         {weakAreas.length > 0 && (
           <motion.div variants={item}>
             <h2 className="text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-2">
               Needs Review
             </h2>
             <Card
-              onClick={() => navigate('/weak-areas')}
+              onClick={() => navigate('/review')}
               className="border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-900/20"
             >
               <div className="flex items-center gap-3">
-                <div className="text-3xl">🎯</div>
+                <div className="text-3xl">{'\u{1F3AF}'}</div>
                 <div className="flex-1">
                   <p className="font-bold text-slate-900 dark:text-white text-sm">
                     {weakAreas.length} topic{weakAreas.length !== 1 ? 's' : ''} to review
@@ -137,40 +228,20 @@ export function Home() {
           </motion.div>
         )}
 
-        {/* Courses */}
-        <motion.div variants={item}>
-          <div className="flex items-center justify-between mb-2">
-            <h2 className="text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
-              Your Courses
-            </h2>
-            <button
-              onClick={() => navigate('/courses')}
-              className="text-sky-500 text-xs font-semibold touch-manipulation"
-            >
-              See all →
-            </button>
-          </div>
-          <div className="space-y-3">
-            {COURSES.map((course) => (
-              <CourseCard key={course.id} course={course} />
-            ))}
-          </div>
-        </motion.div>
-
         {/* All done state */}
         {!nextLesson && (
           <motion.div variants={item}>
             <Card className="text-center" padding="lg">
-              <p className="text-5xl mb-3">🎓</p>
-              <p className="font-black text-xl text-slate-900 dark:text-white">All caught up!</p>
+              <p className="text-5xl mb-3">{'\u{1F393}'}</p>
+              <p className="font-black text-xl text-slate-900 dark:text-white">All topics complete!</p>
               <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">
-                You've completed every lesson. Try a practice test to check your knowledge.
+                You've finished every lesson. Take a practice quiz to sharpen your skills or review weak areas.
               </p>
               <button
                 onClick={() => navigate('/practice')}
-                className="mt-4 bg-sky-500 text-white px-6 py-2.5 rounded-xl font-bold text-sm touch-manipulation"
+                className="mt-4 bg-cadence-800 text-white px-6 py-2.5 rounded-xl font-bold text-sm touch-manipulation"
               >
-                Take a Practice Test
+                Practice Quiz
               </button>
             </Card>
           </motion.div>

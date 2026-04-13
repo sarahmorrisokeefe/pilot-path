@@ -39,8 +39,6 @@ Open `ios/App/App/Info.plist` and add/verify these entries:
 
 - [ ] `UIRequiresFullScreen` → `Boolean: YES`
 - [ ] `UISupportedInterfaceOrientations` → Array containing only `UIInterfaceOrientationPortrait`
-- [ ] `NSCameraUsageDescription` → (add if camera is used, otherwise omit)
-- [ ] `NSLocationWhenInUseUsageDescription` → (add if location is used, otherwise omit)
 
 ```xml
 <key>UIRequiresFullScreen</key>
@@ -57,7 +55,7 @@ Open `ios/App/App/Info.plist` and add/verify these entries:
 
 - [ ] Generate icon: `node scripts/generate-icon.js` (see instructions it prints)
 - [ ] In Xcode: open **Assets.xcassets → AppIcon**
-- [ ] Drag `assets/icon.png` (1024×1024) into the App Store slot
+- [ ] Drag `assets/icon.png` (1024x1024) into the App Store slot
 - [ ] Verify no missing icon warnings in Xcode
 - [ ] **OR** use `npx @capacitor/assets generate --ios` to auto-fill all sizes
 
@@ -65,7 +63,7 @@ Open `ios/App/App/Info.plist` and add/verify these entries:
 
 ## Step 5: Splash Screen
 
-- [ ] Capacitor splash screen is configured in `capacitor.config.ts` (indigo background, 2s duration)
+- [ ] Capacitor splash screen is configured in `capacitor.config.ts` (cadence purple background, 2s duration)
 - [ ] Verify `LaunchScreen.storyboard` loads correctly on first run (Xcode → Run on Simulator)
 - [ ] If customizing further: edit `ios/App/App/Base.lproj/LaunchScreen.storyboard`
 
@@ -89,7 +87,7 @@ Open `ios/App/App/Info.plist` and add/verify these entries:
 - [ ] Verify all 5 nav tabs navigate correctly
 - [ ] Verify splash screen appears and hides cleanly
 - [ ] Verify data persists across app restarts (Capacitor Preferences)
-- [ ] Verify practice test completes without crashing
+- [ ] Verify practice quiz completes without crashing
 
 ---
 
@@ -100,7 +98,7 @@ Open `ios/App/App/Info.plist` and add/verify these entries:
 - [ ] Build and run (Cmd+R) — accept trust prompt on device if needed
 - [ ] Repeat all simulator checks on real device
 - [ ] Test on at least one device with a notch (iPhone X or later)
-- [ ] Test with keyboard: sign-in flow, any text input fields
+- [ ] Test with keyboard: any text input fields
 
 ---
 
@@ -123,8 +121,8 @@ Open `ios/App/App/Info.plist` and add/verify these entries:
   - Primary Language: English (US)
   - SKU: `cadence-ios-001`
 - [ ] Fill in app metadata:
-  - [ ] App description
-  - [ ] Keywords (music theory, chords, scales, ear training, study)
+  - [ ] App description: "Cadence is an offline music theory study app with gamified lessons covering notation, rhythm, scales, intervals, and chords. Designed for beginners through AP Music Theory."
+  - [ ] Keywords: music, theory, AP, study, quiz, education
   - [ ] Support URL
   - [ ] Marketing URL (optional)
   - [ ] Privacy Policy URL (required for App Store)
@@ -140,9 +138,9 @@ Open `ios/App/App/Info.plist` and add/verify these entries:
 - [ ] Choose **TestFlight & App Store** → **Next**
 - [ ] Choose **Upload** → **Next**
 - [ ] Leave all distribution options checked → **Next**
-- [ ] Xcode will sign and upload the build (takes 2–10 minutes)
+- [ ] Xcode will sign and upload the build (takes 2-10 minutes)
 - [ ] Wait for build to appear in App Store Connect → TestFlight tab
-- [ ] Wait for Apple's automated review (usually 15–30 min for TestFlight)
+- [ ] Wait for Apple's automated review (usually 15-30 min for TestFlight)
 
 ---
 
@@ -160,7 +158,7 @@ Open `ios/App/App/Info.plist` and add/verify these entries:
 ## Step 13: External TestFlight (Optional)
 
 - [ ] Create an **External Testing** group
-- [ ] Submit build for Beta App Review (usually reviewed within 24–48 hours)
+- [ ] Submit build for Beta App Review (usually reviewed within 24-48 hours)
 - [ ] Once approved, share the public TestFlight link with beta testers
 
 ---

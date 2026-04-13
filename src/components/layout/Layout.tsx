@@ -18,7 +18,7 @@ export function Layout({ children, hideNav = false, title, backPath }: LayoutPro
   const navigate = useNavigate()
 
   return (
-    <div className="min-h-screen bg-sky-50 dark:bg-slate-900 flex flex-col">
+    <div className="min-h-screen bg-[#f5f3ff] dark:bg-[#0d0f1f] flex flex-col">
       {/* Header */}
       <header className="sticky top-0 z-30 bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm border-b border-slate-200 dark:border-slate-700 safe-top transform-gpu">
         <div className="flex items-center justify-between px-4 h-14">
@@ -40,31 +40,20 @@ export function Layout({ children, hideNav = false, title, backPath }: LayoutPro
               </h1>
             ) : (
               <div className="flex items-center gap-2">
-                <span className="text-2xl">🎵</span>
-                <span className="font-black text-xl text-sky-600 dark:text-sky-400 tracking-tight">
+                <span className="text-2xl text-copper-500">♩</span>
+                <span className="font-black text-xl text-cadence-800 dark:text-cadence-300 tracking-tight">
                   Cadence
                 </span>
               </div>
             )}
           </div>
-          {/* Right side: sync/avatar + settings + dark mode toggle */}
+          {/* Right side: avatar + settings + dark mode toggle */}
           <div className="flex items-center gap-1">
-            {/* Signed-out: sign in button */}
-            {!user && (
-              <button
-                onClick={() => navigate('/auth')}
-                className="flex items-center gap-1 text-xs font-semibold bg-sky-500 hover:bg-sky-600 active:bg-sky-700 text-white px-3 py-1.5 rounded-lg transition-colors touch-manipulation"
-                aria-label="Sign in"
-              >
-                Sign In
-              </button>
-            )}
-
             {/* Signed-in: avatar circle */}
             {user && (
               <button
                 onClick={() => navigate('/settings')}
-                className="w-8 h-8 rounded-full bg-sky-500 text-white text-xs font-bold flex items-center justify-center touch-manipulation hover:bg-sky-600 transition-colors"
+                className="w-8 h-8 rounded-full bg-cadence-800 text-white text-xs font-bold flex items-center justify-center touch-manipulation hover:bg-cadence-700 transition-colors"
                 aria-label="Settings"
               >
                 {user.email?.[0]?.toUpperCase() ?? '?'}
@@ -118,7 +107,7 @@ export function Layout({ children, hideNav = false, title, backPath }: LayoutPro
             href="https://okeefesarah.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-sky-500 dark:text-sky-400 hover:text-sky-700 dark:hover:text-sky-600 transition-colors"
+            className="text-cadence-800 dark:text-cadence-300 hover:text-cadence-800 dark:hover:text-cadence-700 transition-colors"
           >
             Sarah O'Keefe
           </a>
@@ -128,7 +117,7 @@ export function Layout({ children, hideNav = false, title, backPath }: LayoutPro
             href="https://ko-fi.com/sarahmorrisokeefe"
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-1 inline-block text-xs text-sky-500 dark:text-sky-400 hover:text-sky-700 dark:hover:text-sky-600 transition-colors"
+            className="mt-1 inline-block text-xs text-cadence-800 dark:text-cadence-300 hover:text-cadence-800 dark:hover:text-cadence-700 transition-colors"
           >
             ☕ Support this app on Ko-fi
           </a>

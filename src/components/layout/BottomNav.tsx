@@ -2,9 +2,9 @@ import { useLocation, useNavigate } from 'react-router-dom'
 
 const tabs = [
   { id: 'home', label: 'Home', icon: '🏠', path: '/' },
-  { id: 'courses', label: 'Courses', icon: '📚', path: '/courses' },
-  { id: 'test', label: 'Test', icon: '🎵', path: '/practice' },
-  { id: 'weak', label: 'Weak Areas', icon: '🎯', path: '/weak-areas' },
+  { id: 'learn', label: 'Learn', icon: '📚', path: '/learn' },
+  { id: 'practice', label: 'Practice', icon: '🎯', path: '/practice' },
+  { id: 'review', label: 'Review', icon: '🔄', path: '/review' },
   { id: 'progress', label: 'Progress', icon: '📊', path: '/progress' },
 ] as const
 
@@ -32,7 +32,7 @@ export function BottomNav() {
                 transition-colors duration-150
                 touch-manipulation select-none
                 ${active
-                  ? 'text-sky-500 dark:text-sky-400'
+                  ? 'text-cadence-800 dark:text-cadence-300'
                   : 'text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300'
                 }
               `}
@@ -46,7 +46,7 @@ export function BottomNav() {
                 {tab.label}
               </span>
               {active && (
-                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-sky-500 dark:bg-sky-400 rounded-full" />
+                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-cadence-800 dark:bg-cadence-300 rounded-full" />
               )}
             </button>
           )
