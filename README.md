@@ -2,7 +2,7 @@
 
 A gamified music theory study app for beginners through AP Music Theory. Learn notation, rhythm, scales, intervals, and chords through bite-sized lessons, instant feedback, and a progression system that keeps you coming back.
 
-[See it live here](cadence-music-theory.vercel.app).
+[See it live here](https://cadence-music-theory.vercel.app).
 
 ---
 
