@@ -8,7 +8,6 @@ import {
   Eyebrow,
   PrimaryButton,
   CategoryChip,
-  type BubblegumTone,
 } from '../components/bubblegum'
 import { COURSES } from '../data/courses'
 import { useProgress } from '../hooks/useProgress'
@@ -19,6 +18,7 @@ import {
   getTodayDateString,
   getLiveStreak,
 } from '../utils'
+import { getAlbumTone, TONE_BG } from '../utils/bubblegum'
 import type { Course } from '../types'
 
 const LEVEL_THRESHOLDS = [0, 50, 150, 300, 500, 800, 1200, 1800, 2500, 3500]
@@ -28,31 +28,6 @@ function getLevel(totalXP: number) {
     if (totalXP >= LEVEL_THRESHOLDS[i]) return i + 1
   }
   return 1
-}
-
-const ALBUM_TONES: Record<string, BubblegumTone> = {
-  'notation-basics':  'lavender',
-  'rhythm-and-meter': 'peach',
-  'scales-and-keys':  'pink',
-  'intervals':        'sky',
-  'chords':           'mint',
-}
-
-const TONE_BG: Record<BubblegumTone, string> = {
-  butter:   'bg-bubblegum-butter',
-  peach:    'bg-bubblegum-peach',
-  mint:     'bg-bubblegum-mint',
-  sky:      'bg-bubblegum-sky',
-  lavender: 'bg-bubblegum-lavender',
-  pink:     'bg-bubblegum-pink',
-  cherry:   'bg-bubblegum-cherry',
-  plum:     'bg-bubblegum-plum',
-  white:    'bg-white',
-  cream:    'bg-bubblegum-cream-hi',
-}
-
-function albumTone(courseId: string, fallback: BubblegumTone = 'cream'): BubblegumTone {
-  return ALBUM_TONES[courseId] ?? fallback
 }
 
 function firstNameFromUser(email: string | undefined): string {
@@ -190,7 +165,7 @@ function SignedOutHome() {
 }
 
 function AlbumPreviewCard({ course, onClick }: { course: Course; onClick: () => void }) {
-  const tone = albumTone(course.id)
+  const tone = getAlbumTone(course.id)
   return (
     <button
       type="button"
@@ -475,7 +450,7 @@ function AlbumProgressCard({
   pct: number
   onClick: () => void
 }) {
-  const tone = albumTone(course.id)
+  const tone = getAlbumTone(course.id)
   const isNew = pct === 0
   return (
     <button
