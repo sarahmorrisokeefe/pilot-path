@@ -5,12 +5,14 @@ import { ProgressBar } from '../components/ui/ProgressBar'
 import { Badge } from '../components/ui/Badge'
 import { COURSES, getCourseById } from '../data/courses'
 import { useProgress } from '../hooks/useProgress'
+import { useRequireAuth } from '../hooks/useRequireAuth'
 import { getCourseCompletion, getModuleCompletion } from '../utils'
 
 export function CourseDetail() {
   const { courseId } = useParams<{ courseId: string }>()
   const navigate = useNavigate()
   const { progress } = useProgress()
+  const { gate } = useRequireAuth()
 
   const course = getCourseById(courseId ?? '')
   if (!course) {
@@ -51,7 +53,7 @@ export function CourseDetail() {
 
         {/* Practice Test CTA */}
         <button
-          onClick={() => navigate('/practice')}
+          onClick={() => gate(() => navigate('/practice'), 'Sign in to take practice quizzes')}
           className="w-full bg-white dark:bg-slate-800 border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-2xl p-4 flex items-center gap-3 touch-manipulation active:scale-[0.98] transition-transform"
         >
           <span className="text-3xl">📝</span>
