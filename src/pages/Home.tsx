@@ -1,13 +1,25 @@
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Layout } from '../components/layout/Layout'
-import { Card } from '../components/ui/Card'
-import { Badge } from '../components/ui/Badge'
-import { ProgressBar } from '../components/ui/ProgressBar'
+import {
+  BubblegumLayout,
+  Doodle,
+  Pill,
+  Mono,
+  Eyebrow,
+  PrimaryButton,
+  CategoryChip,
+} from '../components/bubblegum'
 import { COURSES } from '../data/courses'
 import { useProgress } from '../hooks/useProgress'
 import { useRequireAuth } from '../hooks/useRequireAuth'
-import { getTopWeakAreas, getCourseCompletion, getTodayDateString, getLiveStreak } from '../utils'
+import {
+  getTopWeakAreas,
+  getCourseCompletion,
+  getTodayDateString,
+  getLiveStreak,
+} from '../utils'
+import { getAlbumTone, TONE_BG } from '../utils/bubblegum'
+import type { Course } from '../types'
 
 const LEVEL_THRESHOLDS = [0, 50, 150, 300, 500, 800, 1200, 1800, 2500, 3500]
 
@@ -18,7 +30,168 @@ function getLevel(totalXP: number) {
   return 1
 }
 
+function firstNameFromUser(email: string | undefined): string {
+  if (!email) return 'there'
+  const local = email.split('@')[0] ?? 'there'
+  return local.charAt(0).toUpperCase() + local.slice(1)
+}
+
+const container = {
+  hidden: { opacity: 0 },
+  show: { opacity: 1, transition: { staggerChildren: 0.07 } },
+}
+const item = { hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0 } }
+
 export function Home() {
+  const { user } = useRequireAuth()
+  return user ? <SignedInHome /> : <SignedOutHome />
+}
+
+// ── Signed-out variant — BGSignedOutHome ─────────────────────────────────────
+
+function SignedOutHome() {
+  const navigate = useNavigate()
+
+  const headerRight = (
+    <button
+      type="button"
+      onClick={() => navigate('/auth')}
+      className="rounded-full bg-bubblegum-plum px-3.5 py-2 text-xs font-extrabold text-bubblegum-cream touch-manipulation"
+    >
+      Sign in
+    </button>
+  )
+
+  return (
+    <BubblegumLayout activeTab="home" headerRight={headerRight}>
+      <motion.div variants={container} initial="hidden" animate="show" className="flex flex-col gap-[18px] pt-1">
+
+        {/* Anonymous greeting */}
+        <motion.div variants={item} className="px-1">
+          <p className="text-[22px] font-black tracking-[-0.02em] text-bubblegum-plum">
+            Hey there{' '}
+            <span className="inline-block" style={{ transform: 'rotate(-10deg)' }}>
+              👋
+            </span>
+          </p>
+          <p className="mt-1 text-[13px] font-semibold text-bubblegum-plum-soft">
+            Wander the venue — grab a pass when you're ready.
+          </p>
+        </motion.div>
+
+        {/* Hero — sign-in prompt */}
+        <motion.div
+          variants={item}
+          className="relative overflow-hidden rounded-bubble bg-bubblegum-butter p-[22px]"
+        >
+          <Doodle ch="♪" x={20} y={10} size={28} rot={-15} color="#ffaf95" />
+          <Doodle ch="♬" x={290} y={8} size={42} rot={12} color="#ffaf95" opacity={0.5} />
+          <Doodle ch="✦" x={300} y={130} size={22} color="#ff7faf" opacity={0.6} />
+
+          <p className="text-[26px] font-black leading-[1.05] tracking-[-0.025em] text-bubblegum-plum">
+            Get a{' '}
+            <span
+              className="inline-block rounded-lg bg-bubblegum-peach px-2"
+              style={{ transform: 'rotate(-1deg)' }}
+            >
+              backstage pass
+            </span>
+            <br />
+            to save your set.
+          </p>
+          <p className="mt-2.5 text-[13px] font-semibold text-bubblegum-plum-soft">
+            Sign in to track tracks, build streaks, and earn records.
+          </p>
+
+          <div className="mt-4">
+            <PrimaryButton onClick={() => navigate('/auth')}>Take the stage →</PrimaryButton>
+          </div>
+        </motion.div>
+
+        {/* Walk the venue — locked but visible setlist */}
+        <motion.div variants={item}>
+          <Eyebrow>walk the venue 🎵</Eyebrow>
+          <p className="-mt-1.5 mb-3 px-1 text-xs font-semibold text-bubblegum-plum-soft">
+            Tap any album to preview — saving progress needs a pass.
+          </p>
+          <div className="grid grid-cols-2 gap-3">
+            {COURSES.slice(0, 4).map((course) => (
+              <AlbumPreviewCard
+                key={course.id}
+                course={course}
+                onClick={() => navigate(`/learn/${course.id}`)}
+              />
+            ))}
+          </div>
+        </motion.div>
+
+        {/* What's in the pass */}
+        <motion.div
+          variants={item}
+          className="rounded-3xl bg-bubblegum-mint p-4"
+        >
+          <Eyebrow>what's in the pass</Eyebrow>
+          <div className="mt-1 flex flex-col gap-2">
+            {[
+              ['⭐', 'XP after every quiz'],
+              ['🔥', 'Daily streak that survives time-zones'],
+              ['🏆', 'Records and gold-album unlocks'],
+              ['🔄', 'B-sides — auto-resurfaces what you flubbed'],
+            ].map(([icon, label]) => (
+              <div key={label} className="flex items-center gap-3">
+                <span
+                  className="inline-block text-[22px] leading-none"
+                  style={{ transform: 'rotate(-6deg)' }}
+                  aria-hidden="true"
+                >
+                  {icon}
+                </span>
+                <span className="text-[13px] font-bold text-bubblegum-plum">{label}</span>
+              </div>
+            ))}
+          </div>
+        </motion.div>
+
+        <motion.p
+          variants={item}
+          className="mt-1 text-center text-xs font-semibold text-bubblegum-plum-dim"
+        >
+          Or keep wandering — no pass needed to peek.
+        </motion.p>
+
+      </motion.div>
+    </BubblegumLayout>
+  )
+}
+
+function AlbumPreviewCard({ course, onClick }: { course: Course; onClick: () => void }) {
+  const tone = getAlbumTone(course.id)
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`${TONE_BG[tone]} touch-manipulation rounded-[22px] p-3.5 text-left text-bubblegum-plum transition-transform active:scale-[0.98]`}
+    >
+      <div
+        className="mb-1 inline-block text-[38px] leading-none"
+        style={{ transform: 'rotate(-4deg)' }}
+        aria-hidden="true"
+      >
+        {course.icon}
+      </div>
+      <p className="text-[15px] font-black">{course.shortTitle}</p>
+      <div className="mt-1">
+        <Mono size="xs" tone="plum-soft">
+          {course.modules.reduce((n, m) => n + m.lessons.length, 0)} tracks
+        </Mono>
+      </div>
+    </button>
+  )
+}
+
+// ── Signed-in variant — BGHome ───────────────────────────────────────────────
+
+function SignedInHome() {
   const navigate = useNavigate()
   const { progress } = useProgress()
   const { user, gate } = useRequireAuth()
@@ -27,121 +200,92 @@ export function Home() {
   const today = getTodayDateString()
   const dailyDone = progress.dailyGoalDate === today ? (progress.dailyGoalProgress ?? 0) : 0
   const dailyGoal = progress.dailyGoal ?? 3
-  const dailyPct = Math.min(100, Math.round((dailyDone / dailyGoal) * 100))
 
-  // Find next incomplete lesson across all courses
   const nextLesson = (() => {
     for (const course of COURSES) {
       for (const mod of course.modules) {
         for (const lesson of mod.lessons) {
-          const completed = progress.courses[course.id]?.modules[mod.id]?.lessonsProgress[lesson.id]?.completed
-          if (!completed) {
-            return { course, mod, lesson }
-          }
+          const completed =
+            progress.courses[course.id]?.modules[mod.id]?.lessonsProgress[lesson.id]?.completed
+          if (!completed) return { course, mod, lesson }
         }
       }
     }
     return null
   })()
 
-  const streak = progress.streak
-  const liveStreakCount = getLiveStreak(streak)
-  const studiedToday = streak.lastStudied === today
+  const liveStreakCount = getLiveStreak(progress.streak)
   const level = getLevel(progress.totalXP)
-
-  const container = {
-    hidden: { opacity: 0 },
-    show: { opacity: 1, transition: { staggerChildren: 0.07 } },
-  }
-  const item = { hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0 } }
+  const trackLabel = String(level).padStart(2, '0')
+  const firstName = firstNameFromUser(user?.email)
 
   return (
-    <Layout>
-      <motion.div variants={container} initial="hidden" animate="show" className="space-y-5">
+    <BubblegumLayout activeTab="home">
+      <motion.div variants={container} initial="hidden" animate="show" className="flex flex-col gap-[18px] pt-1">
 
-        {/* Hero Card — guest promo or progress stats */}
-        <motion.div variants={item}>
-          {!user ? (
-            <Card className="bg-gradient-to-br from-cadence-800 to-cadence-600 border-0 text-white" padding="lg">
-              <div className="flex items-center gap-3">
-                <div className="text-4xl">♩</div>
-                <div className="flex-1 min-w-0">
-                  <p className="font-black text-lg leading-tight">Track your progress</p>
-                  <p className="text-cadence-100 text-sm mt-0.5">
-                    Sign in to earn XP, build streaks, and resume lessons.
-                  </p>
-                </div>
-              </div>
-              <div className="mt-4 flex items-center gap-2">
-                <button
-                  onClick={() => navigate('/auth')}
-                  className="flex-1 bg-white text-cadence-800 font-bold text-sm py-2.5 rounded-xl touch-manipulation"
-                >
-                  Sign In
-                </button>
-                <button
-                  onClick={() => navigate('/auth?mode=signup')}
-                  className="flex-1 bg-cadence-900/40 text-white border border-white/30 font-bold text-sm py-2.5 rounded-xl touch-manipulation"
-                >
-                  Sign Up
-                </button>
-              </div>
-            </Card>
-          ) : (
-            <Card className="bg-gradient-to-br from-cadence-800 to-cadence-600 border-0 text-white" padding="lg">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-cadence-100 text-sm font-medium">Total XP</p>
-                  <p className="text-4xl font-black mt-0.5">{progress.totalXP}</p>
-                </div>
-                <div className="text-center">
-                  <p className="text-cadence-100 text-sm font-medium">Level</p>
-                  <p className="text-4xl font-black mt-0.5">{level}</p>
-                </div>
-                <div className="text-right">
-                  <p className="text-cadence-100 text-sm font-medium">Streak</p>
-                  <p className="text-4xl font-black mt-0.5">
-                    {liveStreakCount}
-                    <span className="text-lg font-normal text-cadence-200 ml-1">{liveStreakCount === 1 ? 'day' : 'days'}</span>
-                  </p>
-                </div>
-              </div>
-              {/* Daily Goal Bar */}
-              <div className="mt-3 pt-3 border-t border-white/20">
-                <div className="flex items-center justify-between mb-1">
-                  <p className="text-cadence-100 text-xs font-medium">
-                    Daily goal: {dailyDone} of {dailyGoal} quizzes
-                  </p>
-                  {dailyDone >= dailyGoal && (
-                    <span className="text-xs font-bold text-green-300">Done!</span>
-                  )}
-                </div>
-                <div className="w-full h-2 bg-white/20 rounded-full overflow-hidden">
-                  <div
-                    className={`h-2 rounded-full transition-all duration-500 ease-out ${
-                      dailyDone >= dailyGoal ? 'bg-green-400' : 'bg-white'
-                    }`}
-                    style={{ width: `${dailyPct}%` }}
-                  />
-                </div>
-              </div>
-              <div className="mt-2 flex items-center gap-2">
-                <span className={`w-2.5 h-2.5 rounded-full ${studiedToday ? 'bg-green-400' : 'bg-cadence-300'}`} />
-                <p className="text-cadence-100 text-xs">
-                  {studiedToday ? 'Studied today! Keep the streak going.' : 'Study today to keep your streak alive!'}
-                </p>
-              </div>
-            </Card>
-          )}
+        {/* Greeting */}
+        <motion.div variants={item} className="px-1">
+          <p className="text-[22px] font-black tracking-[-0.02em] text-bubblegum-plum">
+            Hi, {firstName}{' '}
+            <span className="inline-block" style={{ transform: 'rotate(-10deg)' }} aria-hidden="true">
+              👋
+            </span>
+          </p>
+          <p className="mt-1 text-[13px] font-semibold text-bubblegum-plum-soft">
+            The crowd's warming up. Let's play.
+          </p>
         </motion.div>
 
-        {/* Continue Learning */}
+        {/* HERO — tonight's set */}
+        <motion.div
+          variants={item}
+          className="relative overflow-hidden rounded-bubble bg-bubblegum-butter p-[22px] text-bubblegum-plum"
+        >
+          <Doodle ch="♪" x={20} y={10} size={28} rot={-15} color="#ffaf95" />
+          <Doodle ch="♬" x={290} y={8} size={42} rot={12} color="#ffaf95" opacity={0.5} />
+          <Doodle ch="♫" x={260} y={140} size={30} rot={-8} color="#ffb3d9" opacity={0.7} />
+
+          <Mono>tonight's set · track {trackLabel}</Mono>
+          <div className="mt-1.5 flex items-baseline gap-2">
+            <span
+              className="inline-block font-black leading-[0.9] tabular-nums"
+              style={{
+                fontSize: '78px',
+                letterSpacing: '-0.05em',
+                transform: 'rotate(-3deg)',
+              }}
+            >
+              {progress.totalXP}
+            </span>
+            <span className="text-lg font-black">XP ⭐</span>
+          </div>
+
+          <div className="mt-3.5 flex flex-wrap gap-2">
+            <Pill tone="peach">🔥 {liveStreakCount} night{liveStreakCount === 1 ? '' : 's'}</Pill>
+            <Pill tone="white">🎤 {dailyDone} of {dailyGoal} tonight</Pill>
+          </div>
+        </motion.div>
+
+        {/* Daily goal — mint progress */}
+        <motion.div
+          variants={item}
+          className="flex items-center gap-3.5 rounded-3xl bg-bubblegum-mint p-4"
+        >
+          <DailyGoalDonut done={dailyDone} goal={dailyGoal} />
+          <div className="flex-1">
+            <Mono>tonight's set</Mono>
+            <p className="mt-0.5 text-base font-black leading-tight text-bubblegum-plum">
+              {dailyGoalCopy(dailyDone, dailyGoal)}
+            </p>
+          </div>
+        </motion.div>
+
+        {/* Up next — sky card with next-lesson */}
         {nextLesson && (
           <motion.div variants={item}>
-            <h2 className="text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-2">
-              Continue Learning
-            </h2>
-            <Card
+            <Eyebrow>up next ✨</Eyebrow>
+            <button
+              type="button"
               onClick={() =>
                 gate(
                   () =>
@@ -151,137 +295,188 @@ export function Home() {
                   'Sign in to start lessons'
                 )
               }
-              className="border-cadence-200 dark:border-cadence-900 bg-cadence-50 dark:bg-cadence-900/20"
+              className="relative flex w-full items-center gap-3.5 overflow-hidden rounded-3xl bg-bubblegum-sky p-4 text-left text-bubblegum-plum transition-transform active:scale-[0.99] touch-manipulation"
             >
-              <div className="flex items-center gap-3">
-                <div className={`w-12 h-12 ${nextLesson.course.bgGradient} rounded-xl flex items-center justify-center text-2xl flex-shrink-0`}>
-                  {nextLesson.course.icon}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
-                    {nextLesson.course.shortTitle} · {nextLesson.mod.title}
-                  </p>
-                  <p className="font-bold text-slate-900 dark:text-white text-sm mt-0.5 line-clamp-1">
-                    {nextLesson.lesson.title}
-                  </p>
-                  <p className="text-xs text-slate-500 mt-0.5">
-                    {nextLesson.lesson.questions.length} questions · {nextLesson.lesson.xpReward} XP
-                  </p>
-                </div>
-                <div className="text-cadence-800 dark:text-cadence-300 flex-shrink-0">
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-                  </svg>
-                </div>
+              <Doodle ch="♩" x={280} y={48} size={36} rot={10} color="#cfb6ff" opacity={0.6} />
+
+              <div
+                className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-[18px] bg-white text-3xl"
+                style={{ transform: 'rotate(-4deg)' }}
+                aria-hidden="true"
+              >
+                {nextLesson.course.icon}
               </div>
-            </Card>
+              <div className="min-w-0 flex-1">
+                <Mono>
+                  track {nextLesson.lesson.id.slice(0, 2).toUpperCase()} · {nextLesson.course.shortTitle}
+                </Mono>
+                <p className="mt-0.5 truncate text-[15px] font-black leading-tight">
+                  {nextLesson.lesson.title}
+                </p>
+                <p className="mt-0.5 text-[11px] font-bold text-bubblegum-plum-soft">
+                  {nextLesson.lesson.questions.length} songs · +{nextLesson.lesson.xpReward} XP
+                </p>
+              </div>
+              <span
+                className="flex h-[46px] w-[46px] flex-shrink-0 items-center justify-center rounded-full bg-bubblegum-plum text-base font-black text-bubblegum-cream"
+                aria-hidden="true"
+              >
+                <span className="pl-1">▶</span>
+              </span>
+            </button>
           </motion.div>
         )}
 
-        {/* Topic Map */}
+        {/* All-done banner — replaces Up Next if no next lesson */}
+        {!nextLesson && (
+          <motion.div
+            variants={item}
+            className="rounded-3xl bg-bubblegum-mint p-5 text-center"
+          >
+            <p className="text-5xl">🎓</p>
+            <p className="mt-2 text-xl font-black text-bubblegum-plum">
+              You played every track!
+            </p>
+            <p className="mt-1 text-sm font-semibold text-bubblegum-plum-soft">
+              Hit Soundcheck for a fresh mix, or rehearse your B-sides.
+            </p>
+            <div className="mt-4">
+              <PrimaryButton
+                tone="plum"
+                onClick={() =>
+                  gate(() => navigate('/practice'), 'Sign in to take practice quizzes')
+                }
+              >
+                Open Soundcheck →
+              </PrimaryButton>
+            </div>
+          </motion.div>
+        )}
+
+        {/* Your setlist — album grid */}
         <motion.div variants={item}>
-          <div className="flex items-center justify-between mb-2">
-            <h2 className="text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
-              Topics
-            </h2>
-            <button
-              onClick={() => navigate('/learn')}
-              className="text-cadence-800 dark:text-cadence-300 text-xs font-semibold touch-manipulation"
-            >
-              Browse all →
-            </button>
-          </div>
+          <Eyebrow>your setlist 🎵</Eyebrow>
           <div className="grid grid-cols-2 gap-3">
-            {COURSES.map((course) => {
-              const pct = getCourseCompletion(course, progress)
-              const started = pct > 0
-              const complete = pct === 100
-              return (
-                <div
-                  key={course.id}
-                  onClick={() => navigate(`/learn/${course.id}`)}
-                  className={`bg-white dark:bg-slate-800 rounded-2xl border p-4 cursor-pointer touch-manipulation transition-shadow hover:shadow-md active:scale-[0.98] ${
-                    started
-                      ? 'border-cadence-200 dark:border-cadence-800'
-                      : 'border-slate-100 dark:border-slate-700 opacity-80'
-                  }`}
-                >
-                  <div className="flex items-center justify-between mb-2">
-                    <div className={`w-10 h-10 ${course.bgGradient} rounded-xl flex items-center justify-center text-xl`}>
-                      {course.icon}
-                    </div>
-                    {complete && (
-                      <span className="text-green-500 text-lg">{'\u2705'}</span>
-                    )}
-                  </div>
-                  <p className="font-bold text-slate-900 dark:text-white text-sm leading-tight">
-                    {course.shortTitle}
-                  </p>
-                  {started && !complete && (
-                    <div className="mt-2">
-                      <ProgressBar value={pct} color={course.color} height="h-1.5" />
-                      <p className="text-[10px] text-slate-500 mt-1">{pct}%</p>
-                    </div>
-                  )}
-                  {!started && (
-                    <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-1">Not started</p>
-                  )}
-                </div>
-              )
-            })}
+            {COURSES.slice(0, 4).map((course) => (
+              <AlbumProgressCard
+                key={course.id}
+                course={course}
+                pct={getCourseCompletion(course, progress)}
+                onClick={() => navigate(`/learn/${course.id}`)}
+              />
+            ))}
           </div>
         </motion.div>
 
-        {/* Needs Review */}
+        {/* B-Sides preview — cherry-tinted */}
         {weakAreas.length > 0 && (
           <motion.div variants={item}>
-            <h2 className="text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-2">
-              Needs Review
-            </h2>
-            <Card
+            <Eyebrow>b-sides to brush up 🔁</Eyebrow>
+            <button
+              type="button"
               onClick={() => gate(() => navigate('/review'), 'Sign in to review weak areas')}
-              className="border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-900/20"
+              className="flex w-full items-center gap-3 rounded-3xl bg-bubblegum-cherry/20 p-3.5 text-left transition-transform active:scale-[0.99] touch-manipulation"
             >
-              <div className="flex items-center gap-3">
-                <div className="text-3xl">{'\u{1F3AF}'}</div>
-                <div className="flex-1">
-                  <p className="font-bold text-slate-900 dark:text-white text-sm">
-                    {weakAreas.length} topic{weakAreas.length !== 1 ? 's' : ''} to review
-                  </p>
-                  <div className="flex flex-wrap gap-1 mt-1.5">
-                    {weakAreas.slice(0, 3).map((w) => (
-                      <Badge key={w.questionId} variant="amber">{w.topic}</Badge>
-                    ))}
-                  </div>
-                </div>
-                <svg className="w-5 h-5 text-amber-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-                </svg>
-              </div>
-            </Card>
-          </motion.div>
-        )}
-
-        {/* All done state */}
-        {!nextLesson && (
-          <motion.div variants={item}>
-            <Card className="text-center" padding="lg">
-              <p className="text-5xl mb-3">{'\u{1F393}'}</p>
-              <p className="font-black text-xl text-slate-900 dark:text-white">All topics complete!</p>
-              <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">
-                You've finished every lesson. Take a practice quiz to sharpen your skills or review weak areas.
-              </p>
-              <button
-                onClick={() => gate(() => navigate('/practice'), 'Sign in to take practice quizzes')}
-                className="mt-4 bg-cadence-800 text-white px-6 py-2.5 rounded-xl font-bold text-sm touch-manipulation"
+              <span
+                className="inline-block text-3xl leading-none"
+                style={{ transform: 'rotate(-6deg)' }}
+                aria-hidden="true"
               >
-                Practice Quiz
-              </button>
-            </Card>
+                🎯
+              </span>
+              <div className="flex-1">
+                <p className="text-sm font-black text-bubblegum-plum">
+                  {weakAreas.length} track{weakAreas.length !== 1 ? 's' : ''} to rehearse
+                </p>
+                <div className="mt-1.5 flex flex-wrap gap-1">
+                  {weakAreas.slice(0, 3).map((w) => (
+                    <CategoryChip key={w.questionId} tone="white">
+                      {w.topic}
+                    </CategoryChip>
+                  ))}
+                </div>
+              </div>
+              <span className="text-[22px] font-black text-bubblegum-cherry">›</span>
+            </button>
           </motion.div>
         )}
 
       </motion.div>
-    </Layout>
+    </BubblegumLayout>
+  )
+}
+
+function dailyGoalCopy(done: number, goal: number): string {
+  if (done >= goal) return 'Encore unlocked — tonight is yours!'
+  const remaining = goal - done
+  if (done === 0) return `${goal} song${goal === 1 ? '' : 's'} to a full set tonight.`
+  if (remaining === 1) return 'One more song for an encore!'
+  return `${remaining} more songs for tonight's set.`
+}
+
+function DailyGoalDonut({ done, goal }: { done: number; goal: number }) {
+  const ratio = goal > 0 ? Math.min(1, done / goal) : 0
+  const circumference = 2 * Math.PI * 16 // r=16 → ~100.53
+  const dash = ratio * circumference
+  return (
+    <div className="relative h-[54px] w-[54px]">
+      <svg viewBox="0 0 40 40" width="54" height="54">
+        <circle cx="20" cy="20" r="16" fill="none" stroke="#ffffff" strokeWidth="6" />
+        <circle
+          cx="20"
+          cy="20"
+          r="16"
+          fill="none"
+          stroke="#3a224f"
+          strokeWidth="6"
+          strokeDasharray={`${dash} ${circumference}`}
+          transform="rotate(-90 20 20)"
+          strokeLinecap="round"
+        />
+      </svg>
+      <span className="absolute inset-0 flex items-center justify-center text-[13px] font-black text-bubblegum-plum">
+        {done}/{goal}
+      </span>
+    </div>
+  )
+}
+
+function AlbumProgressCard({
+  course,
+  pct,
+  onClick,
+}: {
+  course: Course
+  pct: number
+  onClick: () => void
+}) {
+  const tone = getAlbumTone(course.id)
+  const isNew = pct === 0
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`${TONE_BG[tone]} touch-manipulation rounded-[22px] p-3.5 text-left text-bubblegum-plum transition-transform active:scale-[0.98]`}
+    >
+      <div
+        className={`mb-1 inline-block text-[38px] leading-none ${
+          isNew ? 'opacity-60 grayscale' : ''
+        }`}
+        style={{ transform: 'rotate(-4deg)' }}
+        aria-hidden="true"
+      >
+        {course.icon}
+      </div>
+      <p className="text-[15px] font-black">{course.shortTitle}</p>
+      <div className="mt-1.5 flex items-center gap-1.5">
+        <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-white/70">
+          <div
+            className="h-full rounded-full bg-bubblegum-plum"
+            style={{ width: `${Math.max(pct, 0)}%` }}
+          />
+        </div>
+        <span className="text-[11px] font-black">{isNew ? 'new!' : `${pct}%`}</span>
+      </div>
+    </button>
   )
 }

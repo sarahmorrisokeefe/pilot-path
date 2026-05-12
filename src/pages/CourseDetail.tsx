@@ -1,12 +1,27 @@
 import { useParams, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Layout } from '../components/layout/Layout'
-import { ProgressBar } from '../components/ui/ProgressBar'
-import { Badge } from '../components/ui/Badge'
-import { COURSES, getCourseById } from '../data/courses'
+import {
+  BubblegumLayout,
+  Doodle,
+  Mono,
+  Eyebrow,
+  PrimaryButton,
+} from '../components/bubblegum'
+import { getCourseById } from '../data/courses'
 import { useProgress } from '../hooks/useProgress'
 import { useRequireAuth } from '../hooks/useRequireAuth'
-import { getCourseCompletion, getModuleCompletion } from '../utils'
+import { getCourseCompletion } from '../utils'
+import { getAlbumTone, TONE_BG, trackLabel } from '../utils/bubblegum'
+import type { Course, Module, Lesson } from '../types'
+
+interface TrackEntry {
+  moduleIdx: number
+  lessonIdx: number
+  module: Module
+  lesson: Lesson
+  label: string
+  completed: boolean
+}
 
 export function CourseDetail() {
   const { courseId } = useParams<{ courseId: string }>()
@@ -15,105 +30,195 @@ export function CourseDetail() {
   const { gate } = useRequireAuth()
 
   const course = getCourseById(courseId ?? '')
+
   if (!course) {
     return (
-      <Layout title="Not Found" backPath="/learn">
-        <p className="text-center text-slate-500 mt-8">Course not found.</p>
-      </Layout>
+      <BubblegumLayout activeTab="learn" back title="Not found">
+        <div className="mt-12 rounded-3xl bg-white p-6 text-center">
+          <p className="text-3xl">🎧</p>
+          <p className="mt-2 text-base font-black text-bubblegum-plum">Album not found.</p>
+          <p className="mt-1 text-sm text-bubblegum-plum-soft">
+            Try the full setlist instead.
+          </p>
+          <div className="mt-4">
+            <PrimaryButton onClick={() => navigate('/learn')}>Back to setlist →</PrimaryButton>
+          </div>
+        </div>
+      </BubblegumLayout>
     )
   }
 
+  const tone = getAlbumTone(course.id, 'lavender')
   const completion = getCourseCompletion(course, progress)
 
+  const tracks: TrackEntry[] = course.modules.flatMap((mod, moduleIdx) =>
+    mod.lessons.map((lesson, lessonIdx) => ({
+      moduleIdx,
+      lessonIdx,
+      module: mod,
+      lesson,
+      label: trackLabel(moduleIdx, lessonIdx),
+      completed:
+        progress.courses[course.id]?.modules[mod.id]?.lessonsProgress[lesson.id]?.completed ?? false,
+    }))
+  )
+
+  const nowPlaying = tracks.find((t) => !t.completed) ?? null
+  const completedCount = tracks.filter((t) => t.completed).length
+  const goLesson = (t: TrackEntry) =>
+    gate(
+      () => navigate(`/learn/${course.id}/modules/${t.module.id}/lessons/${t.lesson.id}`),
+      'Sign in to start lessons'
+    )
+
   return (
-    <Layout title={course.shortTitle} backPath="/learn">
-      {/* Course Hero */}
-      <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
-        <div className={`${course.bgGradient} rounded-2xl p-5 text-white`}>
-          <div className="flex items-start gap-3">
-            <span className="text-5xl">{course.icon}</span>
-            <div className="flex-1">
-              <h1 className="font-black text-xl leading-tight">{course.title}</h1>
-              <p className="text-white/80 text-sm mt-1">{course.description}</p>
-            </div>
-          </div>
-          <div className="mt-4">
-            <div className="flex justify-between text-xs text-white/80 mb-1.5">
-              <span>{completion}% complete</span>
-              <span>{course.modules.length} modules</span>
-            </div>
-            <div className="h-2 bg-white/30 rounded-full overflow-hidden">
-              <div
-                className="h-2 bg-white rounded-full transition-all duration-500"
-                style={{ width: `${completion}%` }}
-              />
-            </div>
-          </div>
-        </div>
+    <BubblegumLayout activeTab="learn" hideHeader>
+      <div className="-mx-5">
+        {/* Hero header — pastel album cover */}
+        <div className={`relative overflow-hidden ${TONE_BG[tone]} px-5 pt-14 pb-6`}>
+          <Doodle ch="♬" x={300} y={36} size={56} rot={12} color="#3a224f" opacity={0.15} />
+          <Doodle ch="♪" x={32} y={84} size={36} rot={-12} color="#3a224f" opacity={0.2} />
 
-        {/* Practice Test CTA */}
-        <button
-          onClick={() => gate(() => navigate('/practice'), 'Sign in to take practice quizzes')}
-          className="w-full bg-white dark:bg-slate-800 border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-2xl p-4 flex items-center gap-3 touch-manipulation active:scale-[0.98] transition-transform"
-        >
-          <span className="text-3xl">📝</span>
-          <div className="text-left">
-            <p className="font-bold text-slate-900 dark:text-white text-sm">Full Practice Test</p>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-              {course.testConfig.questionCount} questions · {course.testConfig.timeLimit} min · Pass at {course.testConfig.passingScore}%
+          <button
+            type="button"
+            onClick={() => navigate(-1)}
+            aria-label="Back"
+            className="absolute left-4 top-4 z-10 flex h-[38px] w-[38px] items-center justify-center rounded-full bg-white text-lg font-black text-bubblegum-plum touch-manipulation"
+          >
+            ←
+          </button>
+
+          <div className="relative z-[1]">
+            <Mono>album · {tracks.length} tracks</Mono>
+            <p
+              className="mt-1.5 text-[40px] font-black leading-[0.95] tracking-[-0.035em] text-bubblegum-plum"
+            >
+              {course.title}
             </p>
-          </div>
-          <svg className="w-5 h-5 text-slate-400 ml-auto flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-          </svg>
-        </button>
+            <p className="mt-2 text-sm font-semibold text-bubblegum-plum/80">
+              {course.description}
+            </p>
 
-        {/* Modules List */}
-        <h2 className="text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Modules</h2>
-        <div className="space-y-3">
-          {course.modules.map((mod, idx) => {
-            const modCompletion = getModuleCompletion(course, mod, progress)
-            const completedLessons = mod.lessons.filter(
-              (l) => progress.courses[course.id]?.modules[mod.id]?.lessonsProgress[l.id]?.completed
-            ).length
-
-            return (
-              <motion.div
-                key={mod.id}
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: idx * 0.04 }}
-              >
+            <div className="mt-4 flex items-center gap-3">
+              <div className="h-2.5 flex-1 overflow-hidden rounded-full bg-white/80">
                 <div
-                  onClick={() => navigate(`/learn/${course.id}/modules/${mod.id}`)}
-                  className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700 p-4 cursor-pointer active:scale-[0.98] transition-transform touch-manipulation"
-                >
-                  <div className="flex items-start gap-3">
-                    <div className={`w-11 h-11 rounded-xl flex items-center justify-center text-2xl flex-shrink-0 ${course.bgGradient}`}>
-                      {mod.icon}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <p className="font-bold text-slate-900 dark:text-white text-sm">{mod.title}</p>
-                        {modCompletion === 100 && <Badge variant="green">✓ Done</Badge>}
-                      </div>
-                      <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 line-clamp-1">{mod.description}</p>
-                      <div className="flex items-center gap-2 mt-2">
-                        <p className="text-xs text-slate-500">
-                          {completedLessons}/{mod.lessons.length} lessons
-                        </p>
-                        <div className="flex-1">
-                          <ProgressBar value={modCompletion} color={course.color} height="h-1.5" />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            )
-          })}
+                  className="h-full rounded-full bg-bubblegum-plum transition-[width] duration-500"
+                  style={{ width: `${completion}%` }}
+                />
+              </div>
+              <span className="text-[13px] font-black text-bubblegum-plum">
+                {completedCount} of {tracks.length} · {completion}%
+              </span>
+            </div>
+          </div>
         </div>
-      </motion.div>
-    </Layout>
+
+        {/* Track list */}
+        <div className="px-5 pt-5">
+          <Eyebrow>track list</Eyebrow>
+
+          <div className="overflow-hidden rounded-3xl bg-white p-1.5">
+            {tracks.map((t, i) => {
+              const isNow = nowPlaying?.label === t.label
+              return (
+                <motion.button
+                  key={`${t.module.id}-${t.lesson.id}`}
+                  type="button"
+                  onClick={() => goLesson(t)}
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.025 }}
+                  className={`flex w-full items-center gap-3 rounded-[18px] p-3 text-left transition-transform touch-manipulation active:scale-[0.99] ${
+                    isNow ? 'bg-bubblegum-butter' : 'bg-transparent'
+                  }`}
+                >
+                  <div
+                    className={`flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full font-mono text-sm font-black tracking-[0.05em] ${
+                      t.completed
+                        ? 'bg-bubblegum-mint text-bubblegum-plum'
+                        : isNow
+                        ? 'bg-bubblegum-plum text-bubblegum-cream'
+                        : 'bg-bubblegum-cream text-bubblegum-plum'
+                    }`}
+                    aria-hidden="true"
+                  >
+                    {t.completed ? '✓' : t.label}
+                  </div>
+
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-1.5">
+                      <p className="text-sm font-black leading-tight text-bubblegum-plum">
+                        {t.lesson.title}
+                      </p>
+                      {isNow && (
+                        <span className="rounded-full bg-bubblegum-plum px-1.5 py-0.5 font-mono text-[9px] font-black uppercase tracking-[0.1em] text-bubblegum-cream">
+                          Now
+                        </span>
+                      )}
+                    </div>
+                    <p className="mt-0.5 text-[11px] font-semibold text-bubblegum-plum-soft">
+                      {t.module.title} · {t.lesson.questions.length} song
+                      {t.lesson.questions.length === 1 ? '' : 's'}
+                    </p>
+                  </div>
+
+                  <div className="flex-shrink-0 text-right">
+                    <Mono
+                      size="xs"
+                      tone={t.completed ? 'plum' : isNow ? 'plum' : 'plum-dim'}
+                    >
+                      +{t.lesson.xpReward} XP
+                    </Mono>
+                    {isNow && (
+                      <div className="mt-0.5 text-lg leading-none text-bubblegum-plum" aria-hidden="true">
+                        ▶
+                      </div>
+                    )}
+                  </div>
+                </motion.button>
+              )
+            })}
+          </div>
+
+          {/* Encore — full practice test */}
+          <button
+            type="button"
+            onClick={() => gate(() => navigate('/practice'), 'Sign in to take practice quizzes')}
+            className="mt-4 flex w-full items-center gap-3 rounded-3xl bg-bubblegum-peach p-4 text-left text-bubblegum-plum transition-transform active:scale-[0.99] touch-manipulation"
+          >
+            <span className="rounded-full bg-bubblegum-plum px-2 py-1 font-mono text-[10px] font-black uppercase tracking-[0.1em] text-bubblegum-cream">
+              Encore
+            </span>
+            <div className="flex-1">
+              <p className="text-sm font-black">Practice the whole album</p>
+              <p className="mt-0.5 text-[11px] font-semibold text-bubblegum-plum-soft">
+                {course.testConfig.questionCount} questions · {course.testConfig.timeLimit} min · pass at {course.testConfig.passingScore}%
+              </p>
+            </div>
+            <span className="text-xl font-black" aria-hidden="true">›</span>
+          </button>
+
+          {/* Keep-playing CTA */}
+          {nowPlaying && (
+            <div className="mt-5">
+              <PrimaryButton onClick={() => goLesson(nowPlaying)}>
+                Keep playing Track {nowPlaying.label} →
+              </PrimaryButton>
+            </div>
+          )}
+          {!nowPlaying && completedCount > 0 && (
+            <div className="mt-5">
+              <PrimaryButton
+                onClick={() =>
+                  gate(() => navigate('/practice'), 'Sign in to take practice quizzes')
+                }
+              >
+                Album played — Take the encore →
+              </PrimaryButton>
+            </div>
+          )}
+        </div>
+      </div>
+    </BubblegumLayout>
   )
 }
