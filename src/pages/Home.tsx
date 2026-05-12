@@ -6,6 +6,7 @@ import { Badge } from '../components/ui/Badge'
 import { ProgressBar } from '../components/ui/ProgressBar'
 import { COURSES } from '../data/courses'
 import { useProgress } from '../hooks/useProgress'
+import { useRequireAuth } from '../hooks/useRequireAuth'
 import { getTopWeakAreas, getCourseCompletion, getTodayDateString, getLiveStreak } from '../utils'
 
 const LEVEL_THRESHOLDS = [0, 50, 150, 300, 500, 800, 1200, 1800, 2500, 3500]
@@ -20,6 +21,7 @@ function getLevel(totalXP: number) {
 export function Home() {
   const navigate = useNavigate()
   const { progress } = useProgress()
+  const { user, gate } = useRequireAuth()
   const weakAreas = getTopWeakAreas(progress, 3)
 
   const today = getTodayDateString()
@@ -57,52 +59,80 @@ export function Home() {
     <Layout>
       <motion.div variants={container} initial="hidden" animate="show" className="space-y-5">
 
-        {/* Hero Card */}
+        {/* Hero Card — guest promo or progress stats */}
         <motion.div variants={item}>
-          <Card className="bg-gradient-to-br from-cadence-800 to-cadence-600 border-0 text-white" padding="lg">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-cadence-100 text-sm font-medium">Total XP</p>
-                <p className="text-4xl font-black mt-0.5">{progress.totalXP}</p>
+          {!user ? (
+            <Card className="bg-gradient-to-br from-cadence-800 to-cadence-600 border-0 text-white" padding="lg">
+              <div className="flex items-center gap-3">
+                <div className="text-4xl">♩</div>
+                <div className="flex-1 min-w-0">
+                  <p className="font-black text-lg leading-tight">Track your progress</p>
+                  <p className="text-cadence-100 text-sm mt-0.5">
+                    Sign in to earn XP, build streaks, and resume lessons.
+                  </p>
+                </div>
               </div>
-              <div className="text-center">
-                <p className="text-cadence-100 text-sm font-medium">Level</p>
-                <p className="text-4xl font-black mt-0.5">{level}</p>
+              <div className="mt-4 flex items-center gap-2">
+                <button
+                  onClick={() => navigate('/auth')}
+                  className="flex-1 bg-white text-cadence-800 font-bold text-sm py-2.5 rounded-xl touch-manipulation"
+                >
+                  Sign In
+                </button>
+                <button
+                  onClick={() => navigate('/auth?mode=signup')}
+                  className="flex-1 bg-cadence-900/40 text-white border border-white/30 font-bold text-sm py-2.5 rounded-xl touch-manipulation"
+                >
+                  Sign Up
+                </button>
               </div>
-              <div className="text-right">
-                <p className="text-cadence-100 text-sm font-medium">Streak</p>
-                <p className="text-4xl font-black mt-0.5">
-                  {liveStreakCount}
-                  <span className="text-lg font-normal text-cadence-200 ml-1">{liveStreakCount === 1 ? 'day' : 'days'}</span>
+            </Card>
+          ) : (
+            <Card className="bg-gradient-to-br from-cadence-800 to-cadence-600 border-0 text-white" padding="lg">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-cadence-100 text-sm font-medium">Total XP</p>
+                  <p className="text-4xl font-black mt-0.5">{progress.totalXP}</p>
+                </div>
+                <div className="text-center">
+                  <p className="text-cadence-100 text-sm font-medium">Level</p>
+                  <p className="text-4xl font-black mt-0.5">{level}</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-cadence-100 text-sm font-medium">Streak</p>
+                  <p className="text-4xl font-black mt-0.5">
+                    {liveStreakCount}
+                    <span className="text-lg font-normal text-cadence-200 ml-1">{liveStreakCount === 1 ? 'day' : 'days'}</span>
+                  </p>
+                </div>
+              </div>
+              {/* Daily Goal Bar */}
+              <div className="mt-3 pt-3 border-t border-white/20">
+                <div className="flex items-center justify-between mb-1">
+                  <p className="text-cadence-100 text-xs font-medium">
+                    Daily goal: {dailyDone} of {dailyGoal} quizzes
+                  </p>
+                  {dailyDone >= dailyGoal && (
+                    <span className="text-xs font-bold text-green-300">Done!</span>
+                  )}
+                </div>
+                <div className="w-full h-2 bg-white/20 rounded-full overflow-hidden">
+                  <div
+                    className={`h-2 rounded-full transition-all duration-500 ease-out ${
+                      dailyDone >= dailyGoal ? 'bg-green-400' : 'bg-white'
+                    }`}
+                    style={{ width: `${dailyPct}%` }}
+                  />
+                </div>
+              </div>
+              <div className="mt-2 flex items-center gap-2">
+                <span className={`w-2.5 h-2.5 rounded-full ${studiedToday ? 'bg-green-400' : 'bg-cadence-300'}`} />
+                <p className="text-cadence-100 text-xs">
+                  {studiedToday ? 'Studied today! Keep the streak going.' : 'Study today to keep your streak alive!'}
                 </p>
               </div>
-            </div>
-            {/* Daily Goal Bar */}
-            <div className="mt-3 pt-3 border-t border-white/20">
-              <div className="flex items-center justify-between mb-1">
-                <p className="text-cadence-100 text-xs font-medium">
-                  Daily goal: {dailyDone} of {dailyGoal} quizzes
-                </p>
-                {dailyDone >= dailyGoal && (
-                  <span className="text-xs font-bold text-green-300">Done!</span>
-                )}
-              </div>
-              <div className="w-full h-2 bg-white/20 rounded-full overflow-hidden">
-                <div
-                  className={`h-2 rounded-full transition-all duration-500 ease-out ${
-                    dailyDone >= dailyGoal ? 'bg-green-400' : 'bg-white'
-                  }`}
-                  style={{ width: `${dailyPct}%` }}
-                />
-              </div>
-            </div>
-            <div className="mt-2 flex items-center gap-2">
-              <span className={`w-2.5 h-2.5 rounded-full ${studiedToday ? 'bg-green-400' : 'bg-cadence-300'}`} />
-              <p className="text-cadence-100 text-xs">
-                {studiedToday ? 'Studied today! Keep the streak going.' : 'Study today to keep your streak alive!'}
-              </p>
-            </div>
-          </Card>
+            </Card>
+          )}
         </motion.div>
 
         {/* Continue Learning */}
@@ -113,8 +143,12 @@ export function Home() {
             </h2>
             <Card
               onClick={() =>
-                navigate(
-                  `/learn/${nextLesson.course.id}/modules/${nextLesson.mod.id}/lessons/${nextLesson.lesson.id}`
+                gate(
+                  () =>
+                    navigate(
+                      `/learn/${nextLesson.course.id}/modules/${nextLesson.mod.id}/lessons/${nextLesson.lesson.id}`
+                    ),
+                  'Sign in to start lessons'
                 )
               }
               className="border-cadence-200 dark:border-cadence-900 bg-cadence-50 dark:bg-cadence-900/20"
@@ -238,7 +272,7 @@ export function Home() {
                 You've finished every lesson. Take a practice quiz to sharpen your skills or review weak areas.
               </p>
               <button
-                onClick={() => navigate('/practice')}
+                onClick={() => gate(() => navigate('/practice'), 'Sign in to take practice quizzes')}
                 className="mt-4 bg-cadence-800 text-white px-6 py-2.5 rounded-xl font-bold text-sm touch-manipulation"
               >
                 Practice Quiz
