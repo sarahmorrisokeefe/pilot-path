@@ -9,7 +9,7 @@
   }
 
   body {
-    @apply bg-[#f5f3ff] dark:bg-[#0d0f1f] text-slate-900 dark:text-slate-100;
+    @apply bg-bubblegum-cream dark:bg-night-ink text-bubblegum-plum dark:text-night-fg;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
     overscroll-behavior: none;
   }
@@ -48,5 +48,24 @@
   .no-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
+  }
+
+  /* Dark mode safety net: when a card flips from white → night-panel, lighten
+     any descendant plum text so it stays readable. Pastel-bg cards aren't
+     affected (they're not bg-night-panel) so their plum text stays plum. */
+  .dark .bg-night-panel .text-bubblegum-plum,
+  .dark .bg-night-panel-hi .text-bubblegum-plum,
+  .dark .bg-night-panel2 .text-bubblegum-plum {
+    color: #fff7e0;
+  }
+  .dark .bg-night-panel .text-bubblegum-plum-soft,
+  .dark .bg-night-panel-hi .text-bubblegum-plum-soft,
+  .dark .bg-night-panel2 .text-bubblegum-plum-soft {
+    color: #d8c8e8;
+  }
+  .dark .bg-night-panel .text-bubblegum-plum-dim,
+  .dark .bg-night-panel-hi .text-bubblegum-plum-dim,
+  .dark .bg-night-panel2 .text-bubblegum-plum-dim {
+    color: #6e5e80;
   }
 }

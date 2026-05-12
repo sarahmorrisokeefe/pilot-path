@@ -72,7 +72,7 @@ function SignedOutHome() {
 
         {/* Anonymous greeting */}
         <motion.div variants={item} className="px-1">
-          <p className="text-[22px] font-black tracking-[-0.02em] text-bubblegum-plum">
+          <p className="text-[22px] font-black tracking-[-0.02em] text-bubblegum-plum dark:text-night-fg">
             Hey there{' '}
             <span className="inline-block" style={{ transform: 'rotate(-10deg)' }}>
               👋
@@ -225,7 +225,7 @@ function FirstNightHome() {
         className="flex flex-col gap-[18px] pt-1"
       >
         <motion.div variants={item} className="px-1">
-          <p className="text-[22px] font-black tracking-[-0.02em] text-bubblegum-plum">
+          <p className="text-[22px] font-black tracking-[-0.02em] text-bubblegum-plum dark:text-night-fg">
             Welcome, {firstName}{' '}
             <span className="inline-block -rotate-[10deg]" aria-hidden="true">
               🎤
@@ -383,7 +383,7 @@ function SignedInHome() {
 
         {/* Greeting */}
         <motion.div variants={item} className="px-1">
-          <p className="text-[22px] font-black tracking-[-0.02em] text-bubblegum-plum">
+          <p className="text-[22px] font-black tracking-[-0.02em] text-bubblegum-plum dark:text-night-fg">
             Hi, {firstName}{' '}
             <span className="inline-block" style={{ transform: 'rotate(-10deg)' }} aria-hidden="true">
               👋

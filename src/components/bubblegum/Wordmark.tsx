@@ -13,14 +13,14 @@ export function Wordmark({ size = 'md' }: WordmarkProps) {
   return (
     <div className="flex items-center gap-1.5">
       <span
-        className={`inline-block font-serif leading-none text-bubblegum-peach ${s.glyph}`}
+        className={`inline-block font-serif leading-none text-bubblegum-peach dark:drop-shadow-glow-peach ${s.glyph}`}
         style={{ transform: 'rotate(-10deg)' }}
         aria-hidden="true"
       >
         ♩
       </span>
       <span
-        className={`font-black tracking-tighter text-bubblegum-plum ${s.word}`}
+        className={`font-black tracking-tighter text-bubblegum-plum dark:text-night-fg ${s.word}`}
       >
         cadence
       </span>

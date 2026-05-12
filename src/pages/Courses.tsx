@@ -60,7 +60,7 @@ export function Courses() {
         className="flex flex-col gap-[18px] pt-1"
       >
         <div className="px-1">
-          <p className="text-[28px] font-black leading-tight tracking-[-0.025em] text-bubblegum-plum">
+          <p className="text-[28px] font-black leading-tight tracking-[-0.025em] text-bubblegum-plum dark:text-night-fg">
             Your{' '}
             <span
               className="inline-block rounded-lg bg-bubblegum-peach px-2"
@@ -118,7 +118,7 @@ export function Courses() {
             ))}
           </div>
         ) : (
-          <div className="rounded-3xl bg-white p-6 text-center">
+          <div className="rounded-3xl bg-white dark:bg-night-panel p-6 text-center">
             <p className="text-3xl">🎧</p>
             <p className="mt-2 text-base font-black text-bubblegum-plum">
               Nothing here yet.

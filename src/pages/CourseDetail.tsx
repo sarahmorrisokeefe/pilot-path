@@ -36,7 +36,7 @@ export function CourseDetail() {
   if (!course) {
     return (
       <BubblegumLayout activeTab="learn" back title="Not found">
-        <div className="mt-12 rounded-3xl bg-white p-6 text-center">
+        <div className="mt-12 rounded-3xl bg-white dark:bg-night-panel p-6 text-center">
           <p className="text-3xl">🎧</p>
           <p className="mt-2 text-base font-black text-bubblegum-plum">Album not found.</p>
           <p className="mt-1 text-sm text-bubblegum-plum-soft">
@@ -123,7 +123,7 @@ export function CourseDetail() {
         <div className="px-5 pt-5">
           <Eyebrow>track list</Eyebrow>
 
-          <div className="overflow-hidden rounded-3xl bg-white p-1.5">
+          <div className="overflow-hidden rounded-3xl bg-white dark:bg-night-panel p-1.5">
             {tracks.map((t, i) => {
               const isNow = nowPlaying?.label === t.label
               return (
@@ -297,7 +297,7 @@ function LockedAlbum({
 
         <main className="px-5 pt-5">
           {/* Unlock instructions */}
-          <div className="relative rounded-3xl bg-white p-5">
+          <div className="relative rounded-3xl bg-white dark:bg-night-panel p-5">
             <div className="mb-3.5 flex items-center gap-3">
               <div
                 className="flex h-14 w-14 -rotate-[6deg] items-center justify-center rounded-full border-[4px] border-white bg-bubblegum-lavender text-3xl"
@@ -357,7 +357,7 @@ function LockedAlbum({
           {/* Blurred locked-track preview */}
           <div className="mt-5">
             <Eyebrow>peek inside</Eyebrow>
-            <div className="overflow-hidden rounded-3xl bg-white p-1.5">
+            <div className="overflow-hidden rounded-3xl bg-white dark:bg-night-panel p-1.5">
               {lockedTracks.map((t) => (
                 <div
                   key={t.lesson.id}

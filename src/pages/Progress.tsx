@@ -72,7 +72,7 @@ export function Progress() {
         className="flex flex-col gap-[18px] pt-1"
       >
         <motion.div variants={item} className="px-1">
-          <p className="text-[28px] font-black leading-tight tracking-[-0.025em] text-bubblegum-plum">
+          <p className="text-[28px] font-black leading-tight tracking-[-0.025em] text-bubblegum-plum dark:text-night-fg">
             Your{' '}
             <span
               className="inline-block rounded-lg bg-bubblegum-butter px-2"
@@ -94,7 +94,7 @@ export function Progress() {
         {progress.streak.longest > liveStreakCount && (
           <motion.div
             variants={item}
-            className="flex items-center justify-between rounded-3xl bg-white p-4 text-bubblegum-plum"
+            className="flex items-center justify-between rounded-3xl bg-white dark:bg-night-panel p-4 text-bubblegum-plum"
           >
             <div className="flex items-center gap-3">
               <span
@@ -133,7 +133,7 @@ export function Progress() {
         {progress.testResults.length > 0 && (
           <motion.div variants={item}>
             <Eyebrow>last few tests 📻</Eyebrow>
-            <div className="overflow-hidden rounded-3xl bg-white p-1.5">
+            <div className="overflow-hidden rounded-3xl bg-white dark:bg-night-panel p-1.5">
               {[...progress.testResults]
                 .reverse()
                 .slice(0, 5)
@@ -293,7 +293,7 @@ function EmptyRecords() {
         className="flex flex-col gap-[18px] pt-1"
       >
         <motion.div variants={item} className="px-1">
-          <p className="text-[28px] font-black leading-tight tracking-[-0.025em] text-bubblegum-plum">
+          <p className="text-[28px] font-black leading-tight tracking-[-0.025em] text-bubblegum-plum dark:text-night-fg">
             Your{' '}
             <span className="inline-block -rotate-[1deg] rounded-lg bg-bubblegum-butter px-2">
               records
@@ -311,7 +311,7 @@ function EmptyRecords() {
         {/* Big empty-state card */}
         <motion.div
           variants={item}
-          className="relative overflow-hidden rounded-[28px] bg-white px-6 py-8 text-center"
+          className="relative overflow-hidden rounded-[28px] bg-white dark:bg-night-panel px-6 py-8 text-center"
         >
           <Doodle ch="✦" x={30} y={20}  size={18} color="#ffaf95" opacity={0.6} />
           <Doodle ch="✦" x={300} y={28} size={22} color="#cfb6ff" opacity={0.6} />

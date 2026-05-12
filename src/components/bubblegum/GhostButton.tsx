@@ -20,7 +20,8 @@ export function GhostButton({
         rounded-full font-extrabold tracking-tight
         px-6 py-[15px] text-sm min-h-[48px]
         bg-white text-bubblegum-plum
-        active:bg-bubblegum-cream-hi
+        dark:bg-night-panel dark:text-night-fg
+        active:bg-bubblegum-cream-hi dark:active:bg-night-panel-hi
         transition-all duration-150
         focus:outline-none focus:ring-2 focus:ring-bubblegum-plum focus:ring-offset-2 focus:ring-offset-bubblegum-cream
         disabled:opacity-40 disabled:cursor-not-allowed

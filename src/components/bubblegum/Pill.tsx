@@ -18,6 +18,7 @@ interface PillProps {
   size?: 'sm' | 'md'
 }
 
+// Pastel-bg pills keep plum text in both modes; white/cream/plum pills flip.
 const toneClasses: Record<BubblegumTone, string> = {
   butter:   'bg-bubblegum-butter text-bubblegum-plum',
   peach:    'bg-bubblegum-peach text-bubblegum-plum',
@@ -26,9 +27,9 @@ const toneClasses: Record<BubblegumTone, string> = {
   lavender: 'bg-bubblegum-lavender text-bubblegum-plum',
   pink:     'bg-bubblegum-pink text-bubblegum-plum',
   cherry:   'bg-bubblegum-cherry text-bubblegum-plum',
-  plum:     'bg-bubblegum-plum text-bubblegum-cream',
-  white:    'bg-white text-bubblegum-plum',
-  cream:    'bg-bubblegum-cream text-bubblegum-plum',
+  plum:     'bg-bubblegum-plum text-bubblegum-cream dark:bg-bubblegum-butter dark:text-bubblegum-plum',
+  white:    'bg-white text-bubblegum-plum dark:bg-night-panel dark:text-night-fg',
+  cream:    'bg-bubblegum-cream text-bubblegum-plum dark:bg-night-panel dark:text-night-fg',
 }
 
 const sizeClasses = {

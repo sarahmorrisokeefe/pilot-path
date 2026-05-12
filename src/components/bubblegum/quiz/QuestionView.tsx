@@ -24,12 +24,12 @@ interface QuestionViewProps {
 }
 
 const STATE_CLASSES = {
-  idle:     'bg-white border-bubblegum-cream-hi text-bubblegum-plum active:scale-[0.98]',
-  selected: 'bg-white border-bubblegum-plum text-bubblegum-plum',
-  right:    'bg-bubblegum-mint border-bubblegum-plum text-bubblegum-plum',
-  wrong:    'bg-bubblegum-cherry/20 border-bubblegum-cherry text-bubblegum-plum',
-  reveal:   'bg-bubblegum-mint border-bubblegum-plum text-bubblegum-plum',
-  dim:      'bg-white border-bubblegum-cream-hi text-bubblegum-plum opacity-55',
+  idle:     'bg-white border-bubblegum-cream-hi text-bubblegum-plum dark:bg-night-panel dark:border-night-panel-hi dark:text-night-fg active:scale-[0.98]',
+  selected: 'bg-white border-bubblegum-plum text-bubblegum-plum dark:bg-night-panel dark:border-bubblegum-butter dark:text-night-fg',
+  right:    'bg-bubblegum-mint border-bubblegum-plum text-bubblegum-plum dark:shadow-glow-mint',
+  wrong:    'bg-bubblegum-cherry/20 border-bubblegum-cherry text-bubblegum-plum dark:bg-bubblegum-cherry/15 dark:text-night-fg dark:shadow-glow-cherry',
+  reveal:   'bg-bubblegum-mint border-bubblegum-plum text-bubblegum-plum dark:shadow-glow-mint',
+  dim:      'bg-white border-bubblegum-cream-hi text-bubblegum-plum opacity-55 dark:bg-night-panel dark:border-night-panel-hi dark:text-night-fg',
 } as const
 
 export function QuestionView({
@@ -54,14 +54,14 @@ export function QuestionView({
     >
       <div>
         <Mono>{question.topic} · question</Mono>
-        <p className="mt-1 text-[22px] font-black leading-[1.15] tracking-[-0.02em] text-bubblegum-plum">
+        <p className="mt-1 text-[22px] font-black leading-[1.15] tracking-[-0.02em] text-bubblegum-plum dark:text-night-fg">
           {question.text}
         </p>
       </div>
 
       {question.staffConfig && !hideStaff && (
         <div
-          className={`relative overflow-hidden rounded-3xl bg-white p-5 ${
+          className={`relative overflow-hidden rounded-3xl bg-white p-5 dark:bg-night-panel ${
             showFeedback && !isCorrect ? 'animate-bg-shake' : ''
           }`}
         >
@@ -142,7 +142,7 @@ export function QuestionView({
         <button
           type="button"
           disabled
-          className="mt-1 cursor-not-allowed rounded-full border-2 border-dashed border-bubblegum-plum-dim bg-bubblegum-cream py-3.5 text-sm font-extrabold text-bubblegum-plum-dim"
+          className="mt-1 cursor-not-allowed rounded-full border-2 border-dashed border-bubblegum-plum-dim bg-bubblegum-cream py-3.5 text-sm font-extrabold text-bubblegum-plum-dim dark:bg-night-panel dark:border-night-fg-dim dark:text-night-fg-dim"
         >
           Tap a note to answer
         </button>
@@ -185,7 +185,9 @@ function FeedbackPanel({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, ease: [0.36, 0.07, 0.19, 0.97] }}
       className={`relative overflow-hidden rounded-3xl p-5 ${
-        isCorrect ? 'bg-bubblegum-mint' : 'border-t-4 border-bubblegum-cherry bg-bubblegum-cherry/20'
+        isCorrect
+          ? 'bg-bubblegum-mint dark:shadow-glow-mint'
+          : 'border-t-4 border-bubblegum-cherry bg-bubblegum-cherry/20 dark:bg-bubblegum-cherry/15 dark:shadow-glow-cherry'
       }`}
     >
       <Doodle
@@ -209,7 +211,7 @@ function FeedbackPanel({
         <div className="flex-1">
           <p
             className={`text-2xl font-black leading-none tracking-[-0.025em] text-bubblegum-plum ${
-              isCorrect ? 'animate-bg-pop-in' : ''
+              isCorrect ? 'animate-bg-pop-in' : 'dark:text-night-fg'
             }`}
           >
             {isCorrect ? 'Encore!' : 'Off-key — close though!'}
@@ -228,7 +230,9 @@ function FeedbackPanel({
         </div>
       </div>
 
-      <p className="mt-3 text-sm font-bold leading-relaxed text-bubblegum-plum">
+      <p className={`mt-3 text-sm font-bold leading-relaxed text-bubblegum-plum ${
+        isCorrect ? '' : 'dark:text-night-fg'
+      }`}>
         {!isCorrect && (
           <>
             It's actually <strong className="text-bubblegum-green">{correctOption}</strong>.{' '}
