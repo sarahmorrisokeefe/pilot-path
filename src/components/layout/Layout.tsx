@@ -49,6 +49,15 @@ export function Layout({ children, hideNav = false, title, backPath }: LayoutPro
           </div>
           {/* Right side: avatar + settings + dark mode toggle */}
           <div className="flex items-center gap-1">
+            {!user && (
+              <button
+                onClick={() => navigate('/auth')}
+                className="text-cadence-800 dark:text-cadence-300 bg-cadence-50 dark:bg-cadence-900/40 text-xs font-bold px-3 py-1.5 rounded-full touch-manipulation hover:bg-cadence-100 dark:hover:bg-cadence-900/60 transition-colors"
+                aria-label="Sign in"
+              >
+                Sign in
+              </button>
+            )}
             {/* Signed-in: avatar circle */}
             {user && (
               <button
