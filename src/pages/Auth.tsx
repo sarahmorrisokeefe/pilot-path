@@ -1,11 +1,25 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, type FormEvent } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Layout } from '../components/layout/Layout'
-import { Button } from '../components/ui/Button'
+import {
+  BubblegumLayout,
+  Doodle,
+  Mono,
+  Pill,
+  PrimaryButton,
+  GhostButton,
+} from '../components/bubblegum'
 import { useAuth } from '../context/AuthContext'
 
 type Mode = 'signin' | 'signup' | 'forgot'
+
+const INPUT_CLASS = `
+  w-full rounded-2xl border-[2px] border-bubblegum-cream-hi bg-white
+  px-4 py-3 text-base font-bold text-bubblegum-plum
+  placeholder-bubblegum-plum-dim
+  focus:border-bubblegum-plum focus:outline-none focus:ring-2 focus:ring-bubblegum-peach
+  transition-colors
+`
 
 export function Auth() {
   const { user, signIn, signUp, resetPassword } = useAuth()
@@ -21,7 +35,6 @@ export function Auth() {
   const [success, setSuccess] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
 
-  // Redirect if already signed in
   useEffect(() => {
     if (user) navigate('/', { replace: true })
   }, [user, navigate])
@@ -32,17 +45,16 @@ export function Auth() {
     setSuccess(null)
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
     setError(null)
     setSuccess(null)
     setLoading(true)
 
     if (mode === 'signin') {
-      const { error } = await signIn(email, password)
-      if (error) setError(error.message)
+      const { error: err } = await signIn(email, password)
+      if (err) setError(err.message)
       else navigate('/')
-
     } else if (mode === 'signup') {
       if (password.length < 6) {
         setError('Password must be at least 6 characters.')
@@ -54,66 +66,117 @@ export function Auth() {
         setLoading(false)
         return
       }
-      const { error } = await signUp(email, password)
-      if (error) {
-        setError(error.message)
+      const { error: err } = await signUp(email, password)
+      if (err) {
+        setError(err.message)
       } else {
-        // Supabase may require email confirmation depending on project settings.
-        // If session is established immediately, the useEffect above handles redirect.
-        setSuccess('Account created! Check your email to confirm, then sign in.')
+        setSuccess('Pass on the way — check your email to confirm.')
         setMode('signin')
       }
-
     } else {
-      // forgot password
-      const { error } = await resetPassword(email)
-      if (error) setError(error.message)
-      else setSuccess('Password reset link sent — check your email.')
+      const { error: err } = await resetPassword(email)
+      if (err) setError(err.message)
+      else setSuccess('Reset link sent — check your email.')
     }
 
     setLoading(false)
   }
 
-  const inputClass = `
-    w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-600
-    bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-base
-    placeholder-slate-400 dark:placeholder-slate-500
-    focus:outline-none focus:ring-2 focus:ring-cadence-400 focus:border-transparent
-    transition-colors
-  `
+  const heading =
+    mode === 'forgot'
+      ? 'Lost your set list?'
+      : mode === 'signup'
+      ? 'Get your backstage pass.'
+      : 'Welcome back to the stage.'
+
+  const subhead =
+    mode === 'forgot'
+      ? "We'll mail a reset link."
+      : mode === 'signup'
+      ? 'Save your set, earn records, keep your streak alive.'
+      : 'Pick up where you left off.'
+
+  const ctaLabel = loading
+    ? 'One sec…'
+    : mode === 'signin'
+    ? 'Take the stage →'
+    : mode === 'signup'
+    ? 'Create my pass →'
+    : 'Send reset link →'
 
   return (
-    <Layout title="Account" hideNav>
-      <div className="max-w-sm mx-auto pt-4">
-        {/* Logo */}
-        <div className="text-center mb-8">
-          <div className="text-5xl mb-3 text-copper-500">♩</div>
-          <h1 className="font-black text-2xl text-slate-900 dark:text-white">Cadence</h1>
-          <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">
-            {mode === 'forgot' ? 'Reset your password' : 'Sign in to start learning'}
+    <BubblegumLayout hideHeader hideTabBar>
+      <div className="relative -mx-5 flex min-h-[calc(100vh-2rem)] flex-col px-5 pt-2">
+        <Doodle ch="♪" x={32} y={70}  size={36} rot={-15} color="#ffaf95" opacity={0.7} />
+        <Doodle ch="♬" x={330} y={120} size={52} rot={12}  color="#cfb6ff" opacity={0.6} />
+        <Doodle ch="♫" x={48} y={300}  size={28} rot={-8}  color="#a8e6b8" opacity={0.7} />
+        <Doodle ch="♩" x={350} y={420} size={42} rot={18}  color="#a8d8ff" opacity={0.7} />
+        <Doodle ch="♪" x={28} y={520}  size={32} rot={-20} color="#ffd66b" opacity={0.8} />
+
+        {/* Brand mark */}
+        <div className="relative z-[1] mt-4 flex items-baseline gap-2">
+          <span
+            className="inline-block font-serif leading-none text-bubblegum-peach"
+            style={{ fontSize: '72px', transform: 'rotate(-10deg)' }}
+            aria-hidden="true"
+          >
+            ♩
+          </span>
+          <span className="text-2xl font-black tracking-[-0.03em] text-bubblegum-plum">
+            cadence
+          </span>
+        </div>
+
+        <div className="relative z-[1] mt-6">
+          <p className="text-[34px] font-black leading-[1.05] tracking-[-0.03em] text-bubblegum-plum">
+            {heading.split(' ').map((word, i, arr) => {
+              // Highlight last word with butter pill for visual hook
+              if (i === arr.length - 1) {
+                return (
+                  <span key={i}>
+                    <span
+                      className="inline-block rounded-lg bg-bubblegum-butter px-2"
+                      style={{ transform: 'rotate(-1deg)' }}
+                    >
+                      {word.replace(/[.?!]$/, '')}
+                    </span>
+                    {word.match(/[.?!]$/)?.[0] ?? ''}
+                  </span>
+                )
+              }
+              return (
+                <span key={i}>
+                  {word}
+                  {i < arr.length - 1 ? ' ' : ''}
+                </span>
+              )
+            })}
+          </p>
+          <p className="mt-3 max-w-[32ch] text-sm font-semibold text-bubblegum-plum-soft">
+            {subhead}
           </p>
         </div>
 
-        {/* Tab strip (not shown for forgot mode) */}
+        {/* Sign-in / Sign-up tab strip */}
         {mode !== 'forgot' && (
-          <div className="flex bg-slate-100 dark:bg-slate-800 rounded-xl p-1 mb-6">
+          <div className="relative z-[1] mt-6 flex rounded-full bg-white p-1">
             {(['signin', 'signup'] as const).map((m) => (
               <button
                 key={m}
+                type="button"
                 onClick={() => switchMode(m)}
-                className={`flex-1 py-2 rounded-lg text-sm font-semibold transition-colors touch-manipulation ${
+                className={`flex-1 rounded-full py-2 text-xs font-extrabold tracking-tight transition-colors touch-manipulation ${
                   mode === m
-                    ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm'
-                    : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'
+                    ? 'bg-bubblegum-plum text-bubblegum-cream'
+                    : 'text-bubblegum-plum-soft'
                 }`}
               >
-                {m === 'signin' ? 'Sign In' : 'Sign Up'}
+                {m === 'signin' ? 'Sign in' : 'Sign up'}
               </button>
             ))}
           </div>
         )}
 
-        {/* Form */}
         <AnimatePresence mode="wait">
           <motion.form
             key={mode}
@@ -122,12 +185,10 @@ export function Auth() {
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.18 }}
             onSubmit={handleSubmit}
-            className="space-y-4"
+            className="relative z-[1] mt-5 flex flex-col gap-3.5"
           >
             <div>
-              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
-                Email
-              </label>
+              <Mono size="xs">email</Mono>
               <input
                 type="email"
                 value={email}
@@ -135,15 +196,13 @@ export function Auth() {
                 placeholder="you@example.com"
                 required
                 autoComplete="email"
-                className={inputClass}
+                className={`mt-1 ${INPUT_CLASS}`}
               />
             </div>
 
             {mode !== 'forgot' && (
               <div>
-                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
-                  Password
-                </label>
+                <Mono size="xs">password</Mono>
                 <input
                   type="password"
                   value={password}
@@ -151,16 +210,14 @@ export function Auth() {
                   placeholder={mode === 'signup' ? 'Min. 6 characters' : '••••••••'}
                   required
                   autoComplete={mode === 'signup' ? 'new-password' : 'current-password'}
-                  className={inputClass}
+                  className={`mt-1 ${INPUT_CLASS}`}
                 />
               </div>
             )}
 
             {mode === 'signup' && (
               <div>
-                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
-                  Confirm Password
-                </label>
+                <Mono size="xs">confirm password</Mono>
                 <input
                   type="password"
                   value={confirmPassword}
@@ -168,76 +225,64 @@ export function Auth() {
                   placeholder="Re-enter password"
                   required
                   autoComplete="new-password"
-                  className={inputClass}
+                  className={`mt-1 ${INPUT_CLASS}`}
                 />
               </div>
             )}
 
-            {/* Error */}
             {error && (
-              <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 rounded-xl px-4 py-3">
-                <p className="text-sm text-red-700 dark:text-red-300">{error}</p>
+              <div className="rounded-2xl border-2 border-bubblegum-cherry bg-bubblegum-cherry/20 px-4 py-3">
+                <p className="text-sm font-bold text-bubblegum-plum">{error}</p>
               </div>
             )}
 
-            {/* Success */}
             {success && (
-              <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-700 rounded-xl px-4 py-3">
-                <p className="text-sm text-green-700 dark:text-green-300">{success}</p>
+              <div className="rounded-2xl bg-bubblegum-mint px-4 py-3">
+                <p className="text-sm font-bold text-bubblegum-plum">{success}</p>
               </div>
             )}
 
-            <Button
-              type="submit"
-              variant="primary"
-              fullWidth
-              size="lg"
-              disabled={loading}
-            >
-              {loading
-                ? 'Please wait…'
-                : mode === 'signin'
-                ? 'Sign In'
-                : mode === 'signup'
-                ? 'Create Account'
-                : 'Send Reset Link'}
-            </Button>
-
-            {/* Footer links */}
-            <div className="flex justify-between text-sm pt-1">
-              {mode === 'signin' && (
-                <button
-                  type="button"
-                  onClick={() => switchMode('forgot')}
-                  className="text-cadence-800 dark:text-cadence-300 hover:underline"
-                >
-                  Forgot password?
-                </button>
-              )}
-              {mode === 'forgot' && (
-                <button
-                  type="button"
-                  onClick={() => switchMode('signin')}
-                  className="text-cadence-800 dark:text-cadence-300 hover:underline"
-                >
-                  ← Back to sign in
-                </button>
-              )}
+            <div className="mt-1">
+              <PrimaryButton type="submit" disabled={loading}>
+                {ctaLabel}
+              </PrimaryButton>
             </div>
 
-            {/* Skip / browse without account */}
-            <div className="text-center pt-2">
-              <button
-                type="button"
-                onClick={() => navigate('/')}
-                className="text-slate-400 dark:text-slate-500 text-sm hover:text-slate-600 dark:hover:text-slate-300 transition-colors touch-manipulation"
-              >
-                Skip for now — browse without an account
-              </button>
-            </div>
+            {mode === 'signin' && (
+              <GhostButton type="button" onClick={() => switchMode('forgot')}>
+                Forgot your password?
+              </GhostButton>
+            )}
+            {mode === 'forgot' && (
+              <GhostButton type="button" onClick={() => switchMode('signin')}>
+                ← Back to sign in
+              </GhostButton>
+            )}
           </motion.form>
         </AnimatePresence>
+
+        {/* Feature chips */}
+        {mode === 'signup' && (
+          <div className="relative z-[1] mt-5 flex flex-wrap gap-1.5">
+            <Pill tone="mint" size="sm">🎼 Notation</Pill>
+            <Pill tone="sky" size="sm">🥁 Rhythm</Pill>
+            <Pill tone="lavender" size="sm">🎹 Scales</Pill>
+            <Pill tone="peach" size="sm">📏 Intervals</Pill>
+            <Pill tone="pink" size="sm">🎸 Chords</Pill>
+          </div>
+        )}
+
+        {/* Skip */}
+        <div className="relative z-[1] mt-auto pb-4 pt-6 text-center">
+          <button
+            type="button"
+            onClick={() => navigate('/')}
+            className="text-xs font-bold text-bubblegum-plum-dim touch-manipulation"
+          >
+            Skip for now — browse without a backstage pass.
+          </button>
+        </div>
       </div>
-    </Layout>
+    </BubblegumLayout>
   )
 }
