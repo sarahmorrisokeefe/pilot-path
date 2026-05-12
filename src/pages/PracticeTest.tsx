@@ -172,7 +172,7 @@ export function PracticeTest() {
   if (started && questions.length === 0) {
     return (
       <BubblegumLayout activeTab="practice">
-        <div className="mt-8 rounded-3xl bg-white p-6 text-center">
+        <div className="mt-8 rounded-3xl bg-white dark:bg-night-panel p-6 text-center">
           <p className="text-3xl">🎧</p>
           <p className="mt-2 text-base font-black text-bubblegum-plum">
             No questions in the selected albums.
@@ -194,7 +194,7 @@ export function PracticeTest() {
         className="flex flex-col gap-[18px] pt-1"
       >
         <div className="px-1">
-          <p className="text-[28px] font-black leading-tight tracking-[-0.025em] text-bubblegum-plum">
+          <p className="text-[28px] font-black leading-tight tracking-[-0.025em] text-bubblegum-plum dark:text-night-fg">
             <span
               className="inline-block rounded-lg bg-bubblegum-peach px-2"
               style={{ transform: 'rotate(-1deg)' }}
@@ -270,7 +270,7 @@ export function PracticeTest() {
         </div>
 
         {/* Mix your own */}
-        <div className="rounded-bubble bg-white p-5">
+        <div className="rounded-bubble bg-white dark:bg-night-panel p-5">
           <Eyebrow>mix your own 🎛</Eyebrow>
 
           <Mono size="xs">pull from these albums</Mono>
@@ -395,7 +395,7 @@ function TopicBreakdown({
   items: { topic: string; correct: number; total: number; pct: number }[]
 }) {
   return (
-    <div className="rounded-3xl bg-white p-4">
+    <div className="rounded-3xl bg-white dark:bg-night-panel p-4">
       <Eyebrow>score by topic</Eyebrow>
       <div className="mt-1 flex flex-col gap-2.5">
         {items.map(({ topic, correct, total, pct }) => {

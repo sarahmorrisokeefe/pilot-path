@@ -26,12 +26,12 @@ export function AppHeader({
             type="button"
             onClick={onBack}
             aria-label="Go back"
-            className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-lg font-black text-bubblegum-plum touch-manipulation"
+            className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-lg font-black text-bubblegum-plum dark:bg-night-panel dark:text-night-fg touch-manipulation"
           >
             ←
           </button>
           {title && (
-            <span className="text-base font-black tracking-tight text-bubblegum-plum">
+            <span className="text-base font-black tracking-tight text-bubblegum-plum dark:text-night-fg">
               {title}
             </span>
           )}
@@ -47,7 +47,7 @@ export function AppHeader({
           type="button"
           onClick={onAvatarClick}
           aria-label="Profile"
-          className="flex h-[38px] w-[38px] items-center justify-center rounded-full border-[3px] border-white bg-bubblegum-lavender text-[15px] font-black text-bubblegum-plum touch-manipulation"
+          className="flex h-[38px] w-[38px] items-center justify-center rounded-full border-[3px] border-white bg-bubblegum-lavender text-[15px] font-black text-bubblegum-plum dark:border-night-panel dark:shadow-glow-lavender touch-manipulation"
         >
           {userInitial ?? 'S'}
         </button>

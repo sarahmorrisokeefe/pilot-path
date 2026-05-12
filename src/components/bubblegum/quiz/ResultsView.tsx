@@ -122,7 +122,7 @@ export function ResultsView({
             type="button"
             onClick={onClose}
             aria-label="Close results"
-            className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-base font-black text-bubblegum-plum touch-manipulation"
+            className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-base font-black text-bubblegum-plum dark:bg-night-panel dark:text-night-fg touch-manipulation"
           >
             ✕
           </button>
@@ -132,11 +132,11 @@ export function ResultsView({
       <div className="relative z-[1] flex-1 overflow-y-auto px-5 pt-2">
         <div className="text-center">
           <Mono size="sm" tone="cherry">{c.tag}</Mono>
-          <p className="mt-2 text-[42px] font-black leading-none tracking-[-0.035em] text-bubblegum-plum">
+          <p className="mt-2 text-[42px] font-black leading-none tracking-[-0.035em] text-bubblegum-plum dark:text-night-fg">
             {c.headline}
           </p>
           {subtitle && (
-            <p className="mt-1 text-sm font-semibold text-bubblegum-plum-soft">{subtitle}</p>
+            <p className="mt-1 text-sm font-semibold text-bubblegum-plum-soft dark:text-night-fg2">{subtitle}</p>
           )}
         </div>
 
@@ -165,7 +165,7 @@ export function ResultsView({
           )}
         </div>
 
-        <p className="mt-5 mb-6 text-center text-xs font-bold text-bubblegum-plum-soft">
+        <p className="mt-5 mb-6 text-center text-xs font-bold text-bubblegum-plum-soft dark:text-night-fg2">
           {c.closingNudge}
         </p>
       </div>
@@ -206,7 +206,7 @@ function ScoreDonut({
     <div className="mt-6 flex justify-center">
       <div className="relative h-[200px] w-[200px]">
         <svg viewBox="0 0 100 100" width="200" height="200">
-          <circle cx="50" cy="50" r={r} fill="none" stroke="#ffffff" strokeWidth="12" />
+          <circle cx="50" cy="50" r={r} fill="none" strokeWidth="12" className="stroke-white dark:stroke-night-panel2" />
           <motion.circle
             cx="50"
             cy="50"
@@ -224,7 +224,7 @@ function ScoreDonut({
         </svg>
         <div className="absolute inset-0 flex flex-col items-center justify-center">
           <span
-            className="inline-block font-black leading-[0.9] tabular-nums text-bubblegum-plum"
+            className="inline-block font-black leading-[0.9] tabular-nums text-bubblegum-plum dark:text-night-fg"
             style={{ fontSize: '64px', letterSpacing: '-0.04em', transform: 'rotate(-2deg)' }}
           >
             {displayScore}

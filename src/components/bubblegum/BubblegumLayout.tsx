@@ -50,7 +50,7 @@ export function BubblegumLayout({
   const userInitial = user?.email?.[0]?.toUpperCase()
 
   return (
-    <div className="relative min-h-screen bg-bubblegum-cream bg-bubble-pattern text-bubblegum-plum">
+    <div className="relative min-h-screen bg-bubblegum-cream bg-bubble-pattern text-bubblegum-plum dark:bg-night-ink dark:bg-none dark:text-night-fg">
       <div className="safe-top" />
 
       {!hideHeader && (

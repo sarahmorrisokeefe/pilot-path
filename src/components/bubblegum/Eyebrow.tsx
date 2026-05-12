@@ -6,9 +6,9 @@ interface EyebrowProps {
 }
 
 const toneClasses = {
-  plum: 'text-bubblegum-plum',
-  'plum-soft': 'text-bubblegum-plum-soft',
-  'plum-dim': 'text-bubblegum-plum-dim',
+  plum: 'text-bubblegum-plum dark:text-night-fg',
+  'plum-soft': 'text-bubblegum-plum-soft dark:text-night-fg2',
+  'plum-dim': 'text-bubblegum-plum-dim dark:text-night-fg-dim',
   cherry: 'text-bubblegum-cherry',
 }
 

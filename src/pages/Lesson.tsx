@@ -87,7 +87,7 @@ export function Lesson() {
   if (!course || !mod || !lesson) {
     return (
       <BubblegumLayout hideTabBar back title="Not found">
-        <div className="mt-12 rounded-3xl bg-white p-6 text-center">
+        <div className="mt-12 rounded-3xl bg-white dark:bg-night-panel p-6 text-center">
           <p className="text-3xl">🎧</p>
           <p className="mt-2 text-base font-black text-bubblegum-plum">Track not found.</p>
           <div className="mt-4">
@@ -214,7 +214,7 @@ function StudyView({
           </button>
         </div>
 
-        <div className="relative overflow-hidden rounded-3xl bg-white p-5">
+        <div className="relative overflow-hidden rounded-3xl bg-white dark:bg-night-panel p-5">
           <Doodle ch="♪" x={18} y={14} size={18} rot={-15} color="#ffaf95" opacity={0.4} />
 
           {slide.questionText && (

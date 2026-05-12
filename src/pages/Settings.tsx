@@ -241,7 +241,7 @@ export function Settings() {
 
         {/* Danger zone */}
         {user ? (
-          <div className="overflow-hidden rounded-3xl border-2 border-dashed border-bubblegum-cherry/50 bg-white p-1.5">
+          <div className="overflow-hidden rounded-3xl border-2 border-dashed border-bubblegum-cherry/50 bg-white dark:bg-night-panel p-1.5">
             <SettingRow
               icon="🧨"
               label="Wipe the setlist"
@@ -309,13 +309,13 @@ function Section({ eyebrow, children }: { eyebrow: string; children: ReactNode }
   return (
     <div>
       <Eyebrow>{eyebrow}</Eyebrow>
-      <div className="overflow-hidden rounded-3xl bg-white p-1.5">{children}</div>
+      <div className="overflow-hidden rounded-3xl bg-white dark:bg-night-panel p-1.5">{children}</div>
     </div>
   )
 }
 
 function Divider() {
-  return <div className="mx-3.5 h-px bg-bubblegum-cream-hi" />
+  return <div className="mx-3.5 h-px bg-bubblegum-cream-hi dark:bg-night-panel-hi" />
 }
 
 const ACCENT_BG = {
@@ -386,7 +386,7 @@ function Toggle({ on, onClick }: { on: boolean; onClick: () => void }) {
       role="switch"
       aria-checked={on}
       className={`relative h-7 w-[46px] rounded-full transition-colors touch-manipulation ${
-        on ? 'bg-bubblegum-plum' : 'bg-bubblegum-cream-hi'
+        on ? 'bg-bubblegum-plum dark:bg-bubblegum-butter' : 'bg-bubblegum-cream-hi dark:bg-night-panel-hi'
       }`}
     >
       <span

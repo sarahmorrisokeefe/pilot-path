@@ -156,7 +156,7 @@ export function WeakAreas() {
           className="flex flex-col gap-[18px] pt-1"
         >
           <div className="px-1">
-            <p className="text-[28px] font-black leading-tight tracking-[-0.025em] text-bubblegum-plum">
+            <p className="text-[28px] font-black leading-tight tracking-[-0.025em] text-bubblegum-plum dark:text-night-fg">
               <span
                 className="inline-block rounded-lg bg-bubblegum-cherry/40 px-2"
                 style={{ transform: 'rotate(-1deg)' }}
@@ -195,7 +195,7 @@ export function WeakAreas() {
           </div>
 
           {/* How it works */}
-          <div className="rounded-3xl bg-white p-4">
+          <div className="rounded-3xl bg-white dark:bg-night-panel p-4">
             <Eyebrow>how b-sides work</Eyebrow>
             <div className="mt-1 flex flex-col gap-3">
               {[
@@ -246,7 +246,7 @@ export function WeakAreas() {
         className="flex flex-col gap-[18px] pt-1"
       >
         <div className="px-1">
-          <p className="text-[28px] font-black leading-tight tracking-[-0.025em] text-bubblegum-plum">
+          <p className="text-[28px] font-black leading-tight tracking-[-0.025em] text-bubblegum-plum dark:text-night-fg">
             <span
               className="inline-block rounded-lg bg-bubblegum-cherry/40 px-2"
               style={{ transform: 'rotate(-1deg)' }}
@@ -287,7 +287,7 @@ export function WeakAreas() {
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: idx * 0.03 }}
-              className="rounded-2xl bg-white p-3.5"
+              className="rounded-2xl bg-white dark:bg-night-panel p-3.5"
             >
               <div className="flex items-start gap-2">
                 <CategoryChip tone="cherry">{wa.topic}</CategoryChip>

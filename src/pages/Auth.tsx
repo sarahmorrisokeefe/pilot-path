@@ -19,6 +19,8 @@ const INPUT_CLASS = `
   placeholder-bubblegum-plum-dim
   focus:border-bubblegum-plum focus:outline-none focus:ring-2 focus:ring-bubblegum-peach
   transition-colors
+  dark:bg-night-panel dark:border-night-panel-hi dark:text-night-fg
+  dark:placeholder-night-fg-dim dark:focus:border-bubblegum-butter
 `
 
 export function Auth() {

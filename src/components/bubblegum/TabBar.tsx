@@ -22,7 +22,7 @@ const tabs: readonly Tab[] = [
 export function TabBar({ active, onTabClick }: TabBarProps) {
   return (
     <nav
-      className="flex rounded-full bg-white p-1.5 shadow-[0_8px_24px_-8px_rgba(58,34,79,0.2)]"
+      className="flex rounded-full bg-white p-1.5 shadow-[0_8px_24px_-8px_rgba(58,34,79,0.2)] dark:bg-night-panel dark:shadow-[0_0_40px_-12px_rgba(255,214,107,0.35)]"
       aria-label="Primary"
     >
       {tabs.map((tab) => {
@@ -36,10 +36,12 @@ export function TabBar({ active, onTabClick }: TabBarProps) {
             aria-label={tab.label}
             className={`
               flex-1 rounded-full py-[7px] text-center
-              text-bubblegum-plum
+              text-bubblegum-plum dark:text-night-fg
               touch-manipulation select-none
               transition-colors duration-150
-              ${isActive ? 'bg-bubblegum-butter font-black' : 'bg-transparent font-semibold'}
+              ${isActive
+                ? 'bg-bubblegum-butter font-black dark:text-bubblegum-plum dark:shadow-glow-butter'
+                : 'bg-transparent font-semibold'}
             `}
           >
             <div className="text-xl leading-none">{tab.icon}</div>

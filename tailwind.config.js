@@ -58,6 +58,19 @@ export default {
       borderRadius: {
         bubble: '32px',
       },
+      boxShadow: {
+        'glow-butter':   '0 0 40px -12px rgba(255, 214, 107, 0.55)',
+        'glow-peach':    '0 0 40px -12px rgba(255, 175, 149, 0.55)',
+        'glow-mint':     '0 0 40px -12px rgba(168, 230, 184, 0.55)',
+        'glow-sky':      '0 0 40px -12px rgba(168, 216, 255, 0.55)',
+        'glow-lavender': '0 0 40px -12px rgba(207, 182, 255, 0.55)',
+        'glow-pink':     '0 0 40px -12px rgba(255, 179, 217, 0.55)',
+        'glow-cherry':   '0 0 40px -12px rgba(255, 127, 175, 0.55)',
+      },
+      dropShadow: {
+        'glow-peach':  '0 0 12px rgba(255, 175, 149, 0.5)',
+        'glow-butter': '0 0 12px rgba(255, 214, 107, 0.5)',
+      },
       backgroundImage: {
         'bubble-pattern': `radial-gradient(circle at 12% 18%, rgba(255,175,149,0.33) 0 8px, transparent 9px),
                            radial-gradient(circle at 78% 8%, rgba(168,230,184,0.33) 0 10px, transparent 11px),

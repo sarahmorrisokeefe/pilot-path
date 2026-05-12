@@ -14,7 +14,7 @@ export function QuizHeader({ progressValue, stepLabel, onClose }: QuizHeaderProp
         type="button"
         onClick={onClose}
         aria-label="Close"
-        className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-white text-base font-black text-bubblegum-plum touch-manipulation"
+        className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-white text-base font-black text-bubblegum-plum dark:bg-night-panel dark:text-night-fg touch-manipulation"
       >
         ✕
       </button>
