@@ -1,5 +1,5 @@
-import { type ReactNode } from 'react'
-import { motion } from 'framer-motion'
+import { useEffect, useState, type ReactNode } from 'react'
+import { animate, motion, useMotionValue, useTransform } from 'framer-motion'
 import { Doodle } from '../Doodle'
 import { Mono } from '../Mono'
 import { PrimaryButton } from '../PrimaryButton'
@@ -185,6 +185,23 @@ function ScoreDonut({
   const r = 42
   const C = 2 * Math.PI * r
   const dash = (score / 100) * C
+
+  // Count-up: animate a motion value 0 → score in sync with the arc.
+  const motionScore = useMotionValue(0)
+  const rounded = useTransform(motionScore, (v) => Math.round(v))
+  const [displayScore, setDisplayScore] = useState(0)
+  useEffect(() => {
+    const controls = animate(motionScore, score, {
+      duration: 1.2,
+      ease: [0.36, 0.07, 0.19, 0.97],
+    })
+    const unsub = rounded.on('change', setDisplayScore)
+    return () => {
+      controls.stop()
+      unsub()
+    }
+  }, [score, motionScore, rounded])
+
   return (
     <div className="mt-6 flex justify-center">
       <div className="relative h-[200px] w-[200px]">
@@ -210,7 +227,7 @@ function ScoreDonut({
             className="inline-block font-black leading-[0.9] tabular-nums text-bubblegum-plum"
             style={{ fontSize: '64px', letterSpacing: '-0.04em', transform: 'rotate(-2deg)' }}
           >
-            {score}
+            {displayScore}
           </span>
           <Mono>{correctCount}/{totalCount} correct</Mono>
         </div>

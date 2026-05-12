@@ -419,7 +419,15 @@ function SignedInHome() {
           </div>
 
           <div className="mt-3.5 flex flex-wrap gap-2">
-            <Pill tone="peach">🔥 {liveStreakCount} night{liveStreakCount === 1 ? '' : 's'}</Pill>
+            <Pill tone="peach">
+              <span
+                className={`inline-block ${liveStreakCount >= 3 ? 'animate-bg-streak-glow' : ''}`}
+                aria-hidden="true"
+              >
+                🔥
+              </span>{' '}
+              {liveStreakCount} night{liveStreakCount === 1 ? '' : 's'}
+            </Pill>
             <Pill tone="white">🎤 {dailyDone} of {dailyGoal} tonight</Pill>
           </div>
         </motion.div>

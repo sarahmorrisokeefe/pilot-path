@@ -60,7 +60,11 @@ export function QuestionView({
       </div>
 
       {question.staffConfig && !hideStaff && (
-        <div className="relative overflow-hidden rounded-3xl bg-white p-5">
+        <div
+          className={`relative overflow-hidden rounded-3xl bg-white p-5 ${
+            showFeedback && !isCorrect ? 'animate-bg-shake' : ''
+          }`}
+        >
           <Doodle ch="♪" x={18} y={14} size={18} rot={-15} color="#ffaf95" opacity={0.4} />
           <Suspense
             fallback={
@@ -95,20 +99,30 @@ export function QuestionView({
               disabled={showFeedback}
               className={`relative rounded-[18px] border-[3px] p-4 text-center transition-all touch-manipulation select-none ${STATE_CLASSES[state]} ${
                 shortOptions ? 'text-[22px] font-black' : 'text-sm font-extrabold leading-snug'
-              }`}
+              } ${state === 'wrong' ? 'animate-bg-shake' : ''}`}
             >
               {option}
               {state === 'right' && (
-                <span
-                  className="absolute -right-2 -top-2.5 flex h-6 w-6 items-center justify-center rounded-full bg-bubblegum-plum text-sm text-bubblegum-cream"
-                  aria-hidden="true"
-                >
-                  ✓
-                </span>
+                <>
+                  <span
+                    className="absolute -right-2 -top-2.5 flex h-6 w-6 origin-center items-center justify-center rounded-full bg-bubblegum-plum text-sm text-bubblegum-cream animate-bg-tick"
+                    aria-hidden="true"
+                  >
+                    ✓
+                  </span>
+                  {xpReward > 0 && (
+                    <span
+                      className="pointer-events-none absolute -top-2 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-bubblegum-butter px-2.5 py-1 text-[11px] font-black tracking-tight text-bubblegum-plum animate-bg-float-up"
+                      aria-hidden="true"
+                    >
+                      +{Math.max(1, Math.floor(xpReward / 4))} XP ⭐
+                    </span>
+                  )}
+                </>
               )}
               {state === 'wrong' && (
                 <span
-                  className="absolute -right-2 -top-2.5 flex h-6 w-6 items-center justify-center rounded-full bg-bubblegum-cherry text-sm text-white"
+                  className="absolute -right-2 -top-2.5 flex h-6 w-6 origin-center items-center justify-center rounded-full bg-bubblegum-cherry text-sm text-white animate-bg-tick"
                   aria-hidden="true"
                 >
                   ✕
@@ -186,14 +200,18 @@ function FeedbackPanel({
 
       <div className="flex items-center gap-3.5">
         <span
-          className="inline-block leading-none"
+          className={`inline-block leading-none ${isCorrect ? 'animate-bg-pop-in' : ''}`}
           style={{ fontSize: '52px', transform: `rotate(${isCorrect ? -12 : -8}deg)` }}
           aria-hidden="true"
         >
           {isCorrect ? '🎉' : '🎧'}
         </span>
         <div className="flex-1">
-          <p className="text-2xl font-black leading-none tracking-[-0.025em] text-bubblegum-plum">
+          <p
+            className={`text-2xl font-black leading-none tracking-[-0.025em] text-bubblegum-plum ${
+              isCorrect ? 'animate-bg-pop-in' : ''
+            }`}
+          >
             {isCorrect ? 'Encore!' : 'Off-key — close though!'}
           </p>
           <div className="mt-1">
