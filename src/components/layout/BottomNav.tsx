@@ -1,20 +1,39 @@
 import { useLocation, useNavigate } from 'react-router-dom'
+import { useRequireAuth } from '../../hooks/useRequireAuth'
 
-const tabs = [
+interface Tab {
+  id: string
+  label: string
+  icon: string
+  path: string
+  authRequired?: boolean
+  authMessage?: string
+}
+
+const tabs: readonly Tab[] = [
   { id: 'home', label: 'Home', icon: '🏠', path: '/' },
   { id: 'learn', label: 'Learn', icon: '📚', path: '/learn' },
-  { id: 'practice', label: 'Practice', icon: '🎯', path: '/practice' },
-  { id: 'review', label: 'Review', icon: '🔄', path: '/review' },
-  { id: 'progress', label: 'Progress', icon: '📊', path: '/progress' },
+  { id: 'practice', label: 'Practice', icon: '🎯', path: '/practice', authRequired: true, authMessage: 'Sign in to take practice quizzes' },
+  { id: 'review', label: 'Review', icon: '🔄', path: '/review', authRequired: true, authMessage: 'Sign in to review weak areas' },
+  { id: 'progress', label: 'Progress', icon: '📊', path: '/progress', authRequired: true, authMessage: 'Sign in to track your progress' },
 ] as const
 
 export function BottomNav() {
   const location = useLocation()
   const navigate = useNavigate()
+  const { gate } = useRequireAuth()
 
   const isActive = (path: string) => {
     if (path === '/') return location.pathname === '/'
     return location.pathname.startsWith(path)
+  }
+
+  const handleTabClick = (tab: Tab) => {
+    if (tab.authRequired) {
+      gate(() => navigate(tab.path), tab.authMessage)
+    } else {
+      navigate(tab.path)
+    }
   }
 
   return (
@@ -25,7 +44,7 @@ export function BottomNav() {
           return (
             <button
               key={tab.id}
-              onClick={() => navigate(tab.path)}
+              onClick={() => handleTabClick(tab)}
               className={`
                 relative flex-1 flex flex-col items-center justify-center gap-0.5
                 min-h-[56px] py-2 px-1
