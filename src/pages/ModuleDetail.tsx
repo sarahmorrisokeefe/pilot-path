@@ -1,27 +1,17 @@
-import { useEffect, useMemo } from 'react'
-import { useParams, useNavigate, useLocation } from 'react-router-dom'
+import { useMemo } from 'react'
+import { useParams, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Layout } from '../components/layout/Layout'
 import { Badge } from '../components/ui/Badge'
 import { getCourseById } from '../data/courses'
 import { useProgress } from '../hooks/useProgress'
 import { useRequireAuth } from '../hooks/useRequireAuth'
-import { useAuthPrompt } from '../context/AuthPromptContext'
 
 export function ModuleDetail() {
   const { courseId, moduleId } = useParams<{ courseId: string; moduleId: string }>()
   const navigate = useNavigate()
-  const location = useLocation()
   const { progress } = useProgress()
   const { gate } = useRequireAuth()
-  const { showAuthPrompt } = useAuthPrompt()
-
-  // Surface the prompt if we arrived here via a redirect that asked for auth.
-  useEffect(() => {
-    if ((location.state as { authRequired?: boolean } | null)?.authRequired) {
-      showAuthPrompt('Sign in to start lessons')
-    }
-  }, [location.state, showAuthPrompt])
 
   const course = getCourseById(courseId ?? '')
   const mod = course?.modules.find((m) => m.id === moduleId)

@@ -239,7 +239,7 @@ export function Home() {
               Needs Review
             </h2>
             <Card
-              onClick={() => navigate('/review')}
+              onClick={() => gate(() => navigate('/review'), 'Sign in to review weak areas')}
               className="border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-900/20"
             >
               <div className="flex items-center gap-3">
