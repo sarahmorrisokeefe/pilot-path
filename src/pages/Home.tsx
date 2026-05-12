@@ -44,7 +44,11 @@ const item = { hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0 } }
 
 export function Home() {
   const { user } = useRequireAuth()
-  return user ? <SignedInHome /> : <SignedOutHome />
+  const { progress } = useProgress()
+
+  if (!user) return <SignedOutHome />
+  if (progress.totalXP === 0) return <FirstNightHome />
+  return <SignedInHome />
 }
 
 // ── Signed-out variant — BGSignedOutHome ─────────────────────────────────────
@@ -186,6 +190,160 @@ function AlbumPreviewCard({ course, onClick }: { course: Course; onClick: () => 
         </Mono>
       </div>
     </button>
+  )
+}
+
+// ── First-night variant — BGFirstNightHome (Day 1, 0 XP) ─────────────────────
+
+function FirstNightHome() {
+  const navigate = useNavigate()
+  const { user, gate } = useRequireAuth()
+  const firstName = firstNameFromUser(user?.email)
+
+  // The very first lesson — A1 of the first course.
+  const firstCourse = COURSES[0]
+  const firstModule = firstCourse?.modules[0]
+  const firstLesson = firstModule?.lessons[0]
+
+  const openFirstTrack = () => {
+    if (!firstCourse || !firstModule || !firstLesson) return
+    gate(
+      () =>
+        navigate(
+          `/learn/${firstCourse.id}/modules/${firstModule.id}/lessons/${firstLesson.id}`
+        ),
+      'Sign in to start lessons'
+    )
+  }
+
+  return (
+    <BubblegumLayout activeTab="home">
+      <motion.div
+        variants={container}
+        initial="hidden"
+        animate="show"
+        className="flex flex-col gap-[18px] pt-1"
+      >
+        <motion.div variants={item} className="px-1">
+          <p className="text-[22px] font-black tracking-[-0.02em] text-bubblegum-plum">
+            Welcome, {firstName}{' '}
+            <span className="inline-block -rotate-[10deg]" aria-hidden="true">
+              🎤
+            </span>
+          </p>
+          <p className="mt-1 text-[13px] font-semibold text-bubblegum-plum-soft">
+            The stage is yours. Let's play your first song.
+          </p>
+        </motion.div>
+
+        {/* Hero — opening night */}
+        <motion.div
+          variants={item}
+          className="relative overflow-hidden rounded-bubble bg-bubblegum-butter p-[22px] text-bubblegum-plum"
+        >
+          <Doodle ch="♪" x={20} y={10} size={28} rot={-15} color="#ffaf95" />
+          <Doodle ch="♬" x={290} y={8} size={42} rot={12} color="#ffaf95" opacity={0.5} />
+
+          <Mono>opening night · track 01</Mono>
+          <div className="mt-1.5 flex items-baseline gap-2">
+            <span
+              className="inline-block font-black leading-[0.9] tabular-nums opacity-40"
+              style={{
+                fontSize: '78px',
+                letterSpacing: '-0.05em',
+                transform: 'rotate(-3deg)',
+              }}
+            >
+              0
+            </span>
+            <span className="text-lg font-black">XP ⭐</span>
+          </div>
+
+          <div className="mt-3.5 flex flex-wrap gap-2">
+            <Pill tone="white">🎤 First night</Pill>
+            <Pill tone="peach">0 tracks played</Pill>
+          </div>
+        </motion.div>
+
+        {/* Big start-here CTA */}
+        {firstLesson && firstCourse && firstModule && (
+          <motion.button
+            variants={item}
+            type="button"
+            onClick={openFirstTrack}
+            className="relative overflow-hidden rounded-3xl bg-bubblegum-sky p-[18px] text-left text-bubblegum-plum transition-transform active:scale-[0.99] touch-manipulation"
+          >
+            <Doodle ch="♩" x={290} y={70} size={56} rot={10} color="#cfb6ff" opacity={0.4} />
+
+            <Mono>start here</Mono>
+            <p className="mt-1 text-[22px] font-black leading-[1.05] tracking-[-0.02em]">
+              Play your first track:
+              <br />
+              <span
+                className="mt-1 inline-block -rotate-[1deg] rounded-lg bg-bubblegum-butter px-2"
+              >
+                {firstLesson.title}
+              </span>
+            </p>
+            <p className="mt-2.5 mb-3.5 text-xs font-semibold text-bubblegum-plum-soft">
+              {firstLesson.questions.length} short song
+              {firstLesson.questions.length === 1 ? '' : 's'} · about 3 minutes · +
+              {firstLesson.xpReward} XP
+            </p>
+            <PrimaryButton tone="plum">
+              Open {firstCourse.shortTitle} · A1 →
+            </PrimaryButton>
+          </motion.button>
+        )}
+
+        {/* What's on the marquee */}
+        <motion.div variants={item}>
+          <Eyebrow>what's on the marquee 🎟</Eyebrow>
+          <div className="grid grid-cols-3 gap-2.5">
+            {COURSES.map((course) => (
+              <MarqueeTile key={course.id} course={course} />
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Streak tease */}
+        <motion.div
+          variants={item}
+          className="flex items-center gap-3 rounded-3xl bg-bubblegum-peach/40 p-3.5"
+        >
+          <span
+            className="inline-block -rotate-[8deg] text-3xl leading-none"
+            aria-hidden="true"
+          >
+            🔥
+          </span>
+          <div className="flex-1">
+            <p className="text-sm font-black text-bubblegum-plum">
+              Start your first night
+            </p>
+            <p className="mt-0.5 text-xs font-semibold text-bubblegum-plum-soft">
+              Finish a track today and your streak begins.
+            </p>
+          </div>
+        </motion.div>
+
+      </motion.div>
+    </BubblegumLayout>
+  )
+}
+
+function MarqueeTile({ course }: { course: Course }) {
+  const tone = getAlbumTone(course.id, 'cream')
+  return (
+    <div className={`${TONE_BG[tone]} rounded-[18px] p-2.5 text-center text-bubblegum-plum`}>
+      <div
+        className="inline-block -rotate-[4deg] text-[28px] leading-none"
+        aria-hidden="true"
+      >
+        {course.icon}
+      </div>
+      <p className="mt-1 text-[11px] font-black tracking-tight">{course.shortTitle}</p>
+    </div>
   )
 }
 
