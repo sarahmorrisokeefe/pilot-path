@@ -69,3 +69,42 @@
     color: #6e5e80;
   }
 }
+
+/* ── A11y: motion + contrast preferences ─────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  /* Disable the bubblegum Tailwind-keyframe animations. Framer-motion
+     respects this hint natively; this covers the CSS-driven ones. */
+  .animate-bg-pop-in,
+  .animate-bg-rise,
+  .animate-bg-tick,
+  .animate-bg-shake,
+  .animate-bg-streak-glow,
+  .animate-bg-float-up,
+  .animate-bounce-in,
+  .animate-shake,
+  .animate-slide-up,
+  .animate-fade-in,
+  .animate-pulse-xp {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+@media (prefers-contrast: more) {
+  /* Drop the soft pastel glows in night-mode when users have asked for
+     higher contrast — the glows blur card edges. */
+  .dark .shadow-glow-butter,
+  .dark .shadow-glow-peach,
+  .dark .shadow-glow-mint,
+  .dark .shadow-glow-sky,
+  .dark .shadow-glow-lavender,
+  .dark .shadow-glow-pink,
+  .dark .shadow-glow-cherry {
+    box-shadow: none !important;
+  }
+  .dark .drop-shadow-glow-peach,
+  .dark .drop-shadow-glow-butter {
+    filter: none !important;
+  }
+}

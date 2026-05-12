@@ -204,8 +204,12 @@ function ScoreDonut({
 
   return (
     <div className="mt-6 flex justify-center">
-      <div className="relative h-[200px] w-[200px]">
-        <svg viewBox="0 0 100 100" width="200" height="200">
+      <div
+        role="img"
+        aria-label={`Score: ${score} percent, ${correctCount} of ${totalCount} correct`}
+        className="relative h-[200px] w-[200px]"
+      >
+        <svg viewBox="0 0 100 100" width="200" height="200" aria-hidden="true">
           <circle cx="50" cy="50" r={r} fill="none" strokeWidth="12" className="stroke-white dark:stroke-night-panel2" />
           <motion.circle
             cx="50"

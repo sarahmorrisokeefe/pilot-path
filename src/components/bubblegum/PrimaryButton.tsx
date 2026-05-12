@@ -36,6 +36,7 @@ export function PrimaryButton({
         px-6 py-4 text-[15px] min-h-[52px]
         transition-all duration-150
         focus:outline-none focus:ring-2 focus:ring-bubblegum-plum focus:ring-offset-2 focus:ring-offset-bubblegum-cream
+        dark:focus:ring-bubblegum-butter dark:focus:ring-offset-night-ink
         disabled:opacity-40 disabled:cursor-not-allowed
         select-none touch-manipulation
         ${toneClasses[tone]}

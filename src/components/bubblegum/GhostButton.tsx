@@ -24,6 +24,7 @@ export function GhostButton({
         active:bg-bubblegum-cream-hi dark:active:bg-night-panel-hi
         transition-all duration-150
         focus:outline-none focus:ring-2 focus:ring-bubblegum-plum focus:ring-offset-2 focus:ring-offset-bubblegum-cream
+        dark:focus:ring-bubblegum-butter dark:focus:ring-offset-night-ink
         disabled:opacity-40 disabled:cursor-not-allowed
         select-none touch-manipulation
         ${fullWidth ? 'w-full' : ''}

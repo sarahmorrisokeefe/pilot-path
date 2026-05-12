@@ -190,8 +190,11 @@ export function Auth() {
             className="relative z-[1] mt-5 flex flex-col gap-3.5"
           >
             <div>
-              <Mono size="xs">email</Mono>
+              <label htmlFor="auth-email" className="block">
+                <Mono size="xs">email</Mono>
+              </label>
               <input
+                id="auth-email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -204,8 +207,11 @@ export function Auth() {
 
             {mode !== 'forgot' && (
               <div>
-                <Mono size="xs">password</Mono>
+                <label htmlFor="auth-password" className="block">
+                  <Mono size="xs">password</Mono>
+                </label>
                 <input
+                  id="auth-password"
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -219,8 +225,11 @@ export function Auth() {
 
             {mode === 'signup' && (
               <div>
-                <Mono size="xs">confirm password</Mono>
+                <label htmlFor="auth-confirm-password" className="block">
+                  <Mono size="xs">confirm password</Mono>
+                </label>
                 <input
+                  id="auth-confirm-password"
                   type="password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
@@ -233,13 +242,16 @@ export function Auth() {
             )}
 
             {error && (
-              <div className="rounded-2xl border-2 border-bubblegum-cherry bg-bubblegum-cherry/20 px-4 py-3">
-                <p className="text-sm font-bold text-bubblegum-plum">{error}</p>
+              <div
+                role="alert"
+                className="rounded-2xl border-2 border-bubblegum-cherry bg-bubblegum-cherry/20 px-4 py-3 dark:bg-bubblegum-cherry/15"
+              >
+                <p className="text-sm font-bold text-bubblegum-plum dark:text-night-fg">{error}</p>
               </div>
             )}
 
             {success && (
-              <div className="rounded-2xl bg-bubblegum-mint px-4 py-3">
+              <div role="status" className="rounded-2xl bg-bubblegum-mint px-4 py-3">
                 <p className="text-sm font-bold text-bubblegum-plum">{success}</p>
               </div>
             )}
