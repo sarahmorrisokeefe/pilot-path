@@ -1,0 +1,251 @@
+/* ─────────────────────────────────────────────────────────────────────────
+   Cadence Design System — Foundations
+   Music theory study app. Indigo + copper. Quarter-note as brand mark.
+
+   Pulled from:
+   • tailwind.config.js  → cadence + copper scales, animations
+   • src/index.css       → body bg, font, smoothing
+   • src/components/*    → component patterns
+   • src/data/courses.ts → course-icon palette
+   ───────────────────────────────────────────────────────────────────────── */
+
+/* ── Inter (variable font: opsz 14–32, wght 100–900) ──────────────────── */
+@font-face {
+  font-family: 'Inter';
+  src: url('fonts/Inter-VariableFont_opsz_wght.ttf') format('truetype-variations'),
+       url('fonts/Inter-VariableFont_opsz_wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  /* ── Brand: Cadence (indigo / midnight) ──────────────────────────────── */
+  --cadence-50:  #eef0ff;
+  --cadence-100: #dfe2ff;
+  --cadence-200: #c6caff;
+  --cadence-300: #a5b4fc;
+  --cadence-400: #7c85e8;
+  --cadence-500: #5558c8;
+  --cadence-600: #3d4280;
+  --cadence-700: #3d4280; /* intentional duplicate from tailwind.config.js */
+  --cadence-800: #2d3161; /* primary brand */
+  --cadence-900: #1e2147;
+  --cadence-950: #0d0f1f; /* dark-mode bg */
+
+  /* ── Brand: Copper (warm accent — sits against the deep indigo) ──────── */
+  --copper-300: #eac9a8;
+  --copper-400: #e0b08a;
+  --copper-500: #d4956b; /* primary accent — used on the ♩ glyph */
+  --copper-600: #c07a4e;
+  --copper-700: #a66339;
+
+  /* ── Neutrals: Tailwind slate (used throughout) ──────────────────────── */
+  --slate-50:  #f8fafc;
+  --slate-100: #f1f5f9;
+  --slate-200: #e2e8f0;
+  --slate-300: #cbd5e1;
+  --slate-400: #94a3b8;
+  --slate-500: #64748b;
+  --slate-600: #475569;
+  --slate-700: #334155;
+  --slate-800: #1e293b;
+  --slate-900: #0f172a;
+
+  /* ── Semantic feedback ──────────────────────────────────────────────── */
+  --green-50:  #f0fdf4;
+  --green-100: #dcfce7;
+  --green-300: #86efac;
+  --green-400: #4ade80;
+  --green-500: #22c55e;  /* correct / success */
+  --green-600: #16a34a;
+  --green-700: #15803d;
+
+  --amber-50:  #fffbeb;
+  --amber-100: #fef3c7;
+  --amber-300: #fcd34d;
+  --amber-400: #fbbf24;
+  --amber-500: #f59e0b;  /* XP, "needs review", streak gradient
+                            (paired with orange-400 for streak card) */
+  --amber-700: #b45309;
+
+  --red-50:  #fef2f2;
+  --red-100: #fee2e2;
+  --red-400: #f87171;
+  --red-500: #ef4444;    /* wrong / danger */
+  --red-700: #b91c1c;
+
+  --orange-400: #fb923c; /* used only with amber-500 in the streak gradient */
+
+  /* ── App-level semantic tokens ──────────────────────────────────────── */
+  --bg-app:        #f5f3ff;             /* body bg, very pale lavender */
+  --bg-surface:    #ffffff;             /* cards */
+  --bg-surface-2:  var(--slate-50);     /* nested surfaces (quiz context box) */
+  --bg-overlay:    rgba(255,255,255,.9);/* sticky header with backdrop-blur */
+
+  --fg-1: var(--slate-900);             /* primary text */
+  --fg-2: var(--slate-700);             /* body / explanations */
+  --fg-3: var(--slate-500);             /* meta, captions */
+  --fg-4: var(--slate-400);             /* placeholder, disabled */
+
+  --border-1:   var(--slate-100);       /* card borders */
+  --border-2:   var(--slate-200);       /* input borders, dividers */
+  --border-active: var(--cadence-800);  /* selected option */
+
+  --accent:        var(--cadence-800);  /* primary action */
+  --accent-hover:  var(--cadence-700);
+  --accent-press:  var(--cadence-600);
+  --accent-soft:   var(--cadence-50);   /* selected/active fill */
+  --accent-glyph:  var(--copper-500);   /* the ♩ */
+
+  --focus-ring: var(--cadence-400);
+
+  /* ── Radii (Tailwind defaults — Cadence leans on rounded-2xl) ────────── */
+  --r-sm: 0.5rem;    /* 8px  — small chips, internal pills */
+  --r-md: 0.75rem;   /* 12px — inputs, lesson option buttons (rounded-xl) */
+  --r-lg: 1rem;      /* 16px — cards & top-level surfaces (rounded-2xl) */
+  --r-full: 9999px;  /* pills, dots, avatars */
+
+  /* ── Shadows (extremely restrained — shadow-sm everywhere) ───────────── */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  /* Color-tinted shadow used on primary CTAs: shadow-sm shadow-cadence-200 */
+  --shadow-accent: 0 1px 2px 0 var(--cadence-200);
+
+  /* ── Spacing — pure Tailwind 4-unit scale; mobile densities ──────────── */
+  --space-1: 0.25rem;  /* 4  */
+  --space-2: 0.5rem;   /* 8  */
+  --space-3: 0.75rem;  /* 12 */
+  --space-4: 1rem;     /* 16 */
+  --space-5: 1.25rem;  /* 20 */
+  --space-6: 1.5rem;   /* 24 */
+  --space-8: 2rem;     /* 32 */
+
+  /* ── Touch — mobile-first, iOS-friendly ─────────────────────────────── */
+  --hit-sm: 36px;
+  --hit-md: 44px;  /* iOS minimum */
+  --hit-lg: 52px;
+
+  /* ── Type ───────────────────────────────────────────────────────────── */
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+
+  /* Sizes — Tailwind defaults the app actually uses */
+  --text-xxs:  10px;   /* topic-map % under progress */
+  --text-xs:   12px;   /* meta, captions, badges */
+  --text-sm:   14px;   /* body, options, secondary headings */
+  --text-base: 16px;   /* questions, dialog primary */
+  --text-lg:   18px;   /* card titles in hero */
+  --text-xl:   20px;   /* study-card topic */
+  --text-2xl:  24px;   /* auth screen H1 */
+  --text-3xl:  30px;   /* results "Great Job!" */
+  --text-4xl:  36px;   /* XP / level numbers */
+  --text-5xl:  48px;   /* score %, level numerals */
+  --text-6xl:  60px;   /* big results emoji */
+
+  /* Weights — heavy ladder; Cadence loves black for numerals */
+  --fw-normal:  400;
+  --fw-medium:  500;
+  --fw-semibold:600;
+  --fw-bold:    700;
+  --fw-extra:   800;
+  --fw-black:   900;
+
+  --leading-tight: 1.1;
+  --leading-snug:  1.25;
+  --leading-normal:1.5;
+  --leading-relax: 1.625;
+
+  /* ── Motion (from tailwind.config.js keyframes) ──────────────────────── */
+  --ease-spring: cubic-bezier(0.36, 0.07, 0.19, 0.97); /* used for bounceIn + shake */
+  --ease-out:    cubic-bezier(0, 0, 0.2, 1);
+  --d-fast:    150ms;
+  --d-base:    250ms;
+  --d-slow:    400ms;
+  --d-slower:  600ms;
+}
+
+/* ── Dark mode token remap (Tailwind `dark:` class strategy) ─────────────
+   Cadence toggles `dark` on the <html> element via useDarkMode hook. */
+.dark, [data-theme="dark"] {
+  --bg-app:       #0d0f1f;             /* cadence-950 */
+  --bg-surface:   var(--slate-800);
+  --bg-surface-2: rgb(51 65 85 / 0.5); /* slate-700/50 */
+  --bg-overlay:   rgb(30 41 59 / 0.9);
+
+  --fg-1: #ffffff;
+  --fg-2: var(--slate-300);
+  --fg-3: var(--slate-400);
+  --fg-4: var(--slate-500);
+
+  --border-1: var(--slate-700);
+  --border-2: var(--slate-600);
+
+  --accent-soft: rgb(45 49 97 / 0.4); /* cadence-900/40 */
+}
+
+/* ── Semantic element styles ─────────────────────────────────────────── */
+
+html, body { background: var(--bg-app); color: var(--fg-1); }
+
+body {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+}
+
+h1 {
+  font-size: var(--text-2xl);
+  font-weight: var(--fw-black);
+  letter-spacing: -0.02em;
+  line-height: var(--leading-tight);
+}
+h2 {
+  font-size: var(--text-xl);
+  font-weight: var(--fw-black);
+  line-height: var(--leading-tight);
+}
+h3 {
+  font-size: var(--text-base);
+  font-weight: var(--fw-bold);
+  line-height: var(--leading-snug);
+}
+/* The Cadence "section header" — small caps-ish slate-500 label above a list */
+.eyebrow,
+h4.eyebrow {
+  font-size: var(--text-sm);
+  font-weight: var(--fw-bold);
+  color: var(--fg-3);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+p   { font-size: var(--text-sm); color: var(--fg-2); line-height: var(--leading-relax); }
+small,
+.meta { font-size: var(--text-xs); color: var(--fg-3); }
+
+/* Numerals — Cadence uses font-black tabular numerals for XP / level / score */
+.numeral {
+  font-weight: var(--fw-black);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--leading-tight);
+}
+
+/* The brand wordmark */
+.cadence-wordmark {
+  font-weight: var(--fw-black);
+  font-size: var(--text-xl);
+  letter-spacing: -0.02em;
+  color: var(--cadence-800);
+}
+.cadence-glyph {
+  color: var(--accent-glyph);
+  font-size: 1.5em;
+  line-height: 1;
+}
+
+code, pre, .mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}

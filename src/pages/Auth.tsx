@@ -116,7 +116,7 @@ export function Auth() {
         <Doodle ch="♪" x={28} y={520}  size={32} rot={-20} color="#ffd66b" opacity={0.8} />
 
         {/* Brand mark */}
-        <div className="relative z-[1] mt-4 flex items-baseline gap-2">
+        <div className="relative z-[1] mt-4 flex items-center gap-3">
           <img
             src="/logo.png"
             alt=""
