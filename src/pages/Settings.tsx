@@ -273,12 +273,12 @@ export function Settings() {
 
         {/* Footer credit */}
         <div className="mt-2 pb-2 text-center">
-          <span
-            className="inline-block -rotate-[10deg] font-serif text-2xl leading-none text-bubblegum-peach"
+          <img
+            src="/logo.png"
+            alt=""
             aria-hidden="true"
-          >
-            ♩
-          </span>
+            className="mx-auto h-6 w-6 -rotate-[10deg] dark:drop-shadow-glow-peach"
+          />
           <p className="mt-1.5 text-[11px] font-bold text-bubblegum-plum-dim">
             Cadence
           </p>

@@ -117,12 +117,12 @@ export function Auth() {
 
         {/* Brand mark */}
         <div className="relative z-[1] mt-4 flex items-baseline gap-2">
-          <span
-            className="inline-block -rotate-[10deg] font-serif text-[72px] leading-none text-bubblegum-peach dark:drop-shadow-glow-peach"
+          <img
+            src="/logo.png"
+            alt=""
             aria-hidden="true"
-          >
-            ♩
-          </span>
+            className="h-[72px] w-[72px] -rotate-[10deg] dark:drop-shadow-glow-peach"
+          />
           <span className="text-2xl font-black tracking-[-0.03em] text-bubblegum-plum">
             cadence
           </span>
