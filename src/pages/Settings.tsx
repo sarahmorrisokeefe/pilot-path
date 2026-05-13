@@ -165,7 +165,7 @@ export function Settings() {
           <SettingRow
             icon="🌙"
             label="House lights"
-            sub={isDark ? 'Bubblegum night' : 'Bubblegum day'}
+            sub={isDark ? 'Lights down' : 'Lights up'}
             accent="plum"
             right={<Toggle on={isDark} onClick={toggle} />}
           />
@@ -280,7 +280,7 @@ export function Settings() {
             ♩
           </span>
           <p className="mt-1.5 text-[11px] font-bold text-bubblegum-plum-dim">
-            Cadence · Bubblegum
+            Cadence
           </p>
           <p className="mt-1 text-[11px] font-semibold text-bubblegum-plum-dim">
             Built with love by{' '}
