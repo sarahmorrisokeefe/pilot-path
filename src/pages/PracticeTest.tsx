@@ -282,7 +282,7 @@ export function PracticeTest() {
                   className={`inline-flex items-center gap-1 rounded-full border-2 px-3.5 py-2 text-xs font-extrabold touch-manipulation transition-colors ${
                     on
                       ? `${TONE_BG[tone]} border-bubblegum-plum text-bubblegum-plum`
-                      : 'border-transparent bg-bubblegum-cream-hi text-bubblegum-plum-dim'
+                      : 'border-transparent bg-bubblegum-cream-hi text-bubblegum-plum-dim dark:bg-night-panel-hi dark:text-night-fg-dim'
                   }`}
                 >
                   <span
@@ -314,8 +314,8 @@ export function PracticeTest() {
                     onClick={() => setQuestionCount(n)}
                     className={`flex-1 rounded-full py-2.5 text-sm font-extrabold transition-colors touch-manipulation ${
                       active
-                        ? 'bg-bubblegum-plum text-bubblegum-cream'
-                        : 'bg-bubblegum-cream-hi text-bubblegum-plum'
+                        ? 'bg-bubblegum-plum text-bubblegum-cream dark:bg-bubblegum-butter dark:text-bubblegum-plum'
+                        : 'bg-bubblegum-cream-hi text-bubblegum-plum dark:bg-night-panel-hi dark:text-night-fg'
                     }`}
                   >
                     {n}

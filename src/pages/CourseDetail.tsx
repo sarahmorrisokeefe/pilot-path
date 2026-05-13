@@ -318,7 +318,7 @@ function LockedAlbum({
                 <div key={c.id} className="flex items-center gap-2.5 py-1.5">
                   <div
                     className={`flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full text-sm font-black ${
-                      done ? 'bg-bubblegum-green text-white' : 'bg-bubblegum-cream-hi text-bubblegum-plum-dim'
+                      done ? 'bg-bubblegum-green text-white' : 'bg-bubblegum-cream-hi text-bubblegum-plum-dim dark:bg-night-panel-hi dark:text-night-fg-dim'
                     }`}
                     aria-hidden="true"
                   >

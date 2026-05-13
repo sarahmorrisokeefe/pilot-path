@@ -50,68 +50,71 @@
     scrollbar-width: none;
   }
 
-  /* Dark mode safety net: when a card flips from white → night-panel, lighten
-     any descendant plum text so it stays readable. Pastel-bg cards aren't
-     affected (they're not bg-night-panel) so their plum text stays plum. */
-  .dark .bg-night-panel .text-bubblegum-plum,
-  .dark .bg-night-panel-hi .text-bubblegum-plum,
-  .dark .bg-night-panel2 .text-bubblegum-plum {
+  /* Dark mode safety net: when a paper card flips from white → night-panel,
+     lighten any descendant plum text so it stays readable. The :not(...)
+     on the descendant means "only when the element doesn't carry its own
+     bg" — pills, chips, buttons inside a night-panel card own their own
+     surface contrast and shouldn't be lifted by the cascade. */
+  .dark
+    :is(.bg-night-panel, .bg-night-panel-hi, .bg-night-panel2)
+    .text-bubblegum-plum:not([class*="bg-"]) {
     color: #fff7e0;
   }
-  .dark .bg-night-panel .text-bubblegum-plum-soft,
-  .dark .bg-night-panel-hi .text-bubblegum-plum-soft,
-  .dark .bg-night-panel2 .text-bubblegum-plum-soft {
+  .dark
+    :is(.bg-night-panel, .bg-night-panel-hi, .bg-night-panel2)
+    .text-bubblegum-plum-soft:not([class*="bg-"]) {
     color: #d8c8e8;
   }
-  .dark .bg-night-panel .text-bubblegum-plum-dim,
-  .dark .bg-night-panel-hi .text-bubblegum-plum-dim,
-  .dark .bg-night-panel2 .text-bubblegum-plum-dim {
+  .dark
+    :is(.bg-night-panel, .bg-night-panel-hi, .bg-night-panel2)
+    .text-bubblegum-plum-dim:not([class*="bg-"]) {
     color: #6e5e80;
   }
 
   /* Inverse safety net: pastel cards keep their bright bg in dark mode,
      so any Mono/Eyebrow descendants that flipped to night.fg* via
-     `dark:text-night-fg*` go back to plum tones — otherwise the light
-     gray-lavender is invisible on butter/peach/mint/etc. Uses [class~]
-     to match the literal compiled Tailwind class names (which include
-     the unescaped colon in the actual class attribute). */
+     `dark:text-night-fg*` go back to plum tones. Uses [class~] (word
+     match) so opacity-modified bgs like cherry/15 — which composite to
+     a DARK surface in night mode and need light text — don't match.
+     :not([class*="bg-"]) on the descendant lets pills/buttons inside
+     pastel cards keep their own dark variant. */
   .dark
     :is(
-      [class*="bg-bubblegum-butter"],
-      [class*="bg-bubblegum-peach"],
-      [class*="bg-bubblegum-mint"],
-      [class*="bg-bubblegum-sky"],
-      [class*="bg-bubblegum-lavender"],
-      [class*="bg-bubblegum-pink"],
-      [class*="bg-bubblegum-cherry"]
+      [class~="bg-bubblegum-butter"],
+      [class~="bg-bubblegum-peach"],
+      [class~="bg-bubblegum-mint"],
+      [class~="bg-bubblegum-sky"],
+      [class~="bg-bubblegum-lavender"],
+      [class~="bg-bubblegum-pink"],
+      [class~="bg-bubblegum-cherry"]
     )
-    [class~="dark:text-night-fg"] {
+    [class~="dark:text-night-fg"]:not([class*="bg-"]) {
     color: #3a224f;
   }
   .dark
     :is(
-      [class*="bg-bubblegum-butter"],
-      [class*="bg-bubblegum-peach"],
-      [class*="bg-bubblegum-mint"],
-      [class*="bg-bubblegum-sky"],
-      [class*="bg-bubblegum-lavender"],
-      [class*="bg-bubblegum-pink"],
-      [class*="bg-bubblegum-cherry"]
+      [class~="bg-bubblegum-butter"],
+      [class~="bg-bubblegum-peach"],
+      [class~="bg-bubblegum-mint"],
+      [class~="bg-bubblegum-sky"],
+      [class~="bg-bubblegum-lavender"],
+      [class~="bg-bubblegum-pink"],
+      [class~="bg-bubblegum-cherry"]
     )
-    [class~="dark:text-night-fg2"] {
+    [class~="dark:text-night-fg2"]:not([class*="bg-"]) {
     color: #6b4a85;
   }
   .dark
     :is(
-      [class*="bg-bubblegum-butter"],
-      [class*="bg-bubblegum-peach"],
-      [class*="bg-bubblegum-mint"],
-      [class*="bg-bubblegum-sky"],
-      [class*="bg-bubblegum-lavender"],
-      [class*="bg-bubblegum-pink"],
-      [class*="bg-bubblegum-cherry"]
+      [class~="bg-bubblegum-butter"],
+      [class~="bg-bubblegum-peach"],
+      [class~="bg-bubblegum-mint"],
+      [class~="bg-bubblegum-sky"],
+      [class~="bg-bubblegum-lavender"],
+      [class~="bg-bubblegum-pink"],
+      [class~="bg-bubblegum-cherry"]
     )
-    [class~="dark:text-night-fg-dim"] {
+    [class~="dark:text-night-fg-dim"]:not([class*="bg-"]) {
     color: #9d85b6;
   }
 }

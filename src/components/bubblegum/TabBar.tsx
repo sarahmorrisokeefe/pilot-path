@@ -36,12 +36,12 @@ export function TabBar({ active, onTabClick }: TabBarProps) {
             aria-label={tab.label}
             className={`
               flex-1 rounded-full py-[7px] text-center
-              text-bubblegum-plum dark:text-night-fg
+              text-bubblegum-plum
               touch-manipulation select-none
               transition-colors duration-150
               ${isActive
-                ? 'bg-bubblegum-butter font-black dark:text-bubblegum-plum dark:shadow-glow-butter'
-                : 'bg-transparent font-semibold'}
+                ? 'bg-bubblegum-butter font-black dark:shadow-glow-butter'
+                : 'bg-transparent font-semibold dark:text-night-fg'}
             `}
           >
             <div className="text-xl leading-none">{tab.icon}</div>
