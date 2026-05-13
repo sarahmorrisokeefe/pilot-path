@@ -49,100 +49,104 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+}
 
-  /* ── Dark-mode ink contrast ──────────────────────────────────────────
-     Strategy: flip every `.text-bubblegum-plum*` to its night.fg
-     equivalent by default, then revert on bright pastel surfaces (where
-     dark ink reads better than cream).
+/* ── Dark-mode ink contrast ────────────────────────────────────────────
+   Strategy: flip every `.text-bubblegum-plum*` to its night.fg cousin
+   by default, then revert on bright pastel surfaces (where dark ink
+   reads better than cream).
 
-     Two revert cases per tone:
-     1) Descendant of a pastel ancestor — but only if the descendant
-        doesn't carry its own bg class. A pill/chip/button inside the
-        pastel card owns its surface and shouldn't be lifted by the
-        cascade.
-     2) Self — same element carries both a pastel bg and the text
-        class (ModeTile mint, PrimaryButton butter, performer card,
-        TabBar active tab, etc.). Here the :not(bg) exclusion would
-        always fire (the element has its own bg by definition), so we
-        skip it for the self selector.
+   These rules live OUTSIDE @layer utilities on purpose. Inside the
+   utilities layer Tailwind's JIT was generating dark variants of my
+   custom selectors (so `.dark .text-bubblegum-plum` was also being
+   emitted as `.dark .dark\:text-bubblegum-plum`), which then overrode
+   the explicit `dark:text-bubblegum-plum` utility on PrimaryButtons
+   and broke their plum-on-butter text. Outside the layer, Tailwind
+   leaves these as plain custom CSS.
 
-     `[class~]` (whole-word match) on the pastel ancestor means opacity-
-     modified bgs like `bg-bubblegum-cherry/15` — which composite to a
-     dark surface in night mode — don't trigger the revert. Cherry/15
-     text correctly stays cream. */
-  .dark .text-bubblegum-plum      { color: #fff7e0; }
-  .dark .text-bubblegum-plum-soft { color: #d8c8e8; }
-  .dark .text-bubblegum-plum-dim  { color: #6e5e80; }
+   Two revert cases per tone:
+   1) Descendant of a pastel ancestor — only when the descendant
+      doesn't carry its own bg. Pills/chips/buttons inside a pastel
+      card own their surface and shouldn't be lifted by the cascade.
+   2) Self — same element carries both a pastel bg and the text class
+      (ModeTile mint, PrimaryButton butter swap, performer card, etc.).
+      `:not(bg)` is intentionally omitted on the self selector.
 
-  .dark
-    :is(
-      [class~="bg-bubblegum-butter"],
-      [class~="bg-bubblegum-peach"],
-      [class~="bg-bubblegum-mint"],
-      [class~="bg-bubblegum-sky"],
-      [class~="bg-bubblegum-lavender"],
-      [class~="bg-bubblegum-pink"],
-      [class~="bg-bubblegum-cherry"]
-    )
-    .text-bubblegum-plum:not([class*="bg-"]),
-  .dark
-    :is(
-      [class~="bg-bubblegum-butter"],
-      [class~="bg-bubblegum-peach"],
-      [class~="bg-bubblegum-mint"],
-      [class~="bg-bubblegum-sky"],
-      [class~="bg-bubblegum-lavender"],
-      [class~="bg-bubblegum-pink"],
-      [class~="bg-bubblegum-cherry"]
-    ).text-bubblegum-plum {
-    color: #3a224f;
-  }
-  .dark
-    :is(
-      [class~="bg-bubblegum-butter"],
-      [class~="bg-bubblegum-peach"],
-      [class~="bg-bubblegum-mint"],
-      [class~="bg-bubblegum-sky"],
-      [class~="bg-bubblegum-lavender"],
-      [class~="bg-bubblegum-pink"],
-      [class~="bg-bubblegum-cherry"]
-    )
-    .text-bubblegum-plum-soft:not([class*="bg-"]),
-  .dark
-    :is(
-      [class~="bg-bubblegum-butter"],
-      [class~="bg-bubblegum-peach"],
-      [class~="bg-bubblegum-mint"],
-      [class~="bg-bubblegum-sky"],
-      [class~="bg-bubblegum-lavender"],
-      [class~="bg-bubblegum-pink"],
-      [class~="bg-bubblegum-cherry"]
-    ).text-bubblegum-plum-soft {
-    color: #6b4a85;
-  }
-  .dark
-    :is(
-      [class~="bg-bubblegum-butter"],
-      [class~="bg-bubblegum-peach"],
-      [class~="bg-bubblegum-mint"],
-      [class~="bg-bubblegum-sky"],
-      [class~="bg-bubblegum-lavender"],
-      [class~="bg-bubblegum-pink"],
-      [class~="bg-bubblegum-cherry"]
-    )
-    .text-bubblegum-plum-dim:not([class*="bg-"]),
-  .dark
-    :is(
-      [class~="bg-bubblegum-butter"],
-      [class~="bg-bubblegum-peach"],
-      [class~="bg-bubblegum-mint"],
-      [class~="bg-bubblegum-sky"],
-      [class~="bg-bubblegum-lavender"],
-      [class~="bg-bubblegum-pink"],
-      [class~="bg-bubblegum-cherry"]
-    ).text-bubblegum-plum-dim {
-    color: #9d85b6;
-  }
+   `[class~]` whole-word match on the pastel ancestor means opacity-
+   modified bgs like `bg-bubblegum-cherry/15` — which composite to a
+   dark surface in night mode — don't trigger the revert. */
+.dark .text-bubblegum-plum      { color: #fff7e0; }
+.dark .text-bubblegum-plum-soft { color: #d8c8e8; }
+.dark .text-bubblegum-plum-dim  { color: #6e5e80; }
+
+.dark
+  :is(
+    [class~="bg-bubblegum-butter"],
+    [class~="bg-bubblegum-peach"],
+    [class~="bg-bubblegum-mint"],
+    [class~="bg-bubblegum-sky"],
+    [class~="bg-bubblegum-lavender"],
+    [class~="bg-bubblegum-pink"],
+    [class~="bg-bubblegum-cherry"]
+  )
+  .text-bubblegum-plum:not([class*="bg-"]),
+.dark
+  :is(
+    [class~="bg-bubblegum-butter"],
+    [class~="bg-bubblegum-peach"],
+    [class~="bg-bubblegum-mint"],
+    [class~="bg-bubblegum-sky"],
+    [class~="bg-bubblegum-lavender"],
+    [class~="bg-bubblegum-pink"],
+    [class~="bg-bubblegum-cherry"]
+  ).text-bubblegum-plum {
+  color: #3a224f;
+}
+.dark
+  :is(
+    [class~="bg-bubblegum-butter"],
+    [class~="bg-bubblegum-peach"],
+    [class~="bg-bubblegum-mint"],
+    [class~="bg-bubblegum-sky"],
+    [class~="bg-bubblegum-lavender"],
+    [class~="bg-bubblegum-pink"],
+    [class~="bg-bubblegum-cherry"]
+  )
+  .text-bubblegum-plum-soft:not([class*="bg-"]),
+.dark
+  :is(
+    [class~="bg-bubblegum-butter"],
+    [class~="bg-bubblegum-peach"],
+    [class~="bg-bubblegum-mint"],
+    [class~="bg-bubblegum-sky"],
+    [class~="bg-bubblegum-lavender"],
+    [class~="bg-bubblegum-pink"],
+    [class~="bg-bubblegum-cherry"]
+  ).text-bubblegum-plum-soft {
+  color: #6b4a85;
+}
+.dark
+  :is(
+    [class~="bg-bubblegum-butter"],
+    [class~="bg-bubblegum-peach"],
+    [class~="bg-bubblegum-mint"],
+    [class~="bg-bubblegum-sky"],
+    [class~="bg-bubblegum-lavender"],
+    [class~="bg-bubblegum-pink"],
+    [class~="bg-bubblegum-cherry"]
+  )
+  .text-bubblegum-plum-dim:not([class*="bg-"]),
+.dark
+  :is(
+    [class~="bg-bubblegum-butter"],
+    [class~="bg-bubblegum-peach"],
+    [class~="bg-bubblegum-mint"],
+    [class~="bg-bubblegum-sky"],
+    [class~="bg-bubblegum-lavender"],
+    [class~="bg-bubblegum-pink"],
+    [class~="bg-bubblegum-cherry"]
+  ).text-bubblegum-plum-dim {
+  color: #9d85b6;
 }
 
 /* ── A11y: motion + contrast preferences ─────────────────────────────────── */

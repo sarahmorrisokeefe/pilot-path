@@ -83,8 +83,8 @@ export function Courses() {
                   onClick={() => setFilter(f.id)}
                   className={`flex-shrink-0 rounded-full px-3.5 py-2 text-xs font-extrabold whitespace-nowrap touch-manipulation transition-colors ${
                     active
-                      ? 'bg-bubblegum-plum text-bubblegum-cream'
-                      : 'bg-white text-bubblegum-plum'
+                      ? 'bg-bubblegum-plum text-bubblegum-cream dark:bg-bubblegum-butter dark:text-bubblegum-plum'
+                      : 'bg-white text-bubblegum-plum dark:bg-night-panel-hi dark:text-night-fg'
                   }`}
                 >
                   {f.label}
