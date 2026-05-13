@@ -68,6 +68,52 @@
   .dark .bg-night-panel2 .text-bubblegum-plum-dim {
     color: #6e5e80;
   }
+
+  /* Inverse safety net: pastel cards keep their bright bg in dark mode,
+     so any Mono/Eyebrow descendants that flipped to night.fg* via
+     `dark:text-night-fg*` go back to plum tones — otherwise the light
+     gray-lavender is invisible on butter/peach/mint/etc. Uses [class~]
+     to match the literal compiled Tailwind class names (which include
+     the unescaped colon in the actual class attribute). */
+  .dark
+    :is(
+      [class*="bg-bubblegum-butter"],
+      [class*="bg-bubblegum-peach"],
+      [class*="bg-bubblegum-mint"],
+      [class*="bg-bubblegum-sky"],
+      [class*="bg-bubblegum-lavender"],
+      [class*="bg-bubblegum-pink"],
+      [class*="bg-bubblegum-cherry"]
+    )
+    [class~="dark:text-night-fg"] {
+    color: #3a224f;
+  }
+  .dark
+    :is(
+      [class*="bg-bubblegum-butter"],
+      [class*="bg-bubblegum-peach"],
+      [class*="bg-bubblegum-mint"],
+      [class*="bg-bubblegum-sky"],
+      [class*="bg-bubblegum-lavender"],
+      [class*="bg-bubblegum-pink"],
+      [class*="bg-bubblegum-cherry"]
+    )
+    [class~="dark:text-night-fg2"] {
+    color: #6b4a85;
+  }
+  .dark
+    :is(
+      [class*="bg-bubblegum-butter"],
+      [class*="bg-bubblegum-peach"],
+      [class*="bg-bubblegum-mint"],
+      [class*="bg-bubblegum-sky"],
+      [class*="bg-bubblegum-lavender"],
+      [class*="bg-bubblegum-pink"],
+      [class*="bg-bubblegum-cherry"]
+    )
+    [class~="dark:text-night-fg-dim"] {
+    color: #9d85b6;
+  }
 }
 
 /* ── A11y: motion + contrast preferences ─────────────────────────────────── */
