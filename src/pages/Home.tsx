@@ -484,16 +484,16 @@ function SignedInHome() {
               You played every track!
             </p>
             <p className="mt-1 text-sm font-semibold text-bubblegum-plum-soft">
-              Hit Soundcheck for a fresh mix, or rehearse your B-sides.
+              Hit Practice for a fresh mix, or rehearse your B-sides.
             </p>
             <div className="mt-4">
               <PrimaryButton
                 tone="plum"
                 onClick={() =>
-                  gate(() => navigate('/practice'), 'Grab a backstage pass for Soundcheck')
+                  gate(() => navigate('/practice'), 'Grab a backstage pass for Practice')
                 }
               >
-                Open Soundcheck →
+                Open Practice →
               </PrimaryButton>
             </div>
           </motion.div>
@@ -520,7 +520,7 @@ function SignedInHome() {
             <Eyebrow>b-sides to brush up 🔁</Eyebrow>
             <button
               type="button"
-              onClick={() => gate(() => navigate('/review'), 'Grab a backstage pass for your B-sides')}
+              onClick={() => gate(() => navigate('/review'), 'Grab a backstage pass for Review')}
               className="flex w-full items-center gap-3 rounded-3xl bg-bubblegum-cherry/20 p-3.5 text-left transition-transform active:scale-[0.99] touch-manipulation dark:bg-bubblegum-cherry/15 dark:shadow-glow-cherry"
             >
               <span

@@ -191,7 +191,7 @@ export function PlacementTest() {
               </div>
             )}
 
-            <PrimaryButton onClick={handleFinish}>Open the setlist →</PrimaryButton>
+            <PrimaryButton onClick={handleFinish}>Open lessons →</PrimaryButton>
           </motion.div>
         </div>
       </BubblegumLayout>

@@ -74,7 +74,7 @@ function AppRoutes() {
       <Route
         path="/practice"
         element={
-          <RequireAuth message="Grab a backstage pass for Soundcheck">
+          <RequireAuth message="Grab a backstage pass for Practice">
             <PracticeTest />
           </RequireAuth>
         }
@@ -82,7 +82,7 @@ function AppRoutes() {
       <Route
         path="/review"
         element={
-          <RequireAuth message="Grab a backstage pass for your B-sides">
+          <RequireAuth message="Grab a backstage pass for Review">
             <WeakAreas />
           </RequireAuth>
         }

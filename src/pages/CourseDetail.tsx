@@ -40,10 +40,10 @@ export function CourseDetail() {
           <p className="text-3xl">🎧</p>
           <p className="mt-2 text-base font-black text-bubblegum-plum">Album not found.</p>
           <p className="mt-1 text-sm text-bubblegum-plum-soft">
-            Try the full setlist instead.
+            Try the lessons list instead.
           </p>
           <div className="mt-4">
-            <PrimaryButton onClick={() => navigate('/learn')}>Back to setlist →</PrimaryButton>
+            <PrimaryButton onClick={() => navigate('/learn')}>Back to lessons →</PrimaryButton>
           </div>
         </div>
       </BubblegumLayout>
@@ -189,7 +189,7 @@ export function CourseDetail() {
           {/* Encore — full practice test */}
           <button
             type="button"
-            onClick={() => gate(() => navigate('/practice'), 'Grab a backstage pass for Soundcheck')}
+            onClick={() => gate(() => navigate('/practice'), 'Grab a backstage pass for Practice')}
             className="mt-4 flex w-full items-center gap-3 rounded-3xl bg-bubblegum-peach p-4 text-left text-bubblegum-plum transition-transform active:scale-[0.99] touch-manipulation"
           >
             <span className="rounded-full bg-bubblegum-plum px-2 py-1 font-mono text-[10px] font-black uppercase tracking-[0.1em] text-bubblegum-cream">
@@ -216,7 +216,7 @@ export function CourseDetail() {
             <div className="mt-5">
               <PrimaryButton
                 onClick={() =>
-                  gate(() => navigate('/practice'), 'Grab a backstage pass for Soundcheck')
+                  gate(() => navigate('/practice'), 'Grab a backstage pass for Practice')
                 }
               >
                 Album played — Take the encore →

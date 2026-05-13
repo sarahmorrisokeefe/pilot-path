@@ -115,7 +115,7 @@ export function Lesson() {
           onPrimary={() => navigate(`/learn/${course.id}`)}
           primaryLabel="Play next track →"
           onSecondary={() => navigate('/learn')}
-          secondaryLabel="Back to setlist"
+          secondaryLabel="Back to lessons"
           onClose={() => navigate(`/learn/${course.id}`)}
         />
       </BubblegumLayout>

@@ -19,8 +19,8 @@ interface BubblegumLayoutProps {
 const TAB_ROUTES: Record<BubblegumTabId, { path: string; authMessage?: string }> = {
   home:     { path: '/' },
   learn:    { path: '/learn' },
-  practice: { path: '/practice', authMessage: 'Grab a backstage pass for Soundcheck' },
-  review:   { path: '/review',   authMessage: 'Grab a backstage pass for your B-sides' },
+  practice: { path: '/practice', authMessage: 'Grab a backstage pass for Practice' },
+  review:   { path: '/review',   authMessage: 'Grab a backstage pass for Review' },
   progress: { path: '/progress', authMessage: 'Grab a backstage pass to see your records' },
 }
 

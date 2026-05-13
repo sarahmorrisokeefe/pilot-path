@@ -115,7 +115,7 @@ export function WeakAreas() {
           onPrimary={startReview}
           primaryLabel="Rehearse again →"
           onSecondary={exitToList}
-          secondaryLabel="Back to B-sides"
+          secondaryLabel="Back to Review"
           onClose={exitToList}
         />
       </BubblegumLayout>
@@ -158,7 +158,7 @@ export function WeakAreas() {
           <div className="px-1">
             <p className="text-[28px] font-black leading-tight tracking-[-0.025em] text-bubblegum-plum dark:text-night-fg">
               <span className="inline-block -rotate-1 rounded-lg bg-bubblegum-cherry/40 px-2">
-                B-sides
+                Review
               </span>
             </p>
             <p className="mt-1.5 text-[13px] font-semibold text-bubblegum-plum-soft">
@@ -226,7 +226,7 @@ export function WeakAreas() {
             onClick={() => navigate('/practice')}
             className="mt-1 text-center text-xs font-bold text-bubblegum-plum-soft underline touch-manipulation"
           >
-            Looking to practice anyway? Try Soundcheck →
+            Looking to practice anyway? Try Practice →
           </button>
         </motion.div>
       </BubblegumLayout>
@@ -244,7 +244,7 @@ export function WeakAreas() {
         <div className="px-1">
           <p className="text-[28px] font-black leading-tight tracking-[-0.025em] text-bubblegum-plum dark:text-night-fg">
             <span className="inline-block -rotate-1 rounded-lg bg-bubblegum-cherry/40 px-2">
-              B-sides
+              Review
             </span>
           </p>
           <p className="mt-1.5 text-[13px] font-semibold text-bubblegum-plum-soft">

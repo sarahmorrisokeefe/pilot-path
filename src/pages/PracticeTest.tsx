@@ -196,7 +196,7 @@ export function PracticeTest() {
         <div className="px-1">
           <p className="text-[28px] font-black leading-tight tracking-[-0.025em] text-bubblegum-plum dark:text-night-fg">
             <span className="inline-block -rotate-1 rounded-lg bg-bubblegum-peach px-2">
-              Soundcheck
+              Practice
             </span>
           </p>
           <p className="mt-1.5 text-[13px] font-semibold text-bubblegum-plum-soft">

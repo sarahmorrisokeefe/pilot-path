@@ -13,9 +13,9 @@ interface Tab {
 
 const tabs: readonly Tab[] = [
   { id: 'home',     icon: '🏠', label: 'Home' },
-  { id: 'learn',    icon: '📚', label: 'Setlist' },
-  { id: 'practice', icon: '🎯', label: 'Soundcheck' },
-  { id: 'review',   icon: '🔄', label: 'B-Sides' },
+  { id: 'learn',    icon: '📚', label: 'Lessons' },
+  { id: 'practice', icon: '🎯', label: 'Practice' },
+  { id: 'review',   icon: '🔄', label: 'Review' },
   { id: 'progress', icon: '📊', label: 'Records' },
 ] as const
 

@@ -63,7 +63,7 @@ export function Courses() {
           <p className="text-[28px] font-black leading-tight tracking-[-0.025em] text-bubblegum-plum dark:text-night-fg">
             Your{' '}
             <span className="inline-block -rotate-1 rounded-lg bg-bubblegum-peach px-2">
-              setlist
+              lessons
             </span>
           </p>
           <p className="mt-1.5 text-[13px] font-semibold text-bubblegum-plum-soft">
