@@ -3,21 +3,21 @@ interface WordmarkProps {
 }
 
 const sizeClasses = {
-  sm: { glyph: 'text-2xl', word: 'text-base' },
-  md: { glyph: 'text-3xl', word: 'text-xl' },
-  lg: { glyph: 'text-4xl', word: 'text-2xl' },
+  sm: { glyph: 'h-6 w-6',  word: 'text-base' },
+  md: { glyph: 'h-8 w-8',  word: 'text-xl' },
+  lg: { glyph: 'h-10 w-10', word: 'text-2xl' },
 }
 
 export function Wordmark({ size = 'md' }: WordmarkProps) {
   const s = sizeClasses[size]
   return (
     <div className="flex items-center gap-1.5">
-      <span
-        className={`inline-block -rotate-[10deg] font-serif leading-none text-bubblegum-peach dark:drop-shadow-glow-peach ${s.glyph}`}
+      <img
+        src="/logo.png"
+        alt=""
         aria-hidden="true"
-      >
-        ♩
-      </span>
+        className={`-rotate-[10deg] dark:drop-shadow-glow-peach ${s.glyph}`}
+      />
       <span
         className={`font-black tracking-tighter text-bubblegum-plum dark:text-night-fg ${s.word}`}
       >

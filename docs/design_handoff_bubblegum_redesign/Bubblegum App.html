@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cadence · Bubblegum × Live Set</title>
+  <style>
+    @font-face {
+      font-family: 'Inter';
+      src: url('fonts/Inter-VariableFont_opsz_wght.ttf') format('truetype-variations'),
+           url('fonts/Inter-VariableFont_opsz_wght.ttf') format('truetype');
+      font-weight: 100 900; font-style: normal; font-display: swap;
+    }
+    html, body { margin: 0; padding: 0; height: 100%;
+      font-family: 'Inter', system-ui, sans-serif; }
+    #root { width: 100%; height: 100vh; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+  <script type="text/babel" src="design-canvas.jsx"></script>
+
+  <!-- shared first so all screens can use BG / helpers -->
+  <script type="text/babel" src="bubblegum/bg-shared.jsx"></script>
+
+  <!-- screens -->
+  <script type="text/babel" src="bubblegum/bg-signin.jsx"></script>
+  <script type="text/babel" src="bubblegum/bg-home.jsx"></script>
+  <script type="text/babel" src="bubblegum/bg-setlist.jsx"></script>
+  <script type="text/babel" src="bubblegum/bg-album.jsx"></script>
+  <script type="text/babel" src="bubblegum/bg-study.jsx"></script>
+  <script type="text/babel" src="bubblegum/bg-quiz.jsx"></script>
+  <script type="text/babel" src="bubblegum/bg-results.jsx"></script>
+  <script type="text/babel" src="bubblegum/bg-progress.jsx"></script>
+  <script type="text/babel" src="bubblegum/bg-empty-states.jsx"></script>
+  <script type="text/babel" src="bubblegum/bg-soundcheck.jsx"></script>
+  <script type="text/babel" src="bubblegum/bg-backstage.jsx"></script>
+  <script type="text/babel" src="bubblegum/bg-motion.jsx"></script>
+  <script type="text/babel" src="bubblegum/bg-dark.jsx"></script>
+
+  <script type="text/babel" data-screen-label="Bubblegum App">
+    function Phone({ children }) {
+      return (
+        <div style={{
+          width: 412, height: 880, borderRadius: 44, overflow: 'hidden',
+          background: '#000', padding: 8,
+          boxShadow: '0 30px 60px -20px rgba(0,0,0,.35), 0 0 0 1px rgba(0,0,0,.1)',
+        }}>
+          <div style={{
+            width: '100%', height: '100%', borderRadius: 36, overflow: 'hidden',
+            background: '#fff', position: 'relative',
+          }}>
+            {children}
+          </div>
+        </div>
+      );
+    }
+
+    /* Vocabulary cheat-sheet card */
+    function VocabCard() {
+      const pairs = [
+        ['Level',        'Track'],
+        ['Streak',       'Nights'],
+        ['Daily goal',   "Tonight's Set"],
+        ['Topics',       'Setlist'],
+        ['Course',       'Album'],
+        ['Lessons',      'Tracks (A1, A2…)'],
+        ['Advanced',     'Encore'],
+        ['Practice',     'Soundcheck'],
+        ['Review',       'B-Sides'],
+        ['Achievements', 'Records'],
+        ['Correct!',     'Encore!'],
+        ['Not quite',    'Off-key'],
+        ['80%+ score',   "Crowd's going wild"],
+      ];
+      return (
+        <div style={{
+          width: '100%', height: '100%', padding: '28px 32px',
+          background: '#fffdf6', border: '1px solid rgba(60,50,40,.18)',
+          borderRadius: 12, color: 'rgba(40,30,20,.85)',
+          fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif',
+          fontSize: 13, lineHeight: 1.55, overflow: 'auto',
+        }}>
+          <p style={{ margin: 0, fontSize: 18, fontWeight: 800,
+            letterSpacing: '-0.01em' }}>Vocabulary map</p>
+          <p style={{ margin: '6px 0 18px', color: 'rgba(40,30,20,.6)',
+            fontSize: 12 }}>
+            Cadence concept → Live Set copy. Applied consistently across every screen.
+          </p>
+          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+            <tbody>
+              {pairs.map(([k, v], i) => (
+                <tr key={k} style={{
+                  borderTop: i === 0 ? `1px solid rgba(60,50,40,.12)` : 'none',
+                  borderBottom: `1px solid rgba(60,50,40,.12)`,
+                }}>
+                  <td style={{ padding: '8px 0', color: 'rgba(40,30,20,.55)',
+                    width: '45%' }}>{k}</td>
+                  <td style={{ padding: '8px 0', fontWeight: 700,
+                    color: 'rgba(40,30,20,.95)' }}>{v}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      );
+    }
+
+    /* Palette / system spec card */
+    function SystemCard() {
+      const swatches = [
+        { c: '#ffd66b', l: 'butter',   role: 'Hero / primary surfaces' },
+        { c: '#ffaf95', l: 'peach',    role: 'Streaks, focused links' },
+        { c: '#a8e6b8', l: 'mint',     role: 'Goal, success, encore' },
+        { c: '#a8d8ff', l: 'sky',      role: 'Up next, info' },
+        { c: '#cfb6ff', l: 'lavender', role: 'Albums, nav avatar' },
+        { c: '#ffb3d9', l: 'pink',     role: 'Soft accents, tags' },
+        { c: '#ff7faf', l: 'cherry',   role: 'Headline highlights' },
+        { c: '#3a224f', l: 'plum',     role: 'All text, plum CTAs' },
+      ];
+      return (
+        <div style={{
+          width: '100%', height: '100%', padding: '28px 32px',
+          background: '#fffdf6', border: '1px solid rgba(60,50,40,.18)',
+          borderRadius: 12, color: 'rgba(40,30,20,.85)',
+          fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif',
+          fontSize: 13, lineHeight: 1.55, overflow: 'auto',
+        }}>
+          <p style={{ margin: 0, fontSize: 18, fontWeight: 800,
+            letterSpacing: '-0.01em' }}>The system</p>
+
+          <p style={{ margin: '14px 0 6px', fontSize: 11, fontWeight: 800,
+            letterSpacing: '0.08em', color: 'rgba(40,30,20,.5)',
+            textTransform: 'uppercase' }}>Palette</p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+            {swatches.map(s => (
+              <div key={s.l} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <div style={{ width: 28, height: 28, borderRadius: 999,
+                  background: s.c,
+                  boxShadow: 'inset 0 0 0 1px rgba(0,0,0,.08)' }} />
+                <span style={{ width: 76, fontWeight: 700,
+                  color: 'rgba(40,30,20,.95)' }}>{s.l}</span>
+                <span style={{ color: 'rgba(40,30,20,.6)', fontSize: 12 }}>{s.role}</span>
+              </div>
+            ))}
+          </div>
+
+          <p style={{ margin: '18px 0 6px', fontSize: 11, fontWeight: 800,
+            letterSpacing: '0.08em', color: 'rgba(40,30,20,.5)',
+            textTransform: 'uppercase' }}>Rules</p>
+          <ul style={{ margin: 0, paddingLeft: 16 }}>
+            <li>Cream + bubble pattern on every page background</li>
+            <li>Radius 18–32px everywhere — no sharp corners</li>
+            <li>No shadows on cards; flat pastel does the work</li>
+            <li>Plum is the only "ink" color — body, labels, icons</li>
+            <li>Numerals oversized + rotated –3°, with serif ♩ rotated –10°</li>
+            <li>Eyebrows use monospace UPPERCASE for "venue" feel</li>
+            <li>Highlight key words via butter/peach pill behind the text</li>
+            <li>Doodled note glyphs scatter across hero backgrounds</li>
+          </ul>
+        </div>
+      );
+    }
+
+    function App() {
+      return (
+        <DesignCanvas storageKey="cadence-bubblegum-v1">
+
+          <DCSection id="intro" title="Cadence · Bubblegum × Live Set"
+            subtitle="Visual: candy pastel pop on cream, ultra-round shapes, no shadows, doodled note glyphs. Copy: tour vocabulary — setlist, tracks, encore, tonight's set. Applied across eight key screens. Drag artboards to reorder; click any one to focus.">
+          </DCSection>
+
+          {/* System spec */}
+          <DCSection id="system" title="The system"
+            subtitle="Palette, rules, and copy vocabulary. Both cards below.">
+            <DCArtboard id="vocab" label="Vocabulary map" width={420} height={620}>
+              <VocabCard />
+            </DCArtboard>
+            <DCArtboard id="palette" label="Palette + rules" width={460} height={620}>
+              <SystemCard />
+            </DCArtboard>
+          </DCSection>
+
+          {/* First impression */}
+          <DCSection id="entry" title="01 · First impression"
+            subtitle="Sets the whole tone — concert-tour energy from second one.">
+            <DCArtboard id="signin" label="Sign in / take the stage" width={428} height={896}>
+              <Phone><BGSignIn /></Phone>
+            </DCArtboard>
+          </DCSection>
+
+          {/* The main tabs */}
+          <DCSection id="main" title="02 · The main tabs"
+            subtitle="What users land on each day. All four primary tabs.">
+            <DCArtboard id="home" label="🏠 Home" width={428} height={896}>
+              <Phone><BGHome /></Phone>
+            </DCArtboard>
+            <DCArtboard id="setlist" label="📚 Setlist" width={428} height={896}>
+              <Phone><BGSetlist /></Phone>
+            </DCArtboard>
+            <DCArtboard id="progress" label="📊 Records" width={428} height={896}>
+              <Phone><BGProgress /></Phone>
+            </DCArtboard>
+          </DCSection>
+
+          {/* Album → Track flow */}
+          <DCSection id="album-flow" title="03 · Album → Track flow"
+            subtitle="Tap an album from setlist, study, then quiz. Three states of the quiz.">
+            <DCArtboard id="album" label="Album detail · Notation" width={428} height={896}>
+              <Phone><BGAlbum /></Phone>
+            </DCArtboard>
+            <DCArtboard id="study" label="Study · Key fact" width={428} height={896}>
+              <Phone><BGStudy /></Phone>
+            </DCArtboard>
+            <DCArtboard id="quiz-default" label="Quiz · default" width={428} height={896}>
+              <Phone><BGQuizDefault /></Phone>
+            </DCArtboard>
+          </DCSection>
+
+          {/* The two big feedback states */}
+          <DCSection id="feedback" title="04 · The big feedback moments"
+            subtitle="Correct = Encore. Wrong = Off-key, never blamed. End of set = the celebration screen.">
+            <DCArtboard id="encore" label="Quiz · Encore! (correct)" width={428} height={896}>
+              <Phone><BGQuizCorrect /></Phone>
+            </DCArtboard>
+            <DCArtboard id="offkey" label="Quiz · Off-key (wrong)" width={428} height={896}>
+              <Phone><BGQuizWrong /></Phone>
+            </DCArtboard>
+            <DCArtboard id="results" label="End of set · Results" width={428} height={896}>
+              <Phone><BGResults /></Phone>
+            </DCArtboard>
+          </DCSection>
+
+          {/* Empty + locked states */}
+          <DCSection id="empty" title="05 · Empty + locked states"
+            subtitle="Day 1, signed out, and locked screens. These are where 'friendly' really lands — don't make the user feel they're missing something, make the absence feel like the start of a story.">
+            <DCArtboard id="signed-out" label="Signed-out home" width={428} height={896}>
+              <Phone><BGSignedOutHome /></Phone>
+            </DCArtboard>
+            <DCArtboard id="first-night" label="First-night home (Day 1)" width={428} height={896}>
+              <Phone><BGFirstNightHome /></Phone>
+            </DCArtboard>
+            <DCArtboard id="locked-album" label="Locked album · Encore" width={428} height={896}>
+              <Phone><BGLockedAlbum /></Phone>
+            </DCArtboard>
+            <DCArtboard id="empty-records" label="Empty Records" width={428} height={896}>
+              <Phone><BGEmptyRecords /></Phone>
+            </DCArtboard>
+            <DCArtboard id="empty-bsides" label="Empty B-Sides" width={428} height={896}>
+              <Phone><BGEmptyBSides /></Phone>
+            </DCArtboard>
+          </DCSection>
+
+          {/* Soundcheck */}
+          <DCSection id="soundcheck" title="06 · Soundcheck landing"
+            subtitle="The Practice tab — mixed-album quiz hub. Quick one-tap start, four modes, custom mix builder, and recent session history.">
+            <DCArtboard id="soundcheck" label="🎤 Soundcheck" width={428} height={896}>
+              <Phone><BGSoundcheck /></Phone>
+            </DCArtboard>
+          </DCSection>
+
+          {/* Backstage */}
+          <DCSection id="backstage" title="07 · Backstage (settings)"
+            subtitle="Account, preferences, dark-mode toggle, sign-out, danger zone. The settings page everyone forgets to design — reframed as backstage so the language stays in-world.">
+            <DCArtboard id="backstage" label="🎟 Backstage" width={428} height={896}>
+              <Phone><BGBackstage /></Phone>
+            </DCArtboard>
+          </DCSection>
+
+          {/* Motion */}
+          <DCSection id="motion" title="08 · Motion pass"
+            subtitle="Four key moments, auto-playing on loop. Tap Replay on any artboard to restart. The Bubblegum system lives on tilt + bounce — motion follows the same physics curve (cubic-bezier .36, .07, .19, .97).">
+            <DCArtboard id="motion-encore" label="🎉 Encore choreography" width={428} height={896}>
+              <Phone><MotionEncore /></Phone>
+            </DCArtboard>
+            <DCArtboard id="motion-donut" label="🎯 Score donut fill" width={428} height={896}>
+              <Phone><MotionDonut /></Phone>
+            </DCArtboard>
+            <DCArtboard id="motion-streak" label="🔥 Streak ignition" width={428} height={896}>
+              <Phone><MotionStreak /></Phone>
+            </DCArtboard>
+            <DCArtboard id="motion-shake" label="🎧 Off-key shake" width={428} height={896}>
+              <Phone><MotionShake /></Phone>
+            </DCArtboard>
+          </DCSection>
+
+          {/* Dark mode — Bubblegum Night */}
+          <DCSection id="night" title="09 · Bubblegum night (dark mode)"
+            subtitle="Strategy: don't invert. Background goes cream → deep plum (warm dark, never cool). Pastels stay — they become glowing accents against the dark. Butter takes over as the 'paper' role plum had in light mode. The user toggles this from Backstage › House lights.">
+            <DCArtboard id="night-signin" label="🌙 Sign in · night" width={428} height={896}>
+              <Phone><BGNightSignIn /></Phone>
+            </DCArtboard>
+            <DCArtboard id="night-home" label="🌙 Home · night" width={428} height={896}>
+              <Phone><BGNightHome /></Phone>
+            </DCArtboard>
+            <DCArtboard id="night-encore" label="🌙 Encore · night" width={428} height={896}>
+              <Phone><BGNightEncore /></Phone>
+            </DCArtboard>
+            <DCArtboard id="night-backstage" label="🌙 Backstage · night" width={428} height={896}>
+              <Phone><BGNightBackstage /></Phone>
+            </DCArtboard>
+          </DCSection>
+
+          {/* Next steps */}
+          <DCSection id="next" title="What's left"
+            subtitle="The roadmap from kickoff is now ticked through. Here's what would push this from explore to ship.">
+            <DCArtboard id="next-card" label="Notes" width={680} height={400}>
+              <div style={{
+                width: '100%', height: '100%', padding: '24px 28px',
+                background: '#fffdf6', border: '1px solid rgba(60,50,40,.18)',
+                borderRadius: 12, color: 'rgba(40,30,20,.85)',
+                fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif',
+                fontSize: 13, lineHeight: 1.6, overflow: 'auto',
+              }}>
+                <p style={{ margin: 0, fontSize: 15, fontWeight: 800 }}>Covered ✓</p>
+                <ul style={{ margin: '6px 0 14px', paddingLeft: 18 }}>
+                  <li>Eight core screens + system / vocabulary docs</li>
+                  <li>Five empty + locked states (signed-out, day 1, locked album, empty records, empty B-sides)</li>
+                  <li>Soundcheck landing with quick-start, four modes, custom mix, history</li>
+                  <li>Backstage (settings) with performer card, show/venue/notifications/danger zone</li>
+                  <li>Motion pass — four moments looping (encore, donut, streak, off-key shake)</li>
+                  <li>Bubblegum Night — dark mode across sign-in, home, encore, backstage</li>
+                </ul>
+                <p style={{ margin: 0, fontSize: 15, fontWeight: 800 }}>Still open</p>
+                <ul style={{ margin: '6px 0 0', paddingLeft: 18 }}>
+                  <li><strong>Real VexFlow integration.</strong> Current staff is a stylised SVG. Production needs real notation rendering at the same scale + plum / glow color.</li>
+                  <li><strong>Accessibility audit.</strong> Plum-on-pastel passes AA at body sizes; double-check labels in pink/peach. Night mode's glowing borders need a non-glow fallback for prefers-reduced-motion.</li>
+                  <li><strong>Auth / account screens.</strong> Sign-in form, password reset, OAuth providers — designed but not mocked yet.</li>
+                  <li><strong>Edit performer card.</strong> Tapping it on Backstage currently goes nowhere — name change, avatar color picker (pick a pastel).</li>
+                  <li><strong>Night versions of remaining screens.</strong> Setlist, Album, Soundcheck, Records all need their night palette pass before ship.</li>
+                  <li><strong>Production token export.</strong> Map every BG / NIGHT color to Tailwind config + CSS custom properties so the React/Vite app can switch at runtime via the existing dark-mode hook.</li>
+                </ul>
+              </div>
+            </DCArtboard>
+          </DCSection>
+
+        </DesignCanvas>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>

@@ -44,14 +44,13 @@ function AppRoutes() {
     return (
       <div className="min-h-screen bg-bubblegum-cream dark:bg-night-ink flex items-center justify-center">
         <div className="text-center">
-          <div
-            className="text-5xl text-bubblegum-peach mb-2 font-serif leading-none inline-block"
-            style={{ transform: 'rotate(-10deg)' }}
+          <img
+            src="/logo.png"
+            alt=""
             aria-hidden="true"
-          >
-            ♩
-          </div>
-          <p className="text-bubblegum-plum-soft text-sm font-bold">Tuning up…</p>
+            className="mx-auto h-12 w-12 -rotate-[10deg]"
+          />
+          <p className="mt-2 text-bubblegum-plum-soft dark:text-night-fg2 text-sm font-bold">Tuning up…</p>
         </div>
       </div>
     )

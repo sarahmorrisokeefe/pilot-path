@@ -116,13 +116,13 @@ export function Auth() {
         <Doodle ch="♪" x={28} y={520}  size={32} rot={-20} color="#ffd66b" opacity={0.8} />
 
         {/* Brand mark */}
-        <div className="relative z-[1] mt-4 flex items-baseline gap-2">
-          <span
-            className="inline-block -rotate-[10deg] font-serif text-[72px] leading-none text-bubblegum-peach dark:drop-shadow-glow-peach"
+        <div className="relative z-[1] mt-4 flex items-center gap-3">
+          <img
+            src="/logo.png"
+            alt=""
             aria-hidden="true"
-          >
-            ♩
-          </span>
+            className="h-[72px] w-[72px] -rotate-[10deg] dark:drop-shadow-glow-peach"
+          />
           <span className="text-2xl font-black tracking-[-0.03em] text-bubblegum-plum">
             cadence
           </span>
