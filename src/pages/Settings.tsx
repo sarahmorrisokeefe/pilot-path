@@ -95,8 +95,7 @@ export function Settings() {
 
           <div className="mt-3 flex items-center gap-4">
             <div
-              className="flex h-[72px] w-[72px] items-center justify-center rounded-full border-[5px] border-white bg-bubblegum-lavender text-3xl font-black text-bubblegum-plum"
-              style={{ transform: 'rotate(-4deg)' }}
+              className="flex h-[72px] w-[72px] -rotate-[4deg] items-center justify-center rounded-full border-[5px] border-white bg-bubblegum-lavender text-3xl font-black text-bubblegum-plum"
               aria-hidden="true"
             >
               {displayName.charAt(0)}
@@ -181,8 +180,7 @@ export function Settings() {
             className="flex items-center gap-3 rounded-3xl bg-bubblegum-cherry/25 p-4 text-bubblegum-plum transition-transform active:scale-[0.99] touch-manipulation"
           >
             <span
-              className="inline-block text-4xl leading-none"
-              style={{ transform: 'rotate(-8deg)' }}
+              className="inline-block -rotate-[8deg] text-4xl leading-none"
               aria-hidden="true"
             >
               ☕
@@ -276,8 +274,7 @@ export function Settings() {
         {/* Footer credit */}
         <div className="mt-2 pb-2 text-center">
           <span
-            className="inline-block font-serif text-2xl leading-none text-bubblegum-peach"
-            style={{ transform: 'rotate(-10deg)' }}
+            className="inline-block -rotate-[10deg] font-serif text-2xl leading-none text-bubblegum-peach"
             aria-hidden="true"
           >
             ♩
@@ -358,8 +355,7 @@ function SettingRow({
       className={`flex w-full items-center gap-3 px-3.5 py-3.5 text-left ${interactive}`}
     >
       <div
-        className={`flex h-[38px] w-[38px] flex-shrink-0 items-center justify-center rounded-xl text-xl ${ACCENT_BG[accent]} ${accent === 'plum' ? 'text-bubblegum-cream' : 'text-bubblegum-plum'}`}
-        style={{ transform: 'rotate(-4deg)' }}
+        className={`flex h-[38px] w-[38px] flex-shrink-0 -rotate-[4deg] items-center justify-center rounded-xl text-xl ${ACCENT_BG[accent]} ${accent === 'plum' ? 'text-bubblegum-cream' : 'text-bubblegum-plum'}`}
         aria-hidden="true"
       >
         {icon}

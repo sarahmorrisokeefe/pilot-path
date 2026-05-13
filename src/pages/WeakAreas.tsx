@@ -157,10 +157,7 @@ export function WeakAreas() {
         >
           <div className="px-1">
             <p className="text-[28px] font-black leading-tight tracking-[-0.025em] text-bubblegum-plum dark:text-night-fg">
-              <span
-                className="inline-block rounded-lg bg-bubblegum-cherry/40 px-2"
-                style={{ transform: 'rotate(-1deg)' }}
-              >
+              <span className="inline-block -rotate-1 rounded-lg bg-bubblegum-cherry/40 px-2">
                 B-sides
               </span>
             </p>
@@ -177,8 +174,7 @@ export function WeakAreas() {
             <Doodle ch="♬" x={300} y={210} size={30} rot={12} color="#3a224f" opacity={0.2} />
 
             <div
-              className="inline-block text-[80px] leading-none"
-              style={{ transform: 'rotate(-8deg)' }}
+              className="inline-block -rotate-[8deg] text-[80px] leading-none"
               aria-hidden="true"
             >
               🎯
@@ -247,10 +243,7 @@ export function WeakAreas() {
       >
         <div className="px-1">
           <p className="text-[28px] font-black leading-tight tracking-[-0.025em] text-bubblegum-plum dark:text-night-fg">
-            <span
-              className="inline-block rounded-lg bg-bubblegum-cherry/40 px-2"
-              style={{ transform: 'rotate(-1deg)' }}
-            >
+            <span className="inline-block -rotate-1 rounded-lg bg-bubblegum-cherry/40 px-2">
               B-sides
             </span>
           </p>

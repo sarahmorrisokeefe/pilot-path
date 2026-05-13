@@ -202,8 +202,9 @@ function FeedbackPanel({
 
       <div className="flex items-center gap-3.5">
         <span
-          className={`inline-block leading-none ${isCorrect ? 'animate-bg-pop-in' : ''}`}
-          style={{ fontSize: '52px', transform: `rotate(${isCorrect ? -12 : -8}deg)` }}
+          className={`inline-block text-[52px] leading-none ${
+            isCorrect ? 'animate-bg-pop-in -rotate-12' : '-rotate-[8deg]'
+          }`}
           aria-hidden="true"
         >
           {isCorrect ? '🎉' : '🎧'}

@@ -195,10 +195,7 @@ export function PracticeTest() {
       >
         <div className="px-1">
           <p className="text-[28px] font-black leading-tight tracking-[-0.025em] text-bubblegum-plum dark:text-night-fg">
-            <span
-              className="inline-block rounded-lg bg-bubblegum-peach px-2"
-              style={{ transform: 'rotate(-1deg)' }}
-            >
+            <span className="inline-block -rotate-1 rounded-lg bg-bubblegum-peach px-2">
               Soundcheck
             </span>
           </p>
@@ -228,8 +225,7 @@ export function PracticeTest() {
               </p>
             </div>
             <span
-              className="flex h-[60px] w-[60px] flex-shrink-0 items-center justify-center rounded-full bg-bubblegum-plum text-xl font-black text-bubblegum-cream"
-              style={{ transform: 'rotate(-6deg)' }}
+              className="flex h-[60px] w-[60px] flex-shrink-0 -rotate-6 items-center justify-center rounded-full bg-bubblegum-plum text-xl font-black text-bubblegum-cream"
               aria-hidden="true"
             >
               ▶
@@ -369,8 +365,7 @@ function ModeTile({ name, icon, desc, tone, locked = false, onClick }: ModeTileP
       }`}
     >
       <div
-        className="mb-1 inline-block text-[32px] leading-none"
-        style={{ transform: 'rotate(-6deg)' }}
+        className="mb-1 inline-block -rotate-6 text-[32px] leading-none"
         aria-hidden="true"
       >
         {icon}

@@ -228,16 +228,14 @@ function ScoreDonut({
         </svg>
         <div className="absolute inset-0 flex flex-col items-center justify-center">
           <span
-            className="inline-block font-black leading-[0.9] tabular-nums text-bubblegum-plum dark:text-night-fg"
-            style={{ fontSize: '64px', letterSpacing: '-0.04em', transform: 'rotate(-2deg)' }}
+            className="inline-block -rotate-2 text-[64px] font-black leading-[0.9] tracking-[-0.04em] tabular-nums text-bubblegum-plum dark:text-night-fg"
           >
             {displayScore}
           </span>
           <Mono>{correctCount}/{totalCount} correct</Mono>
         </div>
         <span
-          className="absolute right-7 top-1.5 text-xl text-bubblegum-cherry"
-          style={{ transform: 'rotate(20deg)' }}
+          className="absolute right-7 top-1.5 rotate-[20deg] text-xl text-bubblegum-cherry"
           aria-hidden="true"
         >
           ✦
@@ -269,10 +267,7 @@ function StatTile({
   return (
     <div className={`rounded-[18px] ${bg} p-3 text-center`}>
       <Mono size="xs">{label}</Mono>
-      <p
-        className="mt-1 inline-block text-[22px] font-black leading-none tabular-nums text-bubblegum-plum"
-        style={{ letterSpacing: '-0.02em' }}
-      >
+      <p className="mt-1 inline-block text-[22px] font-black leading-none tracking-[-0.02em] tabular-nums text-bubblegum-plum">
         {value}
       </p>
     </div>

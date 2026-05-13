@@ -118,8 +118,7 @@ export function Auth() {
         {/* Brand mark */}
         <div className="relative z-[1] mt-4 flex items-baseline gap-2">
           <span
-            className="inline-block font-serif leading-none text-bubblegum-peach"
-            style={{ fontSize: '72px', transform: 'rotate(-10deg)' }}
+            className="inline-block -rotate-[10deg] font-serif text-[72px] leading-none text-bubblegum-peach dark:drop-shadow-glow-peach"
             aria-hidden="true"
           >
             ♩
@@ -136,10 +135,7 @@ export function Auth() {
               if (i === arr.length - 1) {
                 return (
                   <span key={i}>
-                    <span
-                      className="inline-block rounded-lg bg-bubblegum-butter px-2"
-                      style={{ transform: 'rotate(-1deg)' }}
-                    >
+                    <span className="inline-block -rotate-1 rounded-lg bg-bubblegum-butter px-2">
                       {word.replace(/[.?!]$/, '')}
                     </span>
                     {word.match(/[.?!]$/)?.[0] ?? ''}

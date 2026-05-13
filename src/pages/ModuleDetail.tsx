@@ -1,11 +1,17 @@
 import { useMemo } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Layout } from '../components/layout/Layout'
-import { Badge } from '../components/ui/Badge'
+import {
+  BubblegumLayout,
+  Doodle,
+  Mono,
+  Eyebrow,
+  PrimaryButton,
+} from '../components/bubblegum'
 import { getCourseById } from '../data/courses'
 import { useProgress } from '../hooks/useProgress'
 import { useRequireAuth } from '../hooks/useRequireAuth'
+import { getAlbumTone, TONE_BG } from '../utils/bubblegum'
 
 export function ModuleDetail() {
   const { courseId, moduleId } = useParams<{ courseId: string; moduleId: string }>()
@@ -16,7 +22,6 @@ export function ModuleDetail() {
   const course = getCourseById(courseId ?? '')
   const mod = course?.modules.find((m) => m.id === moduleId)
 
-  // Compute mastery: average score across completed lessons
   const mastery = useMemo(() => {
     if (!course || !mod) return { avg: 0, completed: 0, total: 0, mastered: false }
     const modP = progress.courses[course.id]?.modules[mod.id]
@@ -42,111 +47,150 @@ export function ModuleDetail() {
 
   if (!course || !mod) {
     return (
-      <Layout title="Not Found" backPath={`/learn/${courseId}`}>
-        <p className="text-center text-slate-500 mt-8">Module not found.</p>
-      </Layout>
+      <BubblegumLayout activeTab="learn" back title="Not found">
+        <div className="mt-12 rounded-3xl bg-white p-6 text-center dark:bg-night-panel">
+          <p className="text-3xl">🎧</p>
+          <p className="mt-2 text-base font-black text-bubblegum-plum">Side not found.</p>
+          <div className="mt-4">
+            <PrimaryButton onClick={() => navigate(`/learn/${courseId ?? ''}`)}>
+              Back to the album →
+            </PrimaryButton>
+          </div>
+        </div>
+      </BubblegumLayout>
     )
   }
 
-  return (
-    <Layout title={mod.title} backPath={`/learn/${course.id}`}>
-      <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
-        {/* Module header */}
-        <div className={`${course.bgGradient} rounded-2xl p-4 text-white flex items-center gap-3`}>
-          <span className="text-4xl">{mod.icon}</span>
-          <div>
-            <p className="font-black text-lg">{mod.title}</p>
-            <p className="text-white/80 text-sm">{mod.description}</p>
-          </div>
-        </div>
+  const tone = getAlbumTone(course.id, 'lavender')
+  const nextIncomplete = mod.lessons.find(
+    (l) => !progress.courses[course.id]?.modules[mod.id]?.lessonsProgress[l.id]?.completed
+  )
 
-        {/* Mastery indicator */}
-        <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700 p-4">
-          <div className="flex items-center justify-between mb-2">
-            <p className="text-sm font-bold text-slate-900 dark:text-white">Module Mastery</p>
-            {mastery.mastered ? (
-              <Badge variant="green">Mastered</Badge>
-            ) : (
-              <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
-                Score 80%+ to master
-              </span>
-            )}
-          </div>
-          <div className="flex items-center gap-3">
-            <div className="flex-1">
-              <div className="h-2.5 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
-                <div
-                  className={`h-full rounded-full transition-all duration-500 ${
-                    mastery.mastered ? 'bg-green-500' : mastery.avg >= 80 ? 'bg-cadence-800' : mastery.avg >= 50 ? 'bg-amber-500' : 'bg-slate-300 dark:bg-slate-600'
-                  }`}
-                  style={{ width: `${mastery.avg}%` }}
-                />
-              </div>
+  return (
+    <BubblegumLayout
+      activeTab="learn"
+      back
+      title={mod.title}
+      onBack={() => navigate(`/learn/${course.id}`)}
+    >
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="flex flex-col gap-[18px] pt-1"
+      >
+        {/* Module hero — pastel matching the parent album */}
+        <div
+          className={`relative overflow-hidden rounded-bubble ${TONE_BG[tone]} p-[22px] text-bubblegum-plum`}
+        >
+          <Doodle ch="♬" x={300} y={20} size={48} rot={12} color="#3a224f" opacity={0.15} />
+          <Doodle ch="♪" x={20} y={70} size={36} rot={-12} color="#3a224f" opacity={0.2} />
+
+          <Mono>side · {course.shortTitle}</Mono>
+          <p className="mt-1.5 text-[26px] font-black leading-[1.05] tracking-[-0.025em]">
+            {mod.title}
+          </p>
+          <p className="mt-2 text-sm font-semibold text-bubblegum-plum-soft">
+            {mod.description}
+          </p>
+
+          {/* Mastery bar */}
+          <div className="mt-4 flex items-center gap-3">
+            <div className="h-2 flex-1 overflow-hidden rounded-full bg-white/70">
+              <div
+                className="h-full rounded-full bg-bubblegum-plum transition-[width] duration-500"
+                style={{ width: `${mastery.avg}%` }}
+              />
             </div>
-            <span className={`text-sm font-black tabular-nums ${mastery.mastered ? 'text-green-500' : 'text-slate-600 dark:text-slate-300'}`}>
-              {mastery.avg}%
+            <span className="text-xs font-black tabular-nums">
+              {mastery.completed}/{mastery.total} · {mastery.avg}%
             </span>
           </div>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1.5">
-            {mastery.completed}/{mastery.total} lessons completed
-          </p>
+          {mastery.mastered && (
+            <div className="mt-3 inline-flex items-center gap-1 rounded-full bg-bubblegum-mint px-3 py-1 text-[11px] font-black text-bubblegum-plum">
+              ✓ Mastered
+            </div>
+          )}
         </div>
 
-        <h2 className="text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Lessons</h2>
-
-        <div className="space-y-3">
-          {mod.lessons.map((lesson, idx) => {
-            const lessonP = progress.courses[course.id]?.modules[mod.id]?.lessonsProgress[lesson.id]
-            const completed = lessonP?.completed ?? false
-            const score = lessonP?.score ?? 0
-
-            return (
-              <motion.div
-                key={lesson.id}
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: idx * 0.06 }}
-              >
-                <div
+        {/* Lessons list */}
+        <div>
+          <Eyebrow>tracks on this side</Eyebrow>
+          <div className="overflow-hidden rounded-3xl bg-white p-1.5 dark:bg-night-panel">
+            {mod.lessons.map((lesson, idx) => {
+              const lp = progress.courses[course.id]?.modules[mod.id]?.lessonsProgress[lesson.id]
+              const completed = lp?.completed ?? false
+              const score = lp?.score ?? 0
+              const isNext = lesson.id === nextIncomplete?.id
+              return (
+                <motion.button
+                  key={lesson.id}
+                  type="button"
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: idx * 0.03 }}
                   onClick={() =>
                     gate(
-                      () => navigate(`/learn/${course.id}/modules/${mod.id}/lessons/${lesson.id}`),
+                      () =>
+                        navigate(`/learn/${course.id}/modules/${mod.id}/lessons/${lesson.id}`),
                       'Grab a backstage pass to play tracks'
                     )
                   }
-                  className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700 p-4 cursor-pointer active:scale-[0.98] transition-transform touch-manipulation"
+                  className={`flex w-full items-center gap-3 rounded-[18px] p-3 text-left transition-transform touch-manipulation active:scale-[0.99] ${
+                    isNext ? 'bg-bubblegum-butter' : 'bg-transparent'
+                  }`}
                 >
-                  <div className="flex items-center gap-3">
-                    <div className={`
-                      w-11 h-11 rounded-xl flex items-center justify-center text-xl font-black flex-shrink-0
-                      ${completed ? 'bg-green-100 dark:bg-green-900/40 text-green-600' : course.bgGradient + ' text-white'}
-                    `}>
-                      {completed ? '✓' : idx + 1}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2">
-                        <p className="font-bold text-slate-900 dark:text-white text-sm">{lesson.title}</p>
-                        {completed && (
-                          <Badge variant={score === 100 ? 'green' : score >= 70 ? 'cadence' : 'amber'}>
-                            {score}%
-                          </Badge>
-                        )}
-                      </div>
-                      <p className="text-xs text-slate-500 mt-0.5">
-                        {lesson.questions.length} questions · {lesson.xpReward} XP
-                        {completed && score === 100 && ' · Perfect!'}
-                      </p>
-                    </div>
-                    <svg className="w-5 h-5 text-slate-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-                    </svg>
+                  <div
+                    className={`flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full font-mono text-sm font-black ${
+                      completed
+                        ? 'bg-bubblegum-mint text-bubblegum-plum'
+                        : isNext
+                        ? 'bg-bubblegum-plum text-bubblegum-cream'
+                        : 'bg-bubblegum-cream text-bubblegum-plum'
+                    }`}
+                    aria-hidden="true"
+                  >
+                    {completed ? '✓' : idx + 1}
                   </div>
-                </div>
-              </motion.div>
-            )
-          })}
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-black leading-tight text-bubblegum-plum">
+                      {lesson.title}
+                    </p>
+                    <p className="mt-0.5 text-[11px] font-semibold text-bubblegum-plum-soft">
+                      {lesson.questions.length} song
+                      {lesson.questions.length === 1 ? '' : 's'} · +{lesson.xpReward} XP
+                      {completed && score === 100 && ' · Perfect!'}
+                    </p>
+                  </div>
+                  {completed && score < 100 && (
+                    <Mono size="xs" tone="plum">{score}%</Mono>
+                  )}
+                  {isNext && !completed && (
+                    <span className="text-lg leading-none text-bubblegum-plum" aria-hidden="true">
+                      ▶
+                    </span>
+                  )}
+                </motion.button>
+              )
+            })}
+          </div>
         </div>
+
+        {nextIncomplete && (
+          <PrimaryButton
+            onClick={() =>
+              gate(
+                () =>
+                  navigate(
+                    `/learn/${course.id}/modules/${mod.id}/lessons/${nextIncomplete.id}`
+                  ),
+                'Grab a backstage pass to play tracks'
+              )
+            }
+          >
+            Play {nextIncomplete.title} →
+          </PrimaryButton>
+        )}
       </motion.div>
-    </Layout>
+    </BubblegumLayout>
   )
 }

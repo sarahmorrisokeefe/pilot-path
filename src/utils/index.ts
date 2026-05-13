@@ -134,10 +134,6 @@ export function formatMinutes(minutes: number): string {
   return `${m}m`
 }
 
-export function pluralize(count: number, word: string): string {
-  return `${count} ${word}${count !== 1 ? 's' : ''}`
-}
-
 // ─── Question Helpers ─────────────────────────────────────────────────────────
 
 export function shuffleArray<T>(arr: T[]): T[] {
@@ -147,24 +143,4 @@ export function shuffleArray<T>(arr: T[]): T[] {
     ;[copy[i], copy[j]] = [copy[j], copy[i]]
   }
   return copy
-}
-
-export function generateId(): string {
-  return Math.random().toString(36).substring(2, 10)
-}
-
-// ─── Score Helpers ────────────────────────────────────────────────────────────
-
-export function scoreToGrade(score: number): string {
-  if (score >= 90) return 'A'
-  if (score >= 80) return 'B'
-  if (score >= 70) return 'C'
-  if (score >= 60) return 'D'
-  return 'F'
-}
-
-export function scoreToColor(score: number): string {
-  if (score >= 80) return 'text-green-500'
-  if (score >= 70) return 'text-amber-500'
-  return 'text-red-500'
 }

@@ -74,7 +74,7 @@ function SignedOutHome() {
         <motion.div variants={item} className="px-1">
           <p className="text-[22px] font-black tracking-[-0.02em] text-bubblegum-plum dark:text-night-fg">
             Hey there{' '}
-            <span className="inline-block" style={{ transform: 'rotate(-10deg)' }}>
+            <span className="inline-block -rotate-[10deg]">
               👋
             </span>
           </p>
@@ -94,10 +94,7 @@ function SignedOutHome() {
 
           <p className="text-[26px] font-black leading-[1.05] tracking-[-0.025em] text-bubblegum-plum">
             Get a{' '}
-            <span
-              className="inline-block rounded-lg bg-bubblegum-peach px-2"
-              style={{ transform: 'rotate(-1deg)' }}
-            >
+            <span className="inline-block -rotate-1 rounded-lg bg-bubblegum-peach px-2">
               backstage pass
             </span>
             <br />
@@ -144,8 +141,7 @@ function SignedOutHome() {
             ].map(([icon, label]) => (
               <div key={label} className="flex items-center gap-3">
                 <span
-                  className="inline-block text-[22px] leading-none"
-                  style={{ transform: 'rotate(-6deg)' }}
+                  className="inline-block -rotate-6 text-[22px] leading-none"
                   aria-hidden="true"
                 >
                   {icon}
@@ -177,8 +173,7 @@ function AlbumPreviewCard({ course, onClick }: { course: Course; onClick: () => 
       className={`${TONE_BG[tone]} touch-manipulation rounded-[22px] p-3.5 text-left text-bubblegum-plum transition-transform active:scale-[0.98]`}
     >
       <div
-        className="mb-1 inline-block text-[38px] leading-none"
-        style={{ transform: 'rotate(-4deg)' }}
+        className="mb-1 inline-block -rotate-[4deg] text-[38px] leading-none"
         aria-hidden="true"
       >
         {course.icon}
@@ -246,14 +241,7 @@ function FirstNightHome() {
 
           <Mono>opening night · track 01</Mono>
           <div className="mt-1.5 flex items-baseline gap-2">
-            <span
-              className="inline-block font-black leading-[0.9] tabular-nums opacity-40"
-              style={{
-                fontSize: '78px',
-                letterSpacing: '-0.05em',
-                transform: 'rotate(-3deg)',
-              }}
-            >
+            <span className="inline-block -rotate-3 text-[78px] font-black leading-[0.9] tracking-[-0.05em] tabular-nums opacity-40">
               0
             </span>
             <span className="text-lg font-black">XP ⭐</span>
@@ -385,7 +373,7 @@ function SignedInHome() {
         <motion.div variants={item} className="px-1">
           <p className="text-[22px] font-black tracking-[-0.02em] text-bubblegum-plum dark:text-night-fg">
             Hi, {firstName}{' '}
-            <span className="inline-block" style={{ transform: 'rotate(-10deg)' }} aria-hidden="true">
+            <span className="inline-block -rotate-[10deg]" aria-hidden="true">
               👋
             </span>
           </p>
@@ -405,14 +393,7 @@ function SignedInHome() {
 
           <Mono>tonight's set · track {trackLabel}</Mono>
           <div className="mt-1.5 flex items-baseline gap-2">
-            <span
-              className="inline-block font-black leading-[0.9] tabular-nums"
-              style={{
-                fontSize: '78px',
-                letterSpacing: '-0.05em',
-                transform: 'rotate(-3deg)',
-              }}
-            >
+            <span className="inline-block -rotate-3 text-[78px] font-black leading-[0.9] tracking-[-0.05em] tabular-nums">
               {progress.totalXP}
             </span>
             <span className="text-lg font-black">XP ⭐</span>
@@ -466,8 +447,7 @@ function SignedInHome() {
               <Doodle ch="♩" x={280} y={48} size={36} rot={10} color="#cfb6ff" opacity={0.6} />
 
               <div
-                className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-[18px] bg-white text-3xl"
-                style={{ transform: 'rotate(-4deg)' }}
+                className="flex h-14 w-14 flex-shrink-0 -rotate-[4deg] items-center justify-center rounded-[18px] bg-white text-3xl"
                 aria-hidden="true"
               >
                 {nextLesson.course.icon}
@@ -544,8 +524,7 @@ function SignedInHome() {
               className="flex w-full items-center gap-3 rounded-3xl bg-bubblegum-cherry/20 p-3.5 text-left transition-transform active:scale-[0.99] touch-manipulation"
             >
               <span
-                className="inline-block text-3xl leading-none"
-                style={{ transform: 'rotate(-6deg)' }}
+                className="inline-block -rotate-6 text-3xl leading-none"
                 aria-hidden="true"
               >
                 🎯
@@ -625,10 +604,9 @@ function AlbumProgressCard({
       className={`${TONE_BG[tone]} touch-manipulation rounded-[22px] p-3.5 text-left text-bubblegum-plum transition-transform active:scale-[0.98]`}
     >
       <div
-        className={`mb-1 inline-block text-[38px] leading-none ${
+        className={`mb-1 inline-block -rotate-[4deg] text-[38px] leading-none ${
           isNew ? 'opacity-60 grayscale' : ''
         }`}
-        style={{ transform: 'rotate(-4deg)' }}
         aria-hidden="true"
       >
         {course.icon}

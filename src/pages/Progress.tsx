@@ -74,10 +74,7 @@ export function Progress() {
         <motion.div variants={item} className="px-1">
           <p className="text-[28px] font-black leading-tight tracking-[-0.025em] text-bubblegum-plum dark:text-night-fg">
             Your{' '}
-            <span
-              className="inline-block rounded-lg bg-bubblegum-butter px-2"
-              style={{ transform: 'rotate(-1deg)' }}
-            >
+            <span className="inline-block -rotate-1 rounded-lg bg-bubblegum-butter px-2">
               records
             </span>
           </p>
@@ -98,8 +95,7 @@ export function Progress() {
           >
             <div className="flex items-center gap-3">
               <span
-                className="inline-block text-3xl leading-none"
-                style={{ transform: 'rotate(-6deg)' }}
+                className="inline-block -rotate-6 text-3xl leading-none"
                 aria-hidden="true"
               >
                 🔥
@@ -149,8 +145,7 @@ export function Progress() {
                       className={`flex items-center gap-3 rounded-[18px] px-3 py-3 ${i < arr.length - 1 ? 'mb-0.5' : ''}`}
                     >
                       <div
-                        className={`flex h-[42px] w-[42px] flex-shrink-0 items-center justify-center rounded-full text-sm font-black tabular-nums text-bubblegum-plum ${scoreTone}`}
-                        style={{ transform: 'rotate(-3deg)' }}
+                        className={`flex h-[42px] w-[42px] flex-shrink-0 -rotate-3 items-center justify-center rounded-full text-sm font-black tabular-nums text-bubblegum-plum ${scoreTone}`}
                       >
                         {r.score}
                       </div>
@@ -198,10 +193,9 @@ function StatTile({
     <div className={`rounded-[20px] ${TONE_BG[tone]} p-3 text-center`}>
       <Mono size="xs">{label}</Mono>
       <p
-        className={`mt-1 inline-block text-[32px] font-black leading-[0.9] tabular-nums text-bubblegum-plum ${
+        className={`mt-1 inline-block -rotate-2 text-[32px] font-black leading-[0.9] tracking-[-0.03em] tabular-nums text-bubblegum-plum ${
           dimmed ? 'opacity-40' : ''
         }`}
-        style={{ letterSpacing: '-0.03em', transform: 'rotate(-2deg)' }}
       >
         {value}
       </p>
@@ -226,8 +220,7 @@ function RecordCard({
       }`}
     >
       <div
-        className="mx-auto flex h-[70px] w-[70px] items-center justify-center rounded-full border-[4px] border-white bg-white text-4xl"
-        style={{ transform: 'rotate(-6deg)' }}
+        className="mx-auto flex h-[70px] w-[70px] -rotate-6 items-center justify-center rounded-full border-[4px] border-white bg-white text-4xl"
         aria-hidden="true"
       >
         <span className={dimmed ? 'grayscale' : ''}>{record.icon}</span>

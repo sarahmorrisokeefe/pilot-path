@@ -13,8 +13,7 @@ export function Wordmark({ size = 'md' }: WordmarkProps) {
   return (
     <div className="flex items-center gap-1.5">
       <span
-        className={`inline-block font-serif leading-none text-bubblegum-peach dark:drop-shadow-glow-peach ${s.glyph}`}
-        style={{ transform: 'rotate(-10deg)' }}
+        className={`inline-block -rotate-[10deg] font-serif leading-none text-bubblegum-peach dark:drop-shadow-glow-peach ${s.glyph}`}
         aria-hidden="true"
       >
         ♩

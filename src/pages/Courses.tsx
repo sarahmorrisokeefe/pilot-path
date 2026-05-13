@@ -62,10 +62,7 @@ export function Courses() {
         <div className="px-1">
           <p className="text-[28px] font-black leading-tight tracking-[-0.025em] text-bubblegum-plum dark:text-night-fg">
             Your{' '}
-            <span
-              className="inline-block rounded-lg bg-bubblegum-peach px-2"
-              style={{ transform: 'rotate(-1deg)' }}
-            >
+            <span className="inline-block -rotate-1 rounded-lg bg-bubblegum-peach px-2">
               setlist
             </span>
           </p>
@@ -152,8 +149,7 @@ function AlbumCard({ course, pct, tracks, done, onClick }: AlbumCardProps) {
     >
       <div className="flex items-center gap-3.5">
         <div
-          className="flex h-[60px] w-[60px] flex-shrink-0 items-center justify-center rounded-[18px] bg-white text-[32px]"
-          style={{ transform: 'rotate(-4deg)' }}
+          className="flex h-[60px] w-[60px] flex-shrink-0 -rotate-[4deg] items-center justify-center rounded-[18px] bg-white text-[32px]"
           aria-hidden="true"
         >
           {course.icon}
